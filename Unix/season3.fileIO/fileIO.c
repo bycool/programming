@@ -8,6 +8,8 @@ void close_usage();
 void lseek_usage();
 void read_usage();
 void write_usage();
+void fcntl_usage();
+void sync_usage();
 void fileIO_usage();
 
 int main( int argc, char *argv[] ){
@@ -25,7 +27,9 @@ int main( int argc, char *argv[] ){
 				if( strcmp("close",optarg) == 0 )  c = '3';  else
 				if( strcmp("lseek",optarg) == 0 )  c = '4';  else
 				if( strcmp("read",optarg) == 0 )   c = '5';  else
-				if( strcmp("write",optarg) == 0 )  c = '6';
+				if( strcmp("write",optarg) == 0 )  c = '6';  else
+				if( strcmp("fcntl",optarg) == 0 )  c = '7';  else
+				if((strcmp("sync",optarg) & strcmp("fsync",optarg) & strcmp("fdatasync",optarg)) == 0) c = '8';
 				
 
 				switch(c) {
@@ -78,6 +82,15 @@ int main( int argc, char *argv[] ){
 						write(fd,"write",5);
 						close(fd);
 						break;
+					case '7' : //r:fcntl
+						//fd = open("./fcntl.txt",O_WRONLY | O_CREAT | O_EXCL, S_IRWXU);
+						//ret= fcntl(fd,F_GETFD); printf("current descriptor flags: %d\n",ret);
+						//ret= fcntl(fd,F_SETFD,1);
+						
+						break;
+					case '8' :
+
+						break;
 					default :
 						printf("R:err::the argumetn is not included in {open,creat,close,lseek,read,write}\n");
 						break;
@@ -93,39 +106,42 @@ int main( int argc, char *argv[] ){
 				if( strcmp("close",optarg) == 0 )  c = '3';  else
 				if( strcmp("lseek",optarg) == 0 )  c = '4';  else
 				if( strcmp("read",optarg) == 0 )   c = '5';  else
-				if( strcmp("write",optarg) == 0 )  c = '6';
+				if( strcmp("write",optarg) == 0 )  c = '6';  else
+				if( strcmp("fcntl",optarg) == 0 )  c = '7';  else
+				if((strcmp("sync",optarg) & strcmp("fsync",optarg) & strcmp("fdatasync",optarg)) == 0) c = '8';
+
 				switch(c) {
 					case '1' : //h:open
-						printf("H:open\n");
 						open_usage();
 						break;
 					case '2' : //h:creat
-						printf("H:creat\n");
 						creat_usage();
 						break;
 					case '3' : //h:close
-						printf("H:close\n");
 						close_usage();
 						break;
 					case '4' : //h:lseek
-						printf("H:lseek\n");
 						lseek_usage();
 						break;
 					case '5' : //h:read
-						printf("H:read\n");
 						read_usage();
 						break;
 					case '6' : //h:write
-						printf("H:write\n");
 						write_usage();
 						break;
-					default :
+					case '7' : //h:fcntl
+						fcntl_usage();
+						break;
+					case '8' : //h:sync
+						sync_usage();
+						break;
+					default : //-h 
 						fileIO_usage();
 						break;
 				}			
 				break;
 
-			default:
+			default: //-h
 				fileIO_usage();
 				break;
 		} //endl-switch(ret)
@@ -213,16 +229,40 @@ void write_usage(){
 	fpe( " 该文件偏移量增加实际写的字节数");
 } //endl-write_usage()
 
-void fileIO_usage(){
-	fpe( " Usage : fileIO_usage -h");
-	fpe( "         main -h {open,creat,close,lseek,read,write}");
-	fpe( "         main -r {open,creat,close,lseek,read,write}");
+void fcntl_usage(){
+	fpe( " Usage : fcntl(int, int, ...) ");
+	fpe( " ------------------------------------------ ");
+	fpe( " #include <fcntl.h> ");
+	fpe( " int fcntl(int filedes, int cmd, ... [int arg]) ");
+	fpe( " ------------------------------------------ ");
+	fpe( " --cmd-- ");
+	fpe( " cmd = F_DUPFD: 复制一个现有的描述符 ");
+	fpe( " cmd = F_GETFD | F_SETFD : 获得|设置文件描述符标记");
+	fpe( " cmd = F_GETFL | F_SETFL : 获得|设置文件状态标志");
+	fpe( " cmd = F_GETOWN | F_SETOWN : 获得|设置异步io所有权");
+	fpe( " cmd = F_GETLK | F_SETLK |F_SETLKW : 获得|设置记录锁");
+	fpe( " ------------------------------------------ ");
 }
 
+void sync_usage(){
+	fpe( " Usage : sync(void) & fsync(int) & fdatasync(int) ");
+	fpe( " ------------------------------------------ ");
+	fpe( " #include <unistd.h> ");
+	fpe( " int fsync(int filedes) ");
+	fpe( " int fdatasync(int filedes) ");
+	fpe( " void sync(void) ");
+	fpe( " ------------------------------------------ ");
+	fpe( " sync  : 将所有修改过的块缓冲区排入写队列，然后返回，它并不订带实际写磁盘的操作。");
+	fpe( " fsync : 只对由文件描述符filedes指定的单一文件起作用，并且等待写操作结束，然后返回。");
+	fpe( " fdatasync : 类似fsync，它只影响文件的数据部分，除数据外，fsync还会同步更新文件的属性。");
+	fpe( " ------------------------------------------ ");
+}
 
-
-
-
+void fileIO_usage(){
+	fpe( " Usage : fileIO_usage -h");
+	fpe( "         main -h {open,creat,close,lseek,read,write,fcntl}");
+	fpe( "         main -r {open,creat,close,lseek,read,write,fcntl}");
+}
 
 
 
