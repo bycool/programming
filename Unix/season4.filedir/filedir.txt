@@ -47,6 +47,27 @@
 	1）新文件的组ID可以是进程的有效组ID。
 	2）新文件的组ID可以是它所在目录的组ID。
 
+chown : 更改文件的用户ID和组ID
+int chown(const char* pathname, uid_t owner, gid_t group)
+int fchown(int filedes, uid_t owner, gid_t group);
+int lchown(const char* pathname, uid_t owner, gid_t group);
+
+文件长度：
+stat结构体成员st_size表示以字节为单位的文件长度。
+普通文件，文件长度可以为0
+目录，文件长度通常是一个数
+符号链接如下
+lrwxrwxrwx	1	root	7 Sep 25 07:14 lib -> usr/lib
+其中7就是路径 usr/lib
+
+
+#include <unistd.h>
+int link(const char* existingpath, const char* newpath)任何一个文件可以有多个目录项指向其i节点。
+int unlink(const char* pathname)
+
+#include <stdio.h>
+int remove(const char* pathname) remove的功能与rmdir相同
+int rename(const char* oldname, const char* newname) 文件与目录用rename函数更名
 
 
 
