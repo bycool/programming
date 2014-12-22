@@ -69,6 +69,98 @@ int unlink(const char* pathname)
 int remove(const char* pathname) remove的功能与rmdir相同
 int rename(const char* oldname, const char* newname) 文件与目录用rename函数更名
 
+#include <unistd.h>
+int link(const char* oldpath, const char* newpath) 给oldpath建立一个硬链接，此函数不能在不同文件系统间创建硬链接。成功返回0,失败返回-1,错误原因存于errno
+int symlink(const char* actualpath, const char* sympath) 创建链接符号,可在不同文件系统间创建,成功返回0,失败返回-1,错误原因存于errno
+int unlink(const char* pathname) 删除一个现有的目录项，并将由pathname所引用文件的链接数减1。
+ssize_t readlink(const char* restrict pathname,char* restrict buf, size_t bufsize) 读取该链接的文件名字，存于buf。成功返回文件名字字符数
+
+
+文件的时间
+st_atime	文件数据最后访问时间	read			ls -u
+st_mtime	文件数据最后修改时间	write			ls
+st_ctime	i节点状态最后修改时间	chmod,chown		ls -c
+
+#include <utime.h>
+int utime(const char* pathname, const struct utimbuf* times) 成功返回0,出错返回-1
+一个文件的访问和修改时间可以用utime函数修改
+
+#include <sys/stat.h>
+int mkdir(const char* pathname, mode_t mode) 创建一个空目录
+int rmdir(const char* pathname) 删除一个空目录
+
+#include <unistd.h>
+int chdir(const char* pathname) 更改当前工作目录
+int fchdir(int filedes) 两个函数的返回值，成功返回0,出错返回-1
+char* getcwd(char* buf, size_t size)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
