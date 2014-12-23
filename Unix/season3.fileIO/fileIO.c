@@ -36,7 +36,7 @@ int main( int argc, char *argv[] ){
 					case '1' : //r:open
 						printf("R:open\n");
 						fd = open("./open.txt",O_RDWR | O_CREAT | O_EXCL, S_IRWXU); //打开文件，不存在创建，设置权限 
-						if(err == -1) printf("cant open open.txt\n");
+						if( fd == -1) printf("cant open open.txt\n");
 						write(fd,"open",4); //写open到文件
 						close(fd); //关闭文件
 						break;
