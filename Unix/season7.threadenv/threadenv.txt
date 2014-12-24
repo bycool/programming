@@ -1,0 +1,69 @@
+进程环境：
+	7.7 共享库
+		共享库使得可执行文件中不再需要高喊公用的库例程，而只需在所有进程都可引用的存储区中维护这种库例程的一个副本。程序第一次执行或者第一次调用某个函数时，用动态链接方法将程序与共享库函数相链接。这减少了每次可执行文件的长度，但增加了一些运行时间的开销。这种时间开销在该程序第一次执行时或者每个共享库函数第一次被调用时。共享库的另一个优点是可以用库函数的新版本代替老版本，而无需对使用该库的程序重新链接编译。
+	$ cc -static hello.c	阻止gcc使用共享库
+	$ cc hello.c			gcc默认使用共享库
+
+	7.8 存储器分配
+	ISO C说明了三个用于存储空间动态分配的函数:
+	#include <stdlib.h>
+	void* malloc(size_t size) :分配指定字节数的存储区。
+	void* calloc(size_t nobj, size_t size) :为指定数量具指定长度的对象分配存储空间。每一位初始化都为0
+	void* realloc(void* ptr, size_t newsize) :更改以前分配区的长度。
+	三个函数返回值：若成功则返回非空指针，若出错则返回NULL。
+	void free(void *ptr) 
+
+	7.9 环境变量
+	ISO C定义一个函数getenv，可以用其取环境变量值。
+	#include <stdlib.h>
+	char* getenv(const char* name)	返回值：指向与name关联的value的指针，若未找到的则返回NULL。
+
+	#include <stdlib.h>
+	int putenv(char* str) : 取形式为name=value的字符串，将其放置环境表中。如果name已经存在，先删除其原来的定义。
+	int setenv(const char* name, const char* value, int rewrite):将name设为value。rewrite非0,name值不删除，为0,不删除原有。
+	int unsetenv(const char* name)
+
+	7.10 setjmp和longjmp函数
+	在C中，goto函数不能跨越函数的。而执行这类跳转功能的是函数setjmp和longjmp。
+	#include <setjmp.h>
+	int setjmp(jmp_buf env) 若直接调用则返回0,若从longjmp调用返回非0值。
+	void longjmp(jmp_buf env, int val);
+	
+
+	7.11 getrlimit和setrlimit函数
+	每个进程都有一组资源限制，其中一些可以用getrlimit和setrlimit函数查询和更改。
+	#include <sys/resource.h>
+	int getrlimit(int resource, struct rlimit* rlptr);
+	int setrlimit(int resource, const struct rlimit* rlptr); 成功返回0,出错返回非0;
+
+	对于这两个函数的每一次调用都会指定一个资源以及一个指定下列结构的指针。
+	struct rlimit {
+		rlim_t rlim_cur;	/* soft limit : current limit */
+		rlim_t rlim_max;	/* hard limit : maximum value for rlim_cur */
+	}
+
+	这两个函数的resource参数取下列值之一。
+	RLIMIT_AS			进程可用存储区的最大长度(字节)。
+	RLIMIT_CORE			core文件的最大字节数，若其值为0,则阻止创建core文件。
+	RLIMIT_CPU			CPU时间的最大量(秒)，当超过此软限制时，向该进程发送SIGXCPU信号。
+	RLIMIT_DATA			数据段的最大字节长度。
+	RLIMIT_FSIZE		可以创建的文件的最大字节长度。当超过此软限制时，则向该进程发送SIGXFSZ信号。
+	RLIMIT_LOCKS		一个进程可持有的文件锁的最大数。
+	RLIMIT_MEMLOCK		一个进程使用mlock(2)能够锁定在存储器中的最大字节长度。
+	RLIMIT_NOFILE		每个集成能打开的最大文件数。
+	RLIMIT_NPROC		每个实际用户ID可拥有的最大子进程数。
+	RLIMIT_RSS			最大驻内存集的字节长度。
+	RLIMIT_SBSIZE		用户在任一给定时刻可以占用的套接字缓冲区的最大字节。
+	RLIMIT_STACK		栈的最大字节长度。
+	RLIMIT_VMEM			RLIMIT_AS同义
+
+
+
+
+
+
+
+
+
+
+
