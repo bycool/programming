@@ -27,11 +27,63 @@
 	可重入函数可以由多于一个任务并发使用,而不必担心数据错误.不可重入函数不能由超过一个任务所共享,除非能确保函数的互斥.
 	比如malloc:当进程a将要调用malloc函数给进程分配内存,此时遇到信号中断,插入执行该信号处理程序,然后在返回a进程,在信号处理过程中又调用了malloc,malloc通常为它所分配的存储区维护一个链接表,而插入执行信号函数时,进程可能正在改变次链表.
 		
+	10.7 SIGCLD语义
+	SIGCLD和SIGCHLD这两个很容易混淆.
+	SIGCHLD信号语义与其他信号的语义相类似.子进程状态改变后产生此信号,父进程调用wait函数来确定发生了什么.
+	父进程在生成子进程之后会有两种情况,第一种是父进程继续去做别的事情,另一种是父进程啥也不做,一直在wait子进程退出.
+	(此篇SIGCLD和SIGCHLD网上资料写的比较混淆,不做学习内容.)
 
+	10.9 kill和raise函数
+	kill函数将信号发送给进程或进程组.raise函数则允许进程向自身发送信号.
+	#include <signal.h>
+	int kill(pid_t pid, int signo);
+		kill的pid参数有四种不同的情况:
+		pid > 0 :将该信号发送给进程ID为pid的进程.
+		pid = 0 :将信号发送给与发送进程属于同一进程组的所有进程(不包括系统进程集),而且发送进程具有向这些进程发送信号的权限.
+		pid < 0 :将信号发送给其进程组ID等于pid的绝对值,而且发送进程具有向其发送送信号的权限.
+		pid =-1 :将该信号发送给发送进程有权限向它们发送信号的系统上的所有进程. 	
+	int raise(int signo);	//调用raise(signo)等价于kill(getpid(),signo);
+	
+	10.10 alarm和pause函数
+	使用alarm函数可以设置一个计时器,在将来某个制定的时间该计时器会超时.当计时器超时时,产生SIGALRM信号.如果不忽略或不捕捉此信号,则其默认动作是终止调用该alarm函数的进程.
+	#include <unistd.h>
+	unsigned int alarm(unsigned int seconds);
+	返回值:0或以前设置的脑中时间的余留秒数
+	参数seconds的值是秒数,经过了指定的seconds秒后会产生信号SIGALRM.每个进程只能有一个脑中时钟,而本次调用的seconds值是0,则取消以前的闹钟时钟,其余留值仍作为alarm函数的返回值.
+	如果想捕捉SIGALRM信号,则必须在调用alarm之前设置该信号的处理程序.
 
+	pause函数使调用进程挂起直至捕捉到一个信号.
+	#include <unistd.h>
+	int pause(void);
+	只有执行一了一个信号处理程序并从其返回时,pause才返回.
 
+	10.11 信号集
+	一个能表示多个信号的数据类型--信号集(signal set).
+	#include <signal.h>
+	int sigemptyset(sigset_t *set);  初始化由set指向的信号集,清楚其中所有信号.
+	int sigfillset(sigset_t *set);   初始化由set指向的信号集,使其包括所有信号.
+	int sigaddset(sigset_t *set,int signo);  sigaddset打开一位
+	int sigdelset(sigset_t *set,int signo);  sigdelset则关闭一位
+	四个函数的返回值:若成功返回0,若出错返回-1
+	int sigismember(const sigset_t *set, int signo);
+	返回值:若真贼返回1,若假返回0,若出错返回-1
 
+	10.12 sigprocmask函数
+	一个进程的信号屏蔽字规定了当前阻塞而不能递送给该进程的信号集.调用sigprocmask可以检测或更改其信号屏蔽字.
+	#include <signal.h>
+	int sigprocmask(int how,const sigset_t *restrict set, sigset_t *restrict oset)
+	返回值:若成功则返回0,出错返回-1
 
+	10.13 sigpending函数
+	sigpending函数返回信号集,其中的各个信号对于调用进程是阻塞的而不能递送,因而一定是当前为决的.该信号集通过set参数返回.
+	#include <signal.h>
+	int sigpending(sigset_t *set);
+	
+	10.14 sigaction函数
+	sigaction函数的功能是检查或修改与指定信号相关联的处理动作.
+	#include <signal.h>
+	int sigaction(int signo, const struct sigaction *restrict act, struct sigaction *restrict oact);
+		
 
 
 
