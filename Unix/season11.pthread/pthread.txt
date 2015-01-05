@@ -44,4 +44,50 @@
 	rval_ptr是一个无类型的指针,与传给启动例程的单个参数类似.进程中其他线程可以通过pthread_jion函数访问到这个指针.
 	#include <pthread.h>
 	int pthread_join(pthread_t thread, void *8rval_ptr);	
-	返回值:若成功返回0,失败返回错误编号.	
+	返回值:若成功返回0,失败返回错误编号.
+
+	线程可以调用pthread_cancel函数来请求取消同一进程中的其他线程.
+	#include <pthread.h>
+	int pthread_cancel(pthread_t tid);
+	返回值:如果成功返回0,否则返回错误编码
+	默认情况下,pthread_cancel函数会使得有tid表示的线程的行为表现为如同调用了参数为PTHREAD_CANCELED的pthread_exit函数.但是线程可以忽略取消方式或控制取消方式.(调用pthread_cancel(tid)就像在tid线程内调用pthread_exit(PTHREAD_CANCEL)一样的效果.)
+
+	线程可以安排它退出时需要调用的函数,想进程的atexit函数.这种函数成为线程清理处理程序.线程可以创建多个清理处理程序.
+	处理程序记录在栈中,他们的执行顺序与他们注册时的顺序相反:
+	#include <pthread.h>
+	void pthread_cleanup_push(void (*rtn)(void*),void *arg);
+	void pthread_cleanup_pop(int execute);  两个函数配对使用.
+	当发生以下动作时调用清理函数,调用参数为arg,清理函数rtn的调用顺序有pthread_cleanup_push函数来安排:
+	.调用pthread_exit时.
+	.相应取消请求时.
+	.用非零execute参数调用pthread_cleanup_poo时.
+	如果execute参数为0,清理函数将不被调用. 
+	PS:两个函数配对使用,在线程执行的函数里调用,设置一个清理函数压栈,之后在出栈执行.当然也可以不执行.pop函数传0即可.
+
+	进程原语和线程原语的比较:
+	进程		进程		 		描述
+	fork		pthread_cereate		创建新的控制流
+	exit		pthread_exit		从现有的控制流中退出
+	waitpid		pthread_join		从控制流中获得退出状态
+	atexit		pthread_cancel_push	注册退出控制流时调用的函数
+	getpid		pthread_self		获得控制流id
+	abort		pthread_cancel		请求控制流的非正常退出.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
