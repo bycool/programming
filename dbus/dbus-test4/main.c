@@ -165,7 +165,7 @@ void query(char* param)
    // free message
    dbus_message_unref(msg);
    
-   // block until we recieve a reply
+   // block until we receive a reply
    dbus_pending_call_block(pending);
 
 
