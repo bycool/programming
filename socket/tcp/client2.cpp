@@ -55,11 +55,12 @@ int main(){
 	char buffer[1024];
 	scanf("%s",buffer);
 	if( -1 == write(myfd,buffer,strlen(buffer))) return -1;
-	while(1){
+
 	char buf[256];
-	recv(myfd, buf, sizeof(buf), 0);
-	printf("recv:%s\n",buf);
-	}
+	recv(fd,buf,sizeof(buf),0);
+	printf("recvfunc:%s\n",buf);
+
+
 //	getchar(); /* 此句为使程序暂停在此处，可以使用netstat查看当前的连接 */
 	close(myfd); /* 关闭连接，本次通信完成 */
 	return 0;
