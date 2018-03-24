@@ -34,12 +34,14 @@ void insertree(Tnode* node,int i){
 		if(node->rnode == NULL){
 			node->rnode = tmp;
 		}else{
+			free(tmp);
 			insertree(node->rnode,i);
 		}
 	}else if(node->data >=i){
 		if(node->lnode == NULL){
 			node->lnode = tmp;
 		}else{
+			free(tmp);
 			insertree(node->lnode,i);
 		}
 	}
@@ -58,11 +60,9 @@ void preprintree(Tnode *node){
 	return ;
 }
 
-
 /*
  * 后序遍历(左右根)
  */
-
 void backprintree(Tnode *node){
 	if(node->lnode != NULL)
 		backprintree(node->lnode);
