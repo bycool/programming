@@ -22,6 +22,7 @@ void selectsort(vector<int> vi){
 	}
 
 	int len = vi.size();
+	cout<<"len:"<<len<<endl;
 	i = 0;
 	for(i=0;i<len;i++){
 		cout<<vi[i]<<endl;
@@ -47,5 +48,5 @@ int main(){
 		vi.push_back(i);
 	}
 	selectsort(vi);
-	printsort(vi);
+	printsort(vi);//这里打印的队列是无序的，虽然已经通过选择排序算法排序过，但是可能和vector的下标赋值操作有关，也可能和函数的型参拷贝有关。
 }
