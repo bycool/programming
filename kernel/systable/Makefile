@@ -1,8 +1,10 @@
 obj-m	:= sstlb.o
-sstlb-objs	:= systabled.o
+sstlb-objs	:= systabled.o \
+			   nsysfunc.o
 
 KDIR	:= /lib/modules/$(shell uname -r)/build
 PWD		:= $(shell pwd)
+INCL	:= -I .
 
 all:
 	make -C $(KDIR) SUBDIRS=$(PWD) modules

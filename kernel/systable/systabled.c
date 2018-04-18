@@ -1,20 +1,40 @@
 #include <linux/init.h>
+#include <asm/unistd.h>
+#include <linux/sched.h>
 #include <linux/module.h>  
 #include <linux/kernel.h>
 
-#include <linux/sched.h>
-#include <asm/unistd.h>
+#include "nsysfunc.h"
+
+
+//将systable内的function替换为nsysfunction
+#define NSYS(function) \
+do{ \
+	old_##function = (sys_##function##_t)sys_call_table[__NR_##function]; \
+	sys_call_table[__NR_##function] = nsys_##function; \
+}while(0);
+
+//systable内的function换回old_function
+#define OSYS(function)	\
+do{ \
+	if(old_##function != NULL) \
+		sys_call_table[__NR_##function] = old_##function; \
+}while(0);
 
 
 static unsigned int org_cr0 = 0;
 
 static unsigned long **sys_call_table=NULL;
-typedef asmlinkage int (*type_org_mkdir)(const char*, int);
-type_org_mkdir org_mkdir;
+
+
+//声明旧系统函数变量,用于保存原系统调用函数地址。
+sys_mkdir_t old_mkdir = NULL;
+sys_rmdir_t old_rmdir = NULL;
+
 
 struct _idtr {
     unsigned short limit;
-    unsigned long base; //in 64bit mode, base address is 8 bytes
+    unsigned long base;
 } idtr;
 
 typedef struct _idt{
@@ -25,6 +45,14 @@ typedef struct _idt{
     u32 offset_high;
     u32 zero1;
 }idt;
+
+static void setback_cr0(unsigned long val){
+	__asm__ __volatile__
+	(
+		"movq %%rax, %%cr0"
+		::"a"(val)
+	);
+}
 
 static unsigned long clear_and_return_origcr0(void){
 	unsigned long cr0 = 0;
@@ -42,46 +70,24 @@ static unsigned long clear_and_return_origcr0(void){
 	return ret;
 }
 
-
-static void setback_cr0(unsigned long val){
-	__asm__ __volatile__
-	(
-		"movq %%rax, %%cr0"
-		::"a"(val)
-	);
-}
-
-static void *memmem(const void *haystack, size_t haystack_len,
-            const void *needle, size_t needle_len)
-{
+static void *memmem(const void *haystack, size_t haystack_len, const void *needle, size_t needle_len){
     const char *begin;
-    const char *const last_possible
-        = (const char *) haystack + haystack_len - needle_len;
+    const char *const last_possible = (const char *) haystack + haystack_len - needle_len;
 
-    /* The first occurrence of the empty string is deemed to occur at
- *        the beginning of the string. 
- *             */
     if (needle_len == 0)
         return (void *) haystack;
 
-    /* Sanity check, otherwise the loop might search through the whole
- *        memory. 
- *             */
     if (__builtin_expect(haystack_len < needle_len, 0))
         return NULL;
 
-    for (begin = (const char *) haystack; begin <= last_possible; ++begin)
-    {
-        if (begin[0] == ((const char *) needle)[0]
-            && !memcmp(begin + 1, needle + 1, needle_len - 1))
-        {
+    for (begin = (const char *) haystack; begin <= last_possible; ++begin){
+        if (begin[0] == ((const char *) needle)[0] && !memcmp(begin + 1, needle + 1, needle_len - 1)){
             return (void *) begin;
         }
     }
 
     return NULL;
 }
-
 
 static void *getsystable(void){
     unsigned long syscall_long, retval;
@@ -92,27 +98,17 @@ static void *getsystable(void){
     memcpy(sc_asm, (char*)syscall_long, 150);
 
     retval = (unsigned long)memmem(sc_asm, 150, "\xff\x14\xc5", 3);
-    if ( retval != 0 )
-    {
+    if ( retval != 0 ){
         retval = (unsigned long)(*(unsigned long*)(retval+3));
-    }
-    else
-    {
+    }else{
         printk("long mode : memmem found nothing, returning NULL:( \n");
         retval = 0;
     }
 
-    /* we must do it,otherwise the high 32-bit of retval would be wrong! */
     retval |= 0xffffffff00000000;
 
     return (void *)retval;
 }
-
-asmlinkage int hacked_mkdir(const char * pathname, int mode)  
-{  
-	printk("PID %d called sys_mkdir !\n",current->pid);  
-	return org_mkdir(pathname,mode);  
-}  
 
 static int  __init systabled_init(void){
 	printk("systabled init\n");
@@ -123,8 +119,8 @@ static int  __init systabled_init(void){
 
 	org_cr0 = clear_and_return_origcr0();
 
-	org_mkdir      =(type_org_mkdir)sys_call_table[__NR_mkdir];  
-	sys_call_table[__NR_mkdir]=(long)hacked_mkdir;
+	NSYS(mkdir);
+	NSYS(rmdir);
 
 	setback_cr0(org_cr0);
 
@@ -138,7 +134,8 @@ static void __exit systabled_exit(void){
 
 	org_cr0 = clear_and_return_origcr0();
 
-	sys_call_table[__NR_mkdir]=(unsigned long)org_mkdir; 
+	OSYS(mkdir);
+	OSYS(rmdir);
 
 	setback_cr0(org_cr0);
 
