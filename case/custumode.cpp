@@ -12,8 +12,9 @@ mutex m_lock;
 
 void* pushstack(){
 	while(1){
+		usleep(1);
 		m_lock.lock();
-		if(si.size()<10){
+		if(si.size()<1000){
 			si.push(1);
 			cout<<"push stack"<<endl;
 			m_lock.unlock();
@@ -26,6 +27,7 @@ void* pushstack(){
 
 void* popstack(){
 	while(1){
+		usleep(2);
 		m_lock.lock();
 		if(si.size()>0){
 			si.pop();

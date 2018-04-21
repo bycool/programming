@@ -71,7 +71,7 @@ static int __init relay_init(void)
 	}
 	
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,32))
-	relay_rchan = relay_open("cpu", dir, 1024, 1, &relay_callbacks, NULL);
+	relay_rchan = relay_open("cpu", dir, 1024*1024*1024, 1, &relay_callbacks, NULL);
 #else   
 	relay_rchan = relay_open("cpu", dir, 1024, 1, &relay_callbacks);
 #endif
@@ -81,10 +81,11 @@ static int __init relay_init(void)
         return -1;  
     }  
 	
-	for(count = 0; count < 10; count++){
-		sprintf(buffer, "cnt = %d\n", count);
+	for(count = 0; count < 10000; count++){
+		sprintf(buffer, "cnt = %0d", count);
 		relay_write(relay_rchan, buffer, strlen(buffer));
 	}
+	printk("sizeof buffer: %d\n",strlen(buffer));
 
 	return 0;  
 }
