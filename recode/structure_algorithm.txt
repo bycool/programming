@@ -15,8 +15,8 @@
 		struct lnode* next;
 	}node;
 1	destroylist 销毁单链表
-2	initlist  初始化一个带头节点的空单链表
-3	insertElem, 在单链表中第 i 个位置插入元素 elem
+1	initlist  初始化一个带头节点的空单链表
+1	insertElem, 在单链表中第 i 个位置插入元素 elem
 1	removeElem, 在单链表中移除第 pos 个元素，并由 elem 返回其值
 1	createList, 根据数组 elems 构建一个单链表
 1	isEmptyList, 判断单链表是否为空
@@ -34,19 +34,76 @@
 	}node;
 1	destroylist
 1	initlist;
-	insertelem;
-	removelem;
-	isemptylist
-	getelem
-	locatelem
-	getlen
+1	insertelem;
+1	removelem;
+1	isemptylist
+1	getelem
+1	locatelem
+1	getlen
 1	printlist;
-	reverselist
+1	reverselist
 
 
 4.循环链表
+	循环链表是另一种形式的链式存贮结构。它的特点是表中最后一个结点的指针域指向头结点，整个链表形成一个环。
+	单循环链表：在单链表中，将终端结点的指针域NULL改为指向表头结点或开始结点即可。
+	typedef struct lrnode{
+		int data;
+		struct lrnode* next;
+	}node;
+1	destroylist 销毁单链表
+1	initlist  初始化一个带头节点的空单链表
+1	insertElem, 在单链表中第 i 个位置插入元素 elem
+1	removeElem, 在单链表中移除第 pos 个元素，并由 elem 返回其值
+	createList, 根据数组 elems 构建一个单链表
+1	isEmptyList, 判断单链表是否为空
+1	getElem, 获取单链表上位置为 pos 的元素
+1	locateElem, 获取元素 elem 在单链表上第一次出现的位置，如果不存在返回 -1
+1	getLength, 获取单链表长度
+1	printList, 打印整个单链表
+1	reverseList, 反转单链表
+
+	多重循环链表：
+	typedef struct drnode{
+		int data;
+		struct drnode* pre;
+		struct drnode* next;
+	}node;
+	destroylist 销毁单链表
+	initlist  初始化一个带头节点的空单链表
+	insertElem, 在单链表中第 i 个位置插入元素 elem
+	removeElem, 在单链表中移除第 pos 个元素，并由 elem 返回其值
+	createList, 根据数组 elems 构建一个单链表
+	isEmptyList, 判断单链表是否为空
+	getElem, 获取单链表上位置为 pos 的元素
+	locateElem, 获取元素 elem 在单链表上第一次出现的位置，如果不存在返回 -1
+	getLength, 获取单链表长度
+	printList, 打印整个单链表
+	reverseList, 反转单链表
+
+
+
 5.栈
+	栈是一种特殊的线性表，仅能在线性表的一端操作，栈顶允许操作，栈底不允许操作。
+		|	| 栈顶
+		| -	|
+		| _ | 栈底
+
+	typedef struct stack{
+		int* head;
+		int* end;
+		int size;
+	}stack;
+
+	初始化栈
+	push
+	pop
+	destroystack
+
+
 6.队列
+	队列是一种和栈相反的，遵循先进先出原则的线性表。
+
 
 算法:
 分治法

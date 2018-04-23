@@ -98,6 +98,12 @@ int insertlistbyoffset(node** head, int offset ,int data){
 	while(--offset && tmp->next!=NULL){
 		tmp = tmp->next;
 	}
+	
+	if(offset!=0){
+		printf("offset > list.len +1 \n");
+		return -1;
+	}
+	//tmp => offset-1;
 	node* nnode = (node*)malloc(sizeof(node));
 	nnode->data = data;
 	nnode->next = tmp->next;
@@ -179,10 +185,17 @@ int removelemflist(node** head,int offset){
 	}
 	node* tmp = *head;
 	--offset;
-	while(--offset){
+	while(--offset && tmp->next != NULL){
 		tmp = tmp->next;
 	}
+	//tmp => offset-1;
+	//new point => offset;
+	//delete new point
 //	printf("%d\n",tmp->data);
+	if(offset!=0){
+		printf("offset > list.len+1\n");
+		return -1;
+	}
 	node* dnode = tmp->next;
 	offset = dnode->data;
 	tmp->next=dnode->next;
@@ -217,11 +230,11 @@ int main(){
 	insertlisthead(&head,-2);
 	insertlistbyoffset(&head,4,99);
 	display(&head);
-	int ret = removelemflist(&head,4);
-	printf("del elem is : %d\n",ret);
+	int ret = removelemflist(&head,8);
+	printf("offset : 8  del elem is : %d\n",ret);
 	display(&head);
-	ret = removelemflist(&head,3);
-	printf("del elem is : %d\n",ret);
+	ret = removelemflist(&head,8);
+	printf("offset : 8  del elem is : %d\n",ret);
 	display(&head);
 	int pos = getelem(&head,3);
 	printf("list[3]:%d\n",pos);
