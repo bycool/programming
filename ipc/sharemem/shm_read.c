@@ -36,6 +36,8 @@ int main()
     bzero(tmp, BUF_SIZE);
     memcpy(tmp, shm_addr, BUF_SIZE);
     printf("read from shared memory: %s\n", tmp);
+    memcpy(tmp, shm_addr, BUF_SIZE);
+    printf("read from shared memory: %s\n", tmp);
 
     sleep(5);
 

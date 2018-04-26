@@ -9,4 +9,4 @@
   glibc有一个malloc_trim函数可以强制将glibc保存的待用内存给释放掉.
   检查内存泄漏工具(或运行环境)valgrind,googleperftool.Purify
 
-5.
+5.char* getcwd(buff,size): 保存当前路径的缓冲区，缓冲区大小。返回值也是buff的地址。
