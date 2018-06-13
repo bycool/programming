@@ -1,4 +1,4 @@
 1.数据结构和算法。
-2.bochs&Kernel0.11
+2.bochs&Kernel0.11  //kernel/linux-0.11
 3.kernel2.6
 

@@ -1,6 +1,7 @@
 #include <stdio.h>
 
 int main(){
-	int a = NULL;
-
+	char buf[18] = {"cccccccccccccccc1"};
+	buf[17] = 0;
+	printf("%s\n",buf);
 }

@@ -12,7 +12,7 @@ void* seller(void* no){
 			tick--;
 			printf("tick:%d, seller:%d\n",tick,(int*)no);
 			pthread_mutex_unlock(&mlock);
-			sleep(1);
+	//		sleep(1);
 		}else{
 			pthread_mutex_unlock(&mlock);
 			break;

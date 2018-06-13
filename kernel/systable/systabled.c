@@ -113,7 +113,7 @@ static void *getsystable(void){
 static int  __init systabled_init(void){
 	printk("systabled init\n");
 
-	sys_call_table      = (void**)getsystable();
+	sys_call_table = (void**)getsystable();
 	if(sys_call_table == NULL)
 		return -1;
 

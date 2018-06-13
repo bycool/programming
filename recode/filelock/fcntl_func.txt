@@ -1,0 +1,11 @@
+fcntl(int fd, int cmd, struct flock lock);
+fd：文件描述符
+cmd:F_GETLK,F_SETLK,F_SETLKW.
+lock:
+	short l_type;    //F_RDLCK,F_WRLCK,or F_UNCLK.
+	short l_whence;  //从那开始算l_start,SEEK_CUR,SEEK_END,SEEK_SET。
+	off_t l_start;   //offset in bytes,从SEEK_*开始算第l_start个字节开始锁
+	off_t l_len;     //从start开始锁几个字节。
+	pid_t l_pid;     //被谁锁了。
+
+
