@@ -1,6 +1,6 @@
-obj-m+=relay_test.o
+obj-m+=relay.o
 
-relayko-obj := relay_test.o
+relayko-obj := relay.o
 
 all:ko app
 

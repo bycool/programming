@@ -24,7 +24,7 @@ do{ \
 
 static unsigned int org_cr0 = 0;
 
-static unsigned long **sys_call_table=NULL;
+static void **sys_call_table=NULL;
 
 
 //声明旧系统函数变量,用于保存原系统调用函数地址。
