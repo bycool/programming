@@ -8,12 +8,15 @@
 #include <linux/string.h>
 #include <asm/uaccess.h>
 #include <linux/version.h>
+#include <linux/kthread.h>
 
 #include <linux/relay.h>
 #include <linux/debugfs.h>
 
 static struct rchan *relay_rchan = NULL;
 struct dentry *dir = NULL;
+
+static int write_start(void);
 
 static int subbuf_start_callback(struct rchan_buf *buf, void *subbuf, void *prev_subbuf, unsigned int prev_padding)
 {
@@ -60,9 +63,6 @@ static struct rchan_callbacks relay_callbacks =
 
 static int __init relay_init(void)
 {
-	int count;
-	char buffer[10];
-	
 	/*  create folder relay_test_dir  */
 	dir = debugfs_create_dir("relay_test_dir", NULL);
 	if (NULL == dir){
@@ -79,15 +79,37 @@ static int __init relay_init(void)
     if(NULL == relay_rchan){  
         printk("relay_open() failed.\n");  
         return -1;  
-    }  
-	
+    }
+
+	write_start();
+
+/*	
 	for(count = 0; count < 10000; count++){
-		sprintf(buffer, "cnt = %0d", count);
+		sprintf(buffer, "cnt = %d\n", count);
 		relay_write(relay_rchan, buffer, strlen(buffer));
 	}
-	printk("sizeof buffer: %d\n",strlen(buffer));
-
+*/
 	return 0;  
+}
+
+static int kern_write_relay(void* args){
+	int count ;
+	char buf[20];
+
+	for(count = 0; count < 1000000; count++){
+		sprintf(buf, "cnt = %d\n", count);
+		relay_write(relay_rchan, buf, strlen(buf));
+	}
+	return 0;
+}
+
+static int write_start(void){
+	static struct task_struct* thd_write = NULL;
+	thd_write = kthread_run(kern_write_relay, NULL, "write_start");
+	if(thd_write == NULL){
+		return -1;
+	}
+	return 0;
 }
 
 static void __exit relay_exit(void)

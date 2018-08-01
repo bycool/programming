@@ -5,7 +5,7 @@
 
 int main(){
 	struct stat fdst;
-	int rc = stat("1", &fdst);
+	int rc = stat("\\", &fdst);
 	if(rc == 0)
 		printf("1\n");
 	else

@@ -4,12 +4,10 @@
 #include <fcntl.h>
 
 int main(){
-/*
 	int fd = open("1", O_RDWR , 0600);
-	ftruncate(fd,3);
+	ftruncate(fd,10);
 	close(fd);
-*/
 
-	truncate("1", 3);
+//	truncate("1", 3);
 	
 }

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+	<ora_type>2</ora_type>
+	<ora_xtlb>10</ora_xtlb>
+	<ora_transaction sessionid="21" serial="4457">
+		<ora_user>test_admin</ora_user>
+		<ora_client>machine123</ora_client>
+		<ora_time>2017-11-09 09:20:17</ora_time>
+		<ora_program>plsqldev</ora_program>
+		<ora_datalist>
+			<ora_record recnum="1">
+				<ora_schema>redosync</ora_schema>
+				<tab_name>employee</tab_name>
+				<tab_action>insert</tab_action>
+			</ora_record>
+		</ora_datalist>
+	</ora_transaction>
+</root>

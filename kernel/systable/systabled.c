@@ -24,12 +24,17 @@ do{ \
 
 static unsigned int org_cr0 = 0;
 
-static unsigned long **sys_call_table=NULL;
+static void **sys_call_table=NULL;
 
 
 //声明旧系统函数变量,用于保存原系统调用函数地址。
+sys_write_t old_write = NULL;
 sys_mkdir_t old_mkdir = NULL;
 sys_rmdir_t old_rmdir = NULL;
+
+void create_file(){
+
+}
 
 
 struct _idtr {
@@ -119,12 +124,13 @@ static int  __init systabled_init(void){
 
 	org_cr0 = clear_and_return_origcr0();
 
+	NSYS(write);
 	NSYS(mkdir);
 	NSYS(rmdir);
 
-	setback_cr0(org_cr0);
+	create_file();
 
-	printk("systabled initend\n");
+	setback_cr0(org_cr0);
 
 	return 0;
 }
@@ -134,12 +140,11 @@ static void __exit systabled_exit(void){
 
 	org_cr0 = clear_and_return_origcr0();
 
+	OSYS(write);
 	OSYS(mkdir);
 	OSYS(rmdir);
 
 	setback_cr0(org_cr0);
-
-	printk("systabled exit end\n");
 }
 
 module_init(systabled_init);

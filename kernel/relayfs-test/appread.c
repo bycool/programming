@@ -7,12 +7,16 @@
 int main(){
 	int fd = open("/mnt/debugfs/relay_test_dir/cpu0",O_RDWR,770);
 	char buf[31];
-	int r=0;
+	int rc = 0;
+	int r=1000000;
 	do{
-		sleep(1);
-		r = read(fd,buf,10);
-		printf("%s\n",buf);
-	}while(r>0);
+		rc = read(fd,buf,31);
+		if(rc<=0) usleep(10000);
+		buf[rc] = 0;
+		//printf("rc: %d : buf: %s\n", rc ,buf);
+		printf("%s", buf);
+		
+	}while(1);
 
 	return 0;
 }

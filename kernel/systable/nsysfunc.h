@@ -25,10 +25,14 @@
 
 
 //func pointer type declaration
+typedef asmlinkage long (*sys_open_t)(const __user* pathname, int flags, int mode);
+typedef asmlinkage long (*sys_write_t)(unsigned int fd, const char __user* buf, size_t count);
 typedef asmlinkage long (*sys_mkdir_t)(const char __user* pathname, int mode);
 typedef asmlinkage long (*sys_rmdir_t)(const char __user *pathname);
 
 
 //new function declaration
+asmlinkage long nsys_open(const __user* pathname, int flags, int mode);
+asmlinkage long nsys_write(unsigned int fd, const char __user* buf, size_t count);
 asmlinkage long nsys_mkdir(const char __user* pathname, int mode);
 asmlinkage long nsys_rmdir(const char __user *pathname);
