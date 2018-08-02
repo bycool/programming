@@ -96,7 +96,7 @@ static int kern_write_relay(void* args){
 	int count ;
 	char buf[20];
 
-	for(count = 0; count < 1000000; count++){
+	for(count = 0; count < 1000; count++){
 		sprintf(buf, "cnt = %d\n", count);
 		relay_write(relay_rchan, buf, strlen(buf));
 	}

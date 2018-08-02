@@ -1,36 +1,37 @@
+/*************************************************************************
+ *
+ *
+ *
+ *
+ *************************************************************************/
+
 #include <linux/init.h>
 #include <asm/unistd.h>
 #include <linux/sched.h>
 #include <linux/module.h>  
 #include <linux/kernel.h>
 
-#include "sync_operate.h"
+#include "sync_operate.h" //头文件包括自定义系统函数的声明
 
-
-//将systable内的function替换为nsysfunction
+/* old_sys_func --> new_sys_func  */
 #define NSYS(function) \
-do{ \
-	old_##function = (sys_##function##_t)sys_call_table[__NR_##function]; \
-	sys_call_table[__NR_##function] = nsys_##function; \
-}while(0);
+		do{ \
+			old_##function = (sys_##function##_t)sys_call_table[__NR_##function]; \
+			sys_call_table[__NR_##function] = nsys_##function; \
+		}while(0);
 
-//systable内的function换回old_function
+/* new_sys_func --> old_sys_func  */
 #define OSYS(function)	\
-do{ \
-	if(old_##function != NULL) \
-		sys_call_table[__NR_##function] = old_##function; \
-}while(0);
-
+		do{ \
+			if(old_##function != NULL) \
+				sys_call_table[__NR_##function] = old_##function; \
+		}while(0);
 
 static unsigned int org_cr0 = 0;
-
 static void **sys_call_table=NULL;
 
-
-//声明旧系统函数变量,用于保存原系统调用函数地址。
 sys_mkdir_t old_mkdir = NULL;
 sys_rmdir_t old_rmdir = NULL;
-
 
 struct _idtr {
     unsigned short limit;

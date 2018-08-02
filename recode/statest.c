@@ -5,12 +5,6 @@
 
 int main(){
 	struct stat fdst;
-	int rc = stat("\\", &fdst);
-	if(rc == 0)
-		printf("1\n");
-	else
-		perror("1");
-
-	printf("inode: %lu\n",fdst.st_ino);
-	printf("size: %lu\n", fdst.st_size);
+	int rc = stat("1", &fdst);
+	printf("st_ino: %lu\nst_mode: %x\n",fdst.st_ino, fdst.st_mode);
 }

@@ -1,3 +1,8 @@
+/*
+ * 该文件包含:
+ * 		1.旧系统调用函数的函数指针定义，如：sys_mkdir_t是一个函数指针类型。
+ *		2.新系统调用函数的函数声明。
+ */
 #include <linux/version.h>
 #include <asm/unistd.h>
 #include <linux/module.h>
@@ -15,14 +20,6 @@
 #include <linux/audit.h>
 #include <linux/mount.h>
 #include <linux/fs_struct.h>
-
-/*
- * 该文件包含:
- * 		1.旧系统调用函数的函数指针定义，如：sys_mkdir_t是一个函数指针类型。
- *		2.新系统调用函数的函数声明。
- */
-
-
 
 //func pointer type declaration
 typedef asmlinkage long (*sys_mkdir_t)(const char __user* pathname, int mode);
