@@ -23,8 +23,8 @@ static struct channel_info chan_data = {
     .rchan = NULL,
     .base_pathname = "channel_data",
     .parent = NULL,
-    .sub_buf_size = 1024*16,
-    .num_sub_buf = 1024*32,
+    .sub_buf_size = 1024 * 16, // 16k
+    .num_sub_buf = 1024 * 32,  // 32k
     .is_mmap = false
 };
 
@@ -32,7 +32,7 @@ static int subbuf_start_callback(struct rchan_buf *buf,
                                  void *subbuf, 
                                  void *prev_subbuf, 
                                  size_t prev_padding){
-    printk("chan_|data|control|.subbuf_start_callback\n");
+    printk("chan_data.subbuf_start_callback\n");
     return 0;
 }
 
@@ -86,9 +86,26 @@ static struct channel_info chan_control = {
     .rchan = NULL,
     .base_pathname = "channel_control",
     .parent = NULL,
-    .sub_buf_size = 1024*4,
+    .sub_buf_size = 1024*4, //4k
     .num_sub_buf = 1,
     .is_mmap = false
+};
+
+static int control_read(struct file* filep, char __user * buffer, size_t count, loff_t *ppos){
+    printk("relay:control_read\n");
+
+    return 0;
+}
+
+static int control_write(struct file* filep, char __user * buffer, size_t count, loff_t *ppos){
+    printk("relay:control_write\n");
+
+    return 0;
+}
+
+static struct file_opertions control_file_operations = {
+    .read = control_read,
+    .write = control_write
 };
 
 static struct dentry* control_create_buf_file_callback(const char* filename,
@@ -96,8 +113,15 @@ static struct dentry* control_create_buf_file_callback(const char* filename,
                                                        int mode,
                                                        struct rchan_buf* buf,
                                                        int *is_global){
+    printk("sydr create control_relay_file: %s\n", filename);
     *is_global = 1;
     return debugfs_create_file(filename, parent, mode, buf, &control_file_operations);
+}
+
+static int remove_buf_file_callback(struct dentry* dentry){
+    if(dentry != NULL)
+        debugfs_remove(dentry);
+    printk("sydr remove control_relay_file\n");
 }
 
 static struct rchan_callbacks chan_control_callback = {
@@ -105,35 +129,32 @@ static struct rchan_callbacks chan_control_callback = {
     .remove_buf_file = remove_buf_file_callback
 };
 
+/*-------------------------------- main  ------------------------------------*/
 
+int relay_init(void){
+    chan_data.rchan = relay_open(chan_data.base_pathname, NULL,
+                                 chan_data.sub_buf_size, chan_data.num_sub_buf,
+                                 &chan_data_callback, NULL);
+    if(chan_data.rchan == NULL){ printk("relay[data] open fail\n"); return -1; }
 
-static struct file_opertions control_file_operations = {
-    .read = ,
-    .write = 
-};
+    chan_control.rchan = relay_open(chan_control.base_pathname, NULL,
+                                    chan_control.sub_buf_size, chan_control.num_sub_buf,
+                                    *chan_control_callback, NULL);
+    if(chan_control.rchan == NULL){ printk("relay[control] open fail\n"); return -1; }
 
+    printk("relay.init\n");
 
-/*--------------------------------     ------------------------------------*/
-
-static int __init relay_init(void){
-    printk("relay.init: user space interface file : %s\n", chan_data.base_pathname);
-    chan_data.rchan = relay_open(chan_data.base_pathname, NULL, chan_data.sub_buf_size, chan_data.num_sub_buf, &chan_data_callback, NULL);
-    if(chan_data.rchan == NULL){
-        printk("relay open fail\n");
-        return -1;
-    }
     return 0;
 }
 
-static void __exit relay_exit(void){
-    printk("relay.exit\n");
+void relay_exit(void){
     if(chan_data.rchan){
         relay_close(chan_data.rchan);
         chan_data.rchan = NULL;
     }
+    if(chan_control.rchan){
+        relay_close(chan_control.rchan);
+        chan_control.rchan = NULL;
+    }
+    printk("relay.exit\n");
 }
-
-module_init(relay_init);
-module_exit(relay_exit);
-
-MODULE_LICENSE("GPL");
