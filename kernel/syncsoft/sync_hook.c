@@ -1,8 +1,9 @@
 /*************************************************************************
+ * hook sys func： 用new sync call替换原有sys call
+ *                 syscall是一个函数指针数组，将数组元素内函数地址值替换即可。
  *
- *
- *
- *
+ * 在sync_hook_init函数内使用NSYS宏替换原有syscall
+ * 需要声明old_sys_call函数指针
  *************************************************************************/
 
 #include <linux/init.h>
@@ -11,27 +12,14 @@
 #include <linux/module.h>  
 #include <linux/kernel.h>
 
-#include "sync_operate.h" //头文件包括自定义系统函数的声明
-
-/* old_sys_func --> new_sys_func  */
-#define NSYS(function) \
-		do{ \
-			old_##function = (sys_##function##_t)sys_call_table[__NR_##function]; \
-			sys_call_table[__NR_##function] = nsys_##function; \
-		}while(0);
-
-/* new_sys_func --> old_sys_func  */
-#define OSYS(function)	\
-		do{ \
-			if(old_##function != NULL) \
-				sys_call_table[__NR_##function] = old_##function; \
-		}while(0);
-
-static unsigned int org_cr0 = 0;
-static void **sys_call_table=NULL;
+#include "sync.h" //头文件包括自定义系统函数的声明
 
 sys_mkdir_t old_mkdir = NULL;
 sys_rmdir_t old_rmdir = NULL;
+
+
+static unsigned int org_cr0 = 0;
+static void **sys_call_table=NULL;
 
 struct _idtr {
     unsigned short limit;
@@ -112,6 +100,12 @@ static void *getsystable(void){
 }
 
 int sync_hook_init(void){
+/* old_sys_func --> new_sys_func  */
+#define NSYS(function) \
+		do{ \
+			old_##function = (sys_##function##_t)sys_call_table[__NR_##function]; \
+			sys_call_table[__NR_##function] = nsys_##function; \
+		}while(0);
 
 	sys_call_table = (void**)getsystable();
 	if(sys_call_table == NULL)
@@ -128,6 +122,12 @@ int sync_hook_init(void){
 }
 
 void sync_unhook_exit(void){
+/* new_sys_func --> old_sys_func  */
+#define OSYS(function)	\
+		do{ \
+			if(old_##function != NULL) \
+				sys_call_table[__NR_##function] = old_##function; \
+		}while(0);
 
 	org_cr0 = clear_and_return_origcr0();
 

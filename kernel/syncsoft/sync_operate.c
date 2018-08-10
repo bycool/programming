@@ -1,4 +1,4 @@
-#include "sync_operate.h"
+#include "sync.h"
 
 extern sys_mkdir_t old_mkdir;
 extern sys_rmdir_t old_rmdir;

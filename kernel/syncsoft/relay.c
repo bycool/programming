@@ -1,12 +1,19 @@
+/*
+ * relay文件系统： chan_data:数据文件接口，driver向里面写入文件名称
+ *                 chan_control:用于上层与driver进行交互
+ */
 #include <linux/module.h>
 #include <linux/init.h>
 #include <linux/types.h>
 #include <linux/string.h>
 #include <asm/uaccess.h>
 #include <linux/version.h>
+#include <linux/file.h>
 
 #include <linux/relay.h>
 #include <linux/debugfs.h>
+
+#include "sync.h"
 
 
 struct channel_info {
@@ -58,8 +65,8 @@ static struct dentry* data_create_buf_file_callback(const char *filename,
     return debugfs_create_file(filename, mode, parent, buf, &relay_file_operations);
 }
 
-static int remove_buf_file_callback(struct dentry* dentry){
-    printk("chan_|data|control|.remove_buf_file_callback\n");
+static int data_remove_buf_file_callback(struct dentry* dentry){
+    printk("chan_data.remove_buf_file_callback\n");
     debugfs_remove(dentry);
     return 0;
 }
@@ -69,10 +76,10 @@ static struct rchan_callbacks chan_data_callback = {
     .buf_mapped       = buf_mapped_callback,
     .buf_unmapped     = buf_unmapped_callback,
     .create_buf_file  = data_create_buf_file_callback,
-    .remove_buf_file  = remove_buf_file_callback
+    .remove_buf_file  = data_remove_buf_file_callback
 };
 
-int relay_write_to_channel(char* buffer, int buf_len){
+int relay_write_data(char* buffer, int buf_len){
 	if(!chan_data.is_mmap){
 		printk("relay file does not mmap to user space\n");
 		return -1;
@@ -91,19 +98,20 @@ static struct channel_info chan_control = {
     .is_mmap = false
 };
 
-static int control_read(struct file* filep, char __user * buffer, size_t count, loff_t *ppos){
+static ssize_t control_read(struct file* filep, char __user * buffer, size_t count, loff_t *ppos){
     printk("relay:control_read\n");
 
     return 0;
 }
 
-static int control_write(struct file* filep, char __user * buffer, size_t count, loff_t *ppos){
+static ssize_t control_write(struct file* filep, const char __user * buffer, size_t count, loff_t *ppos){
     printk("relay:control_write\n");
 
     return 0;
 }
 
-static struct file_opertions control_file_operations = {
+static struct file_operations control_file_operations = 
+{
     .read = control_read,
     .write = control_write
 };
@@ -115,18 +123,19 @@ static struct dentry* control_create_buf_file_callback(const char* filename,
                                                        int *is_global){
     printk("sydr create control_relay_file: %s\n", filename);
     *is_global = 1;
-    return debugfs_create_file(filename, parent, mode, buf, &control_file_operations);
+    return debugfs_create_file(filename, mode, parent, buf, &control_file_operations);
 }
 
-static int remove_buf_file_callback(struct dentry* dentry){
+static int control_remove_buf_file_callback(struct dentry* dentry){
     if(dentry != NULL)
         debugfs_remove(dentry);
     printk("sydr remove control_relay_file\n");
+    return 0;
 }
 
 static struct rchan_callbacks chan_control_callback = {
     .create_buf_file = control_create_buf_file_callback,
-    .remove_buf_file = remove_buf_file_callback
+    .remove_buf_file = control_remove_buf_file_callback
 };
 
 /*-------------------------------- main  ------------------------------------*/
@@ -139,7 +148,7 @@ int relay_init(void){
 
     chan_control.rchan = relay_open(chan_control.base_pathname, NULL,
                                     chan_control.sub_buf_size, chan_control.num_sub_buf,
-                                    *chan_control_callback, NULL);
+                                    &chan_control_callback, NULL);
     if(chan_control.rchan == NULL){ printk("relay[control] open fail\n"); return -1; }
 
     printk("relay.init\n");

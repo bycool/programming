@@ -11,20 +11,21 @@
 
 void get_inode(void){
 	char* path_name = "/home/teanee/programming/kernel/checkfunc/Makefile";
-	unsigned long fileinode = -1;
-	struct inode *inode;
+
+
+/*	unsigned long fileinode = -1;
 	struct path path;
 	kern_path(path_name, LOOKUP_FOLLOW, &path);
 //	inode = path.dentry->d_inode;
 	fileinode = path.dentry->d_inode->i_ino;
-	printk("path : %s ,inode: %lu, right : 6081523\n", path_name, fileinode);
-/*
+	printk("path : %s ,inode: %lu\n", path_name, fileinode);
+*/
     struct inode *inode;
     struct path path;
     kern_path(path_name, LOOKUP_FOLLOW, &path);
+	path_put(&path);
     inode = path.dentry->d_inode;
     printk("Path name : %s, inode :%lu\n", path_name, inode->i_ino);
-*/
 }
 
 
