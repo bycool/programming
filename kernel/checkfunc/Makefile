@@ -7,6 +7,7 @@ INCL	:= -I .
 
 all:
 	make -C $(KDIR) SUBDIRS=$(PWD) modules
+	gcc test.c -o test
 
 clean:  
 	rm *.o -rf  
@@ -16,4 +17,5 @@ clean:
 	rm .*.cmd -rf
 	rm *.unsigned -rf
 	rm .tmp_versions -rf
+	rm test -f
 

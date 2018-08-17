@@ -1,5 +1,15 @@
 #include "sync.h"
 
+#define WATCH_START       '0'
+#define WATCH_ROOT        '1'
+#define WATCH_PATH        '2'
+#define WATCH_FILE        '3'
+#define WATCH_SUFFIX      '4'
+#define WATCH_NOT_PATH    '5'
+#define WATCH_NOT_FILE    '6'
+#define WATCH_NOT_SUFFIX  '7'
+#define WATCH_FINISH      '8'
+
 static bool wpath_ready = false;
 
 static DEFINE_SPINLOCK(lock);
@@ -16,13 +26,13 @@ enum wp_type {
     WP_FINISH = 8
 };
 
-static char* wp_str_type[] = {
+static char* wptype[] = {
     "WP_START", "WP_ROOT", "WP_PATH", "WP_FILE",
     "WP_SUFFIX", "WP_NOT_PATH", "WP_NOT_FILE", "WP_NOT_SUFFIX",
     "WP_FINISH"
 };
 
-struct wp_str {
+struct wpstr {
     char *str;
     int len;
 };
@@ -30,7 +40,7 @@ struct wp_str {
 struct wpnode {
 	enum wp_type type;
 
-	struct wp_str content;
+	struct wpstr content;
 
     struct wpnode next;
 }
@@ -38,20 +48,26 @@ struct wpnode {
 struct wproot {
     enum wp_type type;
 
-    struct wpnode path;
-    struct wpnode file;
-    struct wpnode suffix;
+	long root_id;
 
-    struct wproot* prep;
-    struct wproot* next; 
+    struct wpstr wp_root;
+
+	struct wpnode* path;
+	struct wpnode* file;
+	struct wpnode* suffix;
+	struct wpnode* notputh;
+	struct wpnode* notfile;
+	struct wpnode* notsuffix;
+
+    struct wproot* brother;
 };
 
 static wpnode watchpath = {WP_STRAT, {"/",1}, NULL, NULL};
 
 
 
-bool watchpath_read(){
-	return wpath_read;
+bool watchpath_ready(){
+	return wpath_ready;
 }
 
 static char* wp_path_dup_str(const char* buffer, int size){
@@ -98,7 +114,7 @@ static int wp_path_analysis(const char* buffer, char** content){
     return 0;
 }
 
-static void wp_str_assign(struct wp_str* wpstr, char* str){
+static void wpstr_assign(struct wpstr* wpstr, char* str){
     wpstr->str = str;
     wpstr->len = str == NULL ? 0 : strlen(str);
 }
@@ -112,7 +128,6 @@ static struct wp_node* wp_alloc_node(enum map_type type, const char* path){
 		printk("kmalloc new wpnode fail\n");
         return NULL;
 	}
-
     
 }
 
@@ -146,5 +161,48 @@ int add_watch_paths(const char __user* buffer, size_t size):
 
     fullpath_kis(args, &args_size);
 
-	rc = wp_path_analysis(args, &)
+	rc = wp_path_analysis(args, &content);
+
+	if(rc != 0){
+		if(!content) kfree(content);
+		return -1;
+	}
+
+	switch (buffer[0] & 0xFF)
+	{
+		case WATCH_ROOT:
+			type = WP_ROOT;
+			break;
+		case WATCH_PATH:
+			type = WP_PATH;
+			break;
+		case WATCH_FILE:
+			type = WP_FILE;
+			break;
+		case WATCH_SUFFIX:
+			type = WP_SUFFIX;
+			break;
+		case WATCH_NOT_PATH:
+			type = WP_NOT_PATH;
+			break;
+		case WATCH_NOT_FILE:
+			type = WP_NOT_FILE;
+			break;
+		case WATCH_NOT_SUFFIX:
+			type = WP_NOT_SUFFIX;
+			break;
+		case WATCH_FINISH:
+			printk("-------------------------------------\n");
+			
+			printk("-------------------------------------\n");
+			wpath_ready = true;
+			return 0;
+		default:
+			break;
+	}
+
+	printk("type: %d, path: %s\n", type, content);
+
+	
+	
 }

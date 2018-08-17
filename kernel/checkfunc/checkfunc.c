@@ -7,6 +7,8 @@
 #include <linux/mount.h>
 #include <linux/path.h>
 #include <linux/fs.h>
+#include <linux/limits.h>
+#include <linux/time.h>
 
 
 void get_inode(void){
@@ -28,12 +30,18 @@ void get_inode(void){
     printk("Path name : %s, inode :%lu\n", path_name, inode->i_ino);
 }
 
+void getmtime(void){
+	struct timeval tv;
+	do_gettimeofday(&tv);
+	printk("sec: %lu, usec: %lu\n", tv.tv_sec, tv.tv_usec);
+	
+}
+
 
 static int __init checkfunc_init(void){
+	getmtime();
+
 	printk("checkfunc mod init\n");
-
-	get_inode();
-
 	return 0;
 }
 

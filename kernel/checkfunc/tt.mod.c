@@ -22,6 +22,7 @@ __attribute__((section("__versions"))) = {
 	{ 0xea147363, "printk" },
 	{ 0xb4390f9a, "mcount" },
 	{ 0x7755310, "path_put" },
+	{ 0x1d2e87c6, "do_gettimeofday" },
 };
 
 static const char __module_depends[]
@@ -30,7 +31,7 @@ __attribute__((section(".modinfo"))) =
 "depends=";
 
 
-MODULE_INFO(srcversion, "1E70AE16F36739E05A25005");
+MODULE_INFO(srcversion, "18B4C98B944776B8B3F3403");
 
 static const struct rheldata _rheldata __used
 __attribute__((section(".rheldata"))) = {

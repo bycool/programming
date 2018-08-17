@@ -6,7 +6,8 @@ void change(char* title){
 }
 
 int main(){
-	char title[10] = {"nihaoy"};
+	char title[1024*5] = {"nihaoy"};
 	change(title);
 	printf("%d\n",title);
+	printf("%d\n", sizeof(title));
 }

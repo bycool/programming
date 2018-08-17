@@ -1,1 +1,0 @@
-cmd_/home/teanee/programming/kernel/systable/sstlb.o := ld -m elf_x86_64   -r -o /home/teanee/programming/kernel/systable/sstlb.o /home/teanee/programming/kernel/systable/systabled.o /home/teanee/programming/kernel/systable/nsysfunc.o ; scripts/mod/modpost /home/teanee/programming/kernel/systable/sstlb.o
