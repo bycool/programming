@@ -42,7 +42,7 @@ struct wpnode {
 
 	struct wpstr content;
 
-    struct wpnode next;
+    struct wpnode* next;
 }
 
 struct wproot {
@@ -55,16 +55,14 @@ struct wproot {
 	struct wpnode* path;
 	struct wpnode* file;
 	struct wpnode* suffix;
-	struct wpnode* notputh;
+	struct wpnode* notpath;
 	struct wpnode* notfile;
 	struct wpnode* notsuffix;
 
     struct wproot* brother;
 };
 
-static wpnode watchpath = {WP_STRAT, {"/",1}, NULL, NULL};
-
-
+static wpnode watchpath = {WP_STRAT, {"/",1}, NULL};
 
 bool watchpath_ready(){
 	return wpath_ready;
@@ -128,23 +126,104 @@ static struct wp_node* wp_alloc_node(enum map_type type, const char* path){
 		printk("kmalloc new wpnode fail\n");
         return NULL;
 	}
-    
+	wpstr_assign(new_node->content, (char*)content);
+
+	new_node->type = type;
+	new_node->next = NULL;
+
+	return new_node;   
+}
+
+static struct wp_node* wp_alloc_root(const char* path){
+	struct wpnode* new_root = NULL;
+
+	new_root = (struct wproot*)kmalloc(sizeof(struct wproot), GFP_ATOMIC);
+	if(new_root = NULL){
+		printk("kmalloc new wproot fail\n");
+		return NULL;
+	}
+	wpstr_assign(new_root->wp_root, path);
+
+	new_root->type = WP_ROOT;
+	new_root->path = NULL;
+	new_root->file = NULL;
+	new_root->suffix = NULL;
+	new_root->notpath = NULL;
+	new_root->notfile = NULL;
+	new_root->notsuffix = NULL;
+
+	new_root->brother = NULL;
+
+	return new_root;
 }
 
 
 static bool add_watch_path(enum wp_type type, char* path){
+	struct wproot* new_root = NULL;
 	struct wpnode* new_node = NULL;
+	struct wproot* tmp_root = NULL;
 	struct wpnode* tmp_node = NULL;
+	struct wpnode* sub_node = NULL;
 
     if(type == WP_START)
         return false;
 
+	if(type == WP_ROOT){
+		new_root = wp_alloc_root(type, path);
+		if(new_root == NULL)
+			return false;
+	}else{
+		new_node = wp_alloc_node(type, path);
+		if(new_node == NULL)
+			return false;
+	}
+
+	spin_lock_irq(&lock);
+
     tmp_node = &watchpath;
+	if(type == WP_ROOT){  // add the first root node;
+		if(tmp_node->next == NULL){
+			new_root->id = 1;
+			tmp_node->next = new_root;
+			spin_unlock_irq(&lock);
+			return true;
+		}else{  // add not first root node;
+			new_root->id = tmp_node->next->id + 1;
+			new_root->next = tmp_node->next;
+			tmp_node->next = new_root;
+			spin_unlock_irq(&lock);
+			return true;
+		}
+	}
 
-	while(tmp_node != NULL){
-        
+	tmp_root = tmp_node->next;
 
-    }
+	switch(type){
+		case WP_PATH:
+			sub_node = tmp_root->path;
+			break;
+		case WP_FILE:
+			sub_node = tmp_root->file;
+			break;
+		case WP_SUFFIX:
+			sub_node = tmp_root->suffix;
+			break;
+		case WP_NOT_PATH:
+			sub_node = tmp_root->notpath;
+			break;
+		case WP_NOT_FILE:
+			sub_node = tmp_root->notfile;
+			break;
+		case WP_NOT_SUFFIX:
+			sub_node = tmp_root->notsuffix;
+			break;
+		default:
+			break;
+	}
+
+	
+
+	
     
 }
 
@@ -203,6 +282,11 @@ int add_watch_paths(const char __user* buffer, size_t size):
 
 	printk("type: %d, path: %s\n", type, content);
 
-	
-	
+	if(!add_watch_path(type, content)){
+		kfree(content);
+		printk("add %d, content: %s fail\n", type, content);
+		return -1;
+	}
+
+	return 0;
 }
