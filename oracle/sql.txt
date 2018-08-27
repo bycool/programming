@@ -1,0 +1,28 @@
+oracle SQL支持命令：
+	1.数据定义语言(DDL)
+		create;
+		alter;
+		drop;
+	2.数据操作语言(DML)
+		insert;
+		select;
+		delete;
+		update;
+	3.事务控制语言(TCL)
+		commit;
+		rollback;
+		savepoint;
+	4.数据控制语言(DCL)
+		grant;
+		revoke;
+
+oracle data type:
+	1.字符:
+		CHAR 固定长度字符串，长度在[1~2000]
+		VARCHAR
+		LONG 
+	2.数值
+	3.日期时间
+	4.RAW/LONG RAW，图片，二进制
+	5.LOB,大对象类型，比如视频,大字符，大二进制
+
