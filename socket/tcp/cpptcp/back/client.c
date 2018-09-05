@@ -5,13 +5,15 @@
 #include <linux/in.h>
 #include <string.h>
 #include <pthread.h>
+#include <errno.h>
 
 
 int recbytes;
 int sin_size;
 char buffer[1024]={0};
 int portnum=8889;  
-char* ip = "127.0.0.1";
+//char* ip = "127.0.0.1";
+char* ip = "192.168.0.62";
 
 
 int csocket(){
@@ -35,12 +37,12 @@ int cconnect(int cfds, char* ip,int portm){
 
 	if(-1 == connect(cfds,(struct sockaddr *)(&s_add), sizeof(struct sockaddr)))
 	{
-	    printf("connect fail !\r\n");
+	    printf("connect fail %d[%s]\n", errno, strerror(errno));
 	    return -1;  
 	}
 	printf("connect ok !\r\n");
 }
-
+/*
 void client_recv(void* fd){
 	char recv_buf[100];
 	int service_fd = (int)fd;
@@ -54,12 +56,14 @@ void client_recv(void* fd){
 		printf("service: %s\n",recv_buf);
 	}
 }
-
+*/
 int main(){
-
+	int keepalive = 1;
 	printf("Hello,welcome to client !\r\n");
 	int myfd = csocket();
 	cconnect(myfd, ip, portnum);
+
+	//setsockopt(myfd, SOL_SOCKET,SO_KEEPALIVE,(void*)(&keepalive),sizeof(keepalive));
 
 //	pthread_t tid;
 //	pthread_create(&tid, NULL, client_recv,(void*)myfd);
@@ -67,10 +71,12 @@ int main(){
 	char buffer[256];
 	char buf[256];
 	while(1){
+		printf("---------------------\n");
 		printf("please enter sth:");
 		scanf("%s",buffer);
+		printf("myfd = %d\n", myfd);
 	 	if( -1 == write(myfd,buffer,sizeof(buffer)-1)) return -1;
-	
+		printf("before recv\n");
 		int s = recv(myfd, buf, sizeof(buf), 0);
 		if(s>0){
 			buf[s] = 0;

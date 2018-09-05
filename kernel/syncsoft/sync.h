@@ -1,6 +1,3 @@
-#ifndef __SYNC_H__
-#define __SYNC_H__
-
 #include <linux/version.h>
 #include <asm/unistd.h>
 #include <linux/module.h>
@@ -22,6 +19,12 @@
 
 #include "sync_operate.h"
 
+/* utils */
+void fullpath_kis_backslash(char* fullpath, int* size);
+void fullpath_kis_dot(char* fullpath, int* size);
+void fullpath_kis_double_dot(char* fullpath, int* size);
+void fullpath_kis(char* fullpath, int* size);
+
 /* relay */
 int relay_init(void);
 void relay_exit(void);
@@ -30,7 +33,4 @@ int relay_write_data(char* buffer, int buf_len);
 /* hook */
 int sync_hook_init(void);
 void sync_unhook_exit(void);
-
-
-#endif
 

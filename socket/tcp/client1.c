@@ -57,7 +57,7 @@ int main(){
 	if( -1 == write(myfd,buffer,strlen(buffer))) return -1;
 	while(1){
 	char buf[256];
-	recv(myfd, buf, sizeof(buf), 0);
+	if(recv(myfd, buf, sizeof(buf), 0)==0) {close(myfd); return 0; }
 	printf("recv:%s\n",buf);
 	}
 //	getchar(); /* 此句为使程序暂停在此处，可以使用netstat查看当前的连接 */

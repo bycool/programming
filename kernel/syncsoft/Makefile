@@ -3,8 +3,9 @@ obj-m	:= sydr.o
 sydr-objs	:= sync_hook.o \
 			   sync_operate.o \
 			   relay.o  \
-               sync.o
-
+               sync.o	\
+               sync_wp.o	\
+               sync_utils.o
 
 KDIR	:= /lib/modules/$(shell uname -r)/build
 PWD		:= $(shell pwd)
