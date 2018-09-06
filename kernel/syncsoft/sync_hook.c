@@ -14,8 +14,34 @@
 
 #include "sync.h" //头文件包括自定义系统函数的声明
 
+sys_open_t old_open = NULL;
+sys_openat_t old_openat = NULL;
+sys_creat_t old_creat = NULL;
+sys_write_t old_write = NULL;
+sys_writev_t old_writev = NULL;
+sys_pwritev_t old_pwritev = NULL;
+sys_pwrite64_t old_pwrite64 = NULL;
+sys_lseek_t old_lseek = NULL;
+sys_close_t old_close = NULL;
 sys_mkdir_t old_mkdir = NULL;
+sys_unlink_t old_unlink = NULL;
+sys_unlinkat_t old_unlinkat = NULL;
+sys_link_t old_link = NULL;
+sys_linkat_t old_linkat = NULL;
+sys_symlink_t old_symlink = NULL;
+sys_symlinkat_t old_symlinkat = NULL;
+sys_rename_t old_rename = NULL;
+sys_renameat_t old_renameat = NULL;
+sys_truncate_t old_truncate = NULL;
+sys_ftruncate_t old_ftruncate = NULL;
 sys_rmdir_t old_rmdir = NULL;
+sys_chown_t old_chown = NULL;
+sys_lchown_t old_lchown = NULL;
+sys_fchown_t old_fchown = NULL;
+sys_fchownat_t old_fchownat = NULL;
+sys_chmod_t old_chmod = NULL;
+sys_fchmod_t old_fchmod = NULL;
+sys_fchmodat_t old_fchmodat = NULL;
 
 
 static unsigned int org_cr0 = 0;

@@ -98,14 +98,24 @@ static struct channel_info chan_control = {
     .is_mmap = false
 };
 
-static ssize_t control_read(struct file* filep, char __user * buffer, size_t count, loff_t *ppos){
-    printk("relay:control_read\n");
+static ssize_t control_read(struct file* filep, char __user * ubuffer, size_t count, loff_t *ppos){
+	struct channel_info* priv = NULL;
+
+	char buffer[8] = {0};
+	int copy_len = 0;
+
+	copy_len = copy_from_user(buffer, ubuffer, count);
+
+	
 
     return 0;
 }
 
-static ssize_t control_write(struct file* filep, const char __user * buffer, size_t count, loff_t *ppos){
-    printk("relay:control_write\n");
+static ssize_t control_write(struct file* filep, const char __user * ubuffer, size_t count, loff_t *ppos){
+	char buffer[1024] = {0};
+	int copy_len = 0;
+
+	copy_len = copy_from_user(buffer, ubuffer, count);
 
     return 0;
 }

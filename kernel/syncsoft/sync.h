@@ -19,6 +19,18 @@
 
 #include "sync_operate.h"
 
+#define CR_DCHAN_READY		'1'
+
+#define	CW_WP_ROOT			'1'
+#define CW_WP_PATH			'2'
+#define CW_WP_FILE			'3'
+#define CW_WP_SUFFIX		'4'
+#define CW_WP_NOT_PATH		'5'
+#define CW_WP_NOT_FILE		'6'
+#define CW_WP_NOT_SUFFIX	'7'
+#define CW_WP_FINISH		'8'
+
+
 /* utils */
 void fullpath_kis_backslash(char* fullpath, int* size);
 void fullpath_kis_dot(char* fullpath, int* size);

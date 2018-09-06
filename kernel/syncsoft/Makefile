@@ -18,7 +18,7 @@ clean:
 	rm *.o -rf  
 	rm *.mod.* -rf  
 	rm *odule* -rf
-	rm *.ko -rf
+#	rm *.ko -rf
 	rm .*.cmd -rf
 	rm *.unsigned -rf
 	rm .tmp_versions -rf
