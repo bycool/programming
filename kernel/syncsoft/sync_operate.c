@@ -84,11 +84,63 @@ asmlinkage long nsys_link(const char __user* oldname, const char __user* newname
 	return old_link(oldname, newname);
 }
 
-asmlinkage long sys_linkat(int olddfd, const char __user* oldname, int newdfd, const char __user* newname, int flag){
+asmlinkage long nsys_linkat(int olddfd, const char __user* oldname, int newdfd, const char __user* newname, int flag){
 	return old_linkat(olddfd, oldname, newdfd, newname, flag);
+}
+
+asmlinkage long nsys_symlink(const char __user* oldname, const char __user* newname){
+	return old_symlink(oldname, newname);
+}
+
+asmlinkage long nsys_symlinkat(const char __user* oldname, int newdfd, const char __user* newname){
+	return old_symlinkat(oldname, newdfd, newname);
+}
+
+asmlinkage long nsys_rename(const char __user* oldname, const char __user* newname){
+	return old_rename(oldname, newname);
+}
+
+asmlinkage long nsys_renameat(int olddfd, const char __user* oldname, int newdfd, const char __user* newname){
+	return old_renameat(olddfd, oldname, newdfd, newname);
+}
+
+asmlinkage long nsys_truncate(const char __user* pathname, long length){
+	return old_truncate(pathname, length);
+}
+
+asmlinkage long nsys_ftruncate(unsigned int fd, unsigned long length){
+	return old_ftruncate(fd, length);
 }
 
 asmlinkage long nsys_rmdir(const char __user* pathname){
 	printk("nsys_rmdir\n");
 	return old_rmdir(pathname);
+}
+
+asmlinkage long nsys_chown(const char __user* filename, uid_t user, gid_t group){
+	return old_chown(filename, user, group);
+}
+
+asmlinkage long nsys_lchown(const char __user* filename, uid_t user, gid_t group){
+	return old_lchown(filename, user, group);
+}
+
+asmlinkage long nsys_fchown(unsigned int fd, uid_t user, gid_t group){
+	return old_fchown(fd, user, group);
+}
+
+asmlinkage long nsys_fchownat(int dfd, const char __user* filename, uid_t user, gid_t group, int flag){
+	return old_fchownat(dfd, filename, user, group, flag);
+}
+
+asmlinkage long nsys_chmod(const char __user* filename, mode_t mode){
+	return old_chmod(filename, mode);
+}
+
+asmlinkage long nsys_fchmod(unsigned int fd, mode_t mode){
+	return old_fchmod(fd, mode);
+}
+
+asmlinkage long nsys_fchmodat(int dfd, const char __user* filename, mode_t mode){
+	return old_fchmodat(dfd, filename, mode);
 }

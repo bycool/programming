@@ -39,7 +39,7 @@ typedef asmlinkage long (*sys_link_t)(const char __user* oldname, const char __u
 typedef asmlinkage long (*sys_linkat_t)(int olddfd, const char __user* oldname, int newdfd, const char __user* newname, int flag);
 typedef asmlinkage long (*sys_symlink_t)(const char __user* oldname, const char __user* newname);
 typedef asmlinkage long (*sys_symlinkat_t)(const char __user* oldname, int newdfd, const char __user* newname);
-typedef asmlinkage long (*sys_rename_t)(const char __user* oldnm, const char __user* newnm);
+typedef asmlinkage long (*sys_rename_t)(const char __user* oldname, const char __user* newname);
 typedef asmlinkage long (*sys_renameat_t)(int olddfd, const char __user* oldname, int newdfd, const char __user* newname);
 typedef asmlinkage long (*sys_truncate_t)(const char __user* pathname, long length);
 typedef asmlinkage long (*sys_ftruncate_t)(unsigned int fd, unsigned long length);
@@ -54,5 +54,33 @@ typedef asmlinkage long (*sys_fchmodat_t)(int dfd, const char __user* filename, 
 
 
 //new function declaration
+asmlinkage long nsys_open(const char __user* filename, int flag, int mode);
+asmlinkage long nsys_openat(int dfd, const char __user* pathname, int flag, int mode);
+asmlinkage long nsys_creat(const char __user* pathname, int mode);
+asmlinkage long nsys_write(unsigned int fd, const char __user* buf, size_t len);
+asmlinkage long nsys_writev(unsigned long fd, const struct iovec __user* vec, unsigned long vlen);
+asmlinkage long nsys_pwritev(unsigned long fd, const struct iovec __user* vec, unsigned long vlen,
+                                         unsigned long pos_l, unsigned long pos_h);
+asmlinkage long nsys_pwrite64(unsigned int fd, const char __user* buf, size_t count, loff_t pos);
+asmlinkage long nsys_lseek(unsigned int fd, off_t offset, unsigned origin);
+asmlinkage long nsys_close(unsigned int fd);
 asmlinkage long nsys_mkdir(const char __user* pathname, int mode);
-asmlinkage long nsys_rmdir(const char __user *pathname);
+asmlinkage long nsys_unlink(const char __user* pathname);
+asmlinkage long nsys_unlinkat(int dfd, const char __user* pathname, int flag);
+asmlinkage long nsys_link(const char __user* oldname, const char __user* newname);
+asmlinkage long nsys_linkat(int olddfd, const char __user* oldname, int newdfd, const char __user* newname, int flag);
+asmlinkage long nsys_symlink(const char __user* oldname, const char __user* newname);
+asmlinkage long nsys_symlinkat(const char __user* oldname, int newdfd, const char __user* newname);
+asmlinkage long nsys_rename(const char __user* oldname, const char __user* newname);
+asmlinkage long nsys_renameat(int olddfd, const char __user* oldname, int newdfd, const char __user* newname);
+asmlinkage long nsys_truncate(const char __user* pathname, long length);
+asmlinkage long nsys_ftruncate(unsigned int fd, unsigned long length);
+asmlinkage long nsys_rmdir(const char __user* pathname);
+asmlinkage long nsys_chown(const char __user* filename, uid_t user, gid_t group);
+asmlinkage long nsys_lchown(const char __user* filename, uid_t user, gid_t group);
+asmlinkage long nsys_fchown(unsigned int fd, uid_t user, gid_t group);
+asmlinkage long nsys_fchownat(int dfd, const char __user* filename, uid_t user, gid_t group, int flag);
+asmlinkage long nsys_chmod(const char __user* filename, mode_t mode);
+asmlinkage long nsys_fchmod(unsigned int fd, mode_t mode);
+asmlinkage long nsys_fchmodat(int dfd, const char __user* filename, mode_t mode);
+

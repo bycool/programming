@@ -13,6 +13,7 @@ INCL	:= -I .
 
 all:
 	make -C $(KDIR) SUBDIRS=$(PWD) modules
+	make clean
 
 clean:  
 	rm *.o -rf  
