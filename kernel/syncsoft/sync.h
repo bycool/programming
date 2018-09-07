@@ -32,6 +32,7 @@
 
 
 /* utils */
+long get_mtime(void);
 void fullpath_kis_backslash(char* fullpath, int* size);
 void fullpath_kis_dot(char* fullpath, int* size);
 void fullpath_kis_double_dot(char* fullpath, int* size);

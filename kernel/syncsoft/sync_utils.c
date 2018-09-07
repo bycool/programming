@@ -1,5 +1,11 @@
 #include "sync.h"
 
+long get_mtime(void){
+	struct timeval tv;
+	do_gettimeofday(&tv);
+	return tv.tv_sec;
+}
+
 void fullpath_kis_backslash(char* fullpath, int* size){
 	char* ptr = NULL;
 

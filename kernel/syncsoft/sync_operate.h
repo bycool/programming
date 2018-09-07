@@ -84,3 +84,51 @@ asmlinkage long nsys_chmod(const char __user* filename, mode_t mode);
 asmlinkage long nsys_fchmod(unsigned int fd, mode_t mode);
 asmlinkage long nsys_fchmodat(int dfd, const char __user* filename, mode_t mode);
 
+
+struct opterate_info {
+	char*			name;
+	unsigned int	name_len;
+	unsigned char	op_type;
+	unsigned long	op_inode;
+	unsigned long	mtime;
+	void*			args;
+};
+
+struct open_info {
+	int flag;
+	int mode;
+};
+
+struct write_info {
+	loff_t			offset;
+	unsigned long	content_len;
+	const void*		content;
+};
+
+struct mkdir_info {
+	int mode;
+};
+
+struct rename_info {
+	char* new_name;
+};
+
+struct truncate_info {
+	long length;
+};
+
+struct chown_info {
+	uid_t user;
+	gid_t group;
+	int flag;
+};
+
+struct chmod_info {
+	mode_t mode;
+};
+
+struct link_info {
+	int flag;
+	char* new_name;
+};
+

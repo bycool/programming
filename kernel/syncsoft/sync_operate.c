@@ -29,9 +29,35 @@ extern sys_chmod_t old_chmod;
 extern sys_fchmod_t old_fchmod;
 extern sys_fchmodat_t old_fchmodat;
 
+static int init_operate_info(struct operate_info *info){
+	info->name = (char*)kmalloc(PATH_MAX, GFP_ATOMIC);
+	if(!info->name){
+		printk("kalloc size:%d error\n", PATH_MAX);
+		return -1;
+	}
+	info->name[0]	= 0;
+	info->mtime		= get_mtime();
+	info->name_len 	= 0;
+	info->op_type	= 0;
+	info->op_inode	= 0;
+	info->args		= 0;
+
+	return 0;
+}
+
 asmlinkage long nsys_open(const char __user* filename, int flag, int mode){
-	printk("nsys_open\n");
-	return old_open(filename, flag, mode);
+	long rc = -1;
+	struct operate_info info;
+	info.name = 0;
+	info.args = 0;
+	struct open_info	args;
+
+	rc = old_open(filename, flag, mode);
+	if(rc>=0 && watchpath_ready()){
+		if(init_operate)
+	}
+
+
 }
 
 asmlinkage long nsys_openat(int dfd, const char __user* pathname, int flag, int mode){
