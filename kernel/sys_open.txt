@@ -1,0 +1,9 @@
+看一看sys_open都干了什么。
+
+fs/open.c 1053
+
+SYSCALL_DEFINE3(open, const char __user *, filename, int, flags, int, mode)
+	force_o_largefile() //是不是32位？这个标志为了在32位上用64位的方法打开大文件。
+	ret = do_sys_open(AT_FDCWD, filename, flags, mode);
+		getname(filename)；
+	asmlinkage_protect(3, ret, filename, flags, mode);

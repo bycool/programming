@@ -1,13 +1,14 @@
 #include <stdio.h>
 #include <string.h>
 
-void change(char* title){
-	printf("%d\n",strlen(title));
+void* change(long title){
+	printf("%p\n",&title);
+	return (void*)title;
 }
 
 int main(){
-	char title[1024*5] = {"nihaoy"};
-	change(title);
-	printf("%d\n",title);
-	printf("%d\n", sizeof(title));
+	long title = 1;
+	char* tmp = change(title);
+	printf("%lu\n", tmp);
+	printf("%p\n", &tmp);
 }

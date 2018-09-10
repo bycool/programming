@@ -74,9 +74,10 @@ int main(){
 		printf("---------------------\n");
 		printf("please enter sth:");
 		scanf("%s",buffer);
-		printf("myfd = %d\n", myfd);
+		printf("1myfd = %d\n", myfd);
 	 	if( -1 == write(myfd,buffer,sizeof(buffer)-1)) return -1;
 		printf("before recv\n");
+		printf("1myfd = %d\n", myfd);
 		int s = recv(myfd, buf, sizeof(buf), 0);
 		if(s>0){
 			buf[s] = 0;
