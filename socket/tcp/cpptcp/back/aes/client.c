@@ -68,21 +68,33 @@ int main(){
 	int myfd = csocket();
 	cconnect(myfd, ip, portnum);
 
-	char buffer[1024] = "<DATAFILE TargetId=\"%d\" FullId=\"1\" FzsNo=\"1\" Enc=\"1\" SIZE=\"1\" Zip=\"1\" ZipSize=\"1\"/>";
+
+	//setsockopt(myfd, SOL_SOCKET,SO_KEEPALIVE,(void*)(&keepalive),sizeof(keepalive));
+
+//	pthread_t tid;
+//	pthread_create(&tid, NULL, client_recv,(void*)myfd);
+
+	char buffer[1024];
 	char buf[256];
-	len = strlen(buffer);
+	while(1){
+		printf("---------------------\n");
+		printf("please enter sth:");
+		scanf("%s",buffer);
+		len = strlen(buffer);
 
-	out_len = aes128_en(buffer, len, &enout);
+		out_len = aes128_en(buffer, len, &enout);
 
-//	printf("buffer.size: %d\n", out_len);
+		printf("buffer.size: %d\n", out_len);
 
-	if( -1 == write(myfd, enout , out_len)) return -1;
+	 	if( -1 == write(myfd, enout , out_len)) return -1;
 
-	free(enout);
-	int s = recv(myfd, buf, sizeof(buf), 0);
-	if(s>0){
-		buf[s] = 0;
-		printf("recv:%s\n",buf);
+		free(enout);
+		int s = recv(myfd, buf, sizeof(buf), 0);
+		if(s>0){
+			buf[s] = 0;
+			printf("recv:%s\n",buf);
+		}
+		
 	}
 	close(myfd);
 	return 0;

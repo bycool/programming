@@ -26,3 +26,24 @@ oracle data type:
 	4.RAW/LONG RAW，图片，二进制
 	5.LOB,大对象类型，比如视频,大字符，大二进制
 
+
+章3.用户与权限：
+	sys：权限最高的oracle用户，相当与linux里的root
+	system：默认的系统管理员,该用户拥有oracle管理工具使用的内部表和视图。通常通过system用户管理数据库用户、权限和存储等。
+	scott: 普通用户，示范账户，默认密码：tiger
+
+*要链接到oracle数据库，需要创建一个用户账户。
+*每一个用户都有一个默认表空间和一个临时表空间。
+*create user 命令用户创建新用户:
+	create user username
+	identified by passwd
+	[default tablespace tablespacename]
+	[temporary tablespace tablespacename]
+
+
+
+
+
+alter user system identified by 123456 //修改system密码为123456
+ALTER USER username ACCOUNT UNLOCK; //解锁username帐号
+
