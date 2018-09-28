@@ -21,7 +21,7 @@ long do_sys_open(int dfd, const char __user *filename, int flags, int mode)
     char *tmp = getname(filename);  //申请内核空间内存 tmp为首地址
     int fd = PTR_ERR(tmp);				//将首地址做个类型转换void* --> long
 
-    if (!IS_ERR(tmp)) {					//tmp是否是错误地址，不是错误地址进入if
+    if (!IS_ERR(tmp)) {					//申请是否成功,成功进入if
         fd = get_unused_fd_flags(flags);
         if (fd >= 0) {
             struct file *f = do_filp_open(dfd, tmp, flags, mode, 0);

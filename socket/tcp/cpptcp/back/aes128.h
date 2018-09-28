@@ -3,5 +3,5 @@
 #include <string.h>
 #include <stdint.h>
 
-uint8_t aes128_en(uint8_t* in, int len, uint8_t** out);
-uint8_t aes128_de(uint8_t* in, int len);
+unsigned char aes128_en(unsigned char* in, int len, unsigned char** out);
+unsigned char aes128_de(unsigned char* in, int len);

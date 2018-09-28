@@ -1,1 +1,0 @@
-cmd_/home/teanee/programming/kernel/checkfunc/tt.o := ld -m elf_x86_64   -r -o /home/teanee/programming/kernel/checkfunc/tt.o /home/teanee/programming/kernel/checkfunc/checkfunc.o ; scripts/mod/modpost /home/teanee/programming/kernel/checkfunc/tt.o

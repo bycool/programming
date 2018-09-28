@@ -17,8 +17,8 @@ unsigned char key[176] = {
   0x71, 0xf8, 0xe1, 0x26, 0xd, 0x9, 0xe7, 0x9, 0x33, 0xb6, 0xde, 0x7e, 0x9, 0x99, 0x9d, 0x24, 0xa9, 0xa6, 0xd7, 0x27, 0xa4, 0xaf, 0x30, 0x2e, 0x97, 
   0x19, 0xee, 0x50, 0x9e, 0x80, 0x73, 0x74};
 
-uint8_t gmult(uint8_t a, uint8_t b) {
-	uint8_t p = 0, i = 0, hbs = 0;
+unsigned char gmult(unsigned char a, unsigned char b) {
+	unsigned char p = 0, i = 0, hbs = 0;
 	for (i = 0; i < 8; i++) {
 		if (b & 1) {
 			p ^= a;
@@ -29,24 +29,24 @@ uint8_t gmult(uint8_t a, uint8_t b) {
 		b >>= 1;
 	}
 
-	return (uint8_t)p;
+	return (unsigned char)p;
 }
 
-void coef_add(uint8_t a[], uint8_t b[], uint8_t d[]) {
+void coef_add(unsigned char a[], unsigned char b[], unsigned char d[]) {
 	d[0] = a[0]^b[0];
 	d[1] = a[1]^b[1];
 	d[2] = a[2]^b[2];
 	d[3] = a[3]^b[3];
 }
 
-void coef_mult(uint8_t *a, uint8_t *b, uint8_t *d) {
+void coef_mult(unsigned char *a, unsigned char *b, unsigned char *d) {
 	d[0] = gmult(a[0],b[0])^gmult(a[3],b[1])^gmult(a[2],b[2])^gmult(a[1],b[3]);
 	d[1] = gmult(a[1],b[0])^gmult(a[0],b[1])^gmult(a[3],b[2])^gmult(a[2],b[3]);
 	d[2] = gmult(a[2],b[0])^gmult(a[1],b[1])^gmult(a[0],b[2])^gmult(a[3],b[3]);
 	d[3] = gmult(a[3],b[0])^gmult(a[2],b[1])^gmult(a[1],b[2])^gmult(a[0],b[3]);
 }
 
-static uint8_t s_box[256] = {
+static unsigned char s_box[256] = {
 	// 0     1     2     3     4     5     6     7     8     9     a     b     c     d     e     f
 	0x63, 0x7c, 0x77, 0x7b, 0xf2, 0x6b, 0x6f, 0xc5, 0x30, 0x01, 0x67, 0x2b, 0xfe, 0xd7, 0xab, 0x76, // 0
 	0xca, 0x82, 0xc9, 0x7d, 0xfa, 0x59, 0x47, 0xf0, 0xad, 0xd4, 0xa2, 0xaf, 0x9c, 0xa4, 0x72, 0xc0, // 1
@@ -65,7 +65,7 @@ static uint8_t s_box[256] = {
 	0xe1, 0xf8, 0x98, 0x11, 0x69, 0xd9, 0x8e, 0x94, 0x9b, 0x1e, 0x87, 0xe9, 0xce, 0x55, 0x28, 0xdf, // e
 	0x8c, 0xa1, 0x89, 0x0d, 0xbf, 0xe6, 0x42, 0x68, 0x41, 0x99, 0x2d, 0x0f, 0xb0, 0x54, 0xbb, 0x16};// f
 
-static uint8_t inv_s_box[256] = {
+static unsigned char inv_s_box[256] = {
 	// 0     1     2     3     4     5     6     7     8     9     a     b     c     d     e     f
 	0x52, 0x09, 0x6a, 0xd5, 0x30, 0x36, 0xa5, 0x38, 0xbf, 0x40, 0xa3, 0x9e, 0x81, 0xf3, 0xd7, 0xfb, // 0
 	0x7c, 0xe3, 0x39, 0x82, 0x9b, 0x2f, 0xff, 0x87, 0x34, 0x8e, 0x43, 0x44, 0xc4, 0xde, 0xe9, 0xcb, // 1
@@ -85,9 +85,9 @@ static uint8_t inv_s_box[256] = {
 	0x17, 0x2b, 0x04, 0x7e, 0xba, 0x77, 0xd6, 0x26, 0xe1, 0x69, 0x14, 0x63, 0x55, 0x21, 0x0c, 0x7d};// f
 
 
-uint8_t R[] = {0x02, 0x00, 0x00, 0x00};
+unsigned char R[] = {0x02, 0x00, 0x00, 0x00};
  
-uint8_t * Rcon(uint8_t i) {
+unsigned char * Rcon(unsigned char i) {
 	
 	if (i == 1) {
 		R[0] = 0x01; // x^(1-1) = x^0 = 1
@@ -103,9 +103,9 @@ uint8_t * Rcon(uint8_t i) {
 	return R;
 }
 
-void add_round_key(uint8_t *state, uint8_t *w, uint8_t r) {
+void add_round_key(unsigned char *state, unsigned char *w, unsigned char r) {
 	
-	uint8_t c;
+	unsigned char c;
 	
 	for (c = 0; c < Nb; c++) {
 		state[Nb*0+c] = state[Nb*0+c]^w[4*Nb*r+4*c+0];   //debug, so it works for Nb !=4 
@@ -115,28 +115,10 @@ void add_round_key(uint8_t *state, uint8_t *w, uint8_t r) {
 	}
 }
 
-void mix_columns(uint8_t *state) {
+void mix_columns(unsigned char *state) {
 
-	uint8_t a[] = {0x02, 0x01, 0x01, 0x03}; // a(x) = {02} + {01}x + {01}x2 + {03}x3
-	uint8_t i, j, col[4], res[4];
-
-	for (j = 0; j < Nb; j++) {
-		for (i = 0; i < 4; i++) {
-			col[i] = state[Nb*i+j];
-		}
-
-		coef_mult(a, col, res);
-
-		for (i = 0; i < 4; i++) {
-			state[Nb*i+j] = res[i];
-		}
-	}
-}
-
-void inv_mix_columns(uint8_t *state) {
-
-	uint8_t a[] = {0x0e, 0x09, 0x0d, 0x0b}; // a(x) = {0e} + {09}x + {0d}x2 + {0b}x3
-	uint8_t i, j, col[4], res[4];
+	unsigned char a[] = {0x02, 0x01, 0x01, 0x03}; // a(x) = {02} + {01}x + {01}x2 + {03}x3
+	unsigned char i, j, col[4], res[4];
 
 	for (j = 0; j < Nb; j++) {
 		for (i = 0; i < 4; i++) {
@@ -151,8 +133,26 @@ void inv_mix_columns(uint8_t *state) {
 	}
 }
 
-void shift_rows(uint8_t *state) {
-	uint8_t i, k, s, tmp;
+void inv_mix_columns(unsigned char *state) {
+
+	unsigned char a[] = {0x0e, 0x09, 0x0d, 0x0b}; // a(x) = {0e} + {09}x + {0d}x2 + {0b}x3
+	unsigned char i, j, col[4], res[4];
+
+	for (j = 0; j < Nb; j++) {
+		for (i = 0; i < 4; i++) {
+			col[i] = state[Nb*i+j];
+		}
+
+		coef_mult(a, col, res);
+
+		for (i = 0; i < 4; i++) {
+			state[Nb*i+j] = res[i];
+		}
+	}
+}
+
+void shift_rows(unsigned char *state) {
+	unsigned char i, k, s, tmp;
 
 	for (i = 1; i < 4; i++) {
 		s = 0;
@@ -169,8 +169,8 @@ void shift_rows(uint8_t *state) {
 	}
 }
 
-void inv_shift_rows(uint8_t *state) {
-	uint8_t i, k, s, tmp;
+void inv_shift_rows(unsigned char *state) {
+	unsigned char i, k, s, tmp;
 
 	for (i = 1; i < 4; i++) {
 		s = 0;
@@ -187,10 +187,10 @@ void inv_shift_rows(uint8_t *state) {
 	}
 }
 
-void sub_bytes(uint8_t *state) {
+void sub_bytes(unsigned char *state) {
 
-	uint8_t i, j;
-	uint8_t row, col;
+	unsigned char i, j;
+	unsigned char row, col;
 
 	for (i = 0; i < 4; i++) {
 		for (j = 0; j < Nb; j++) {
@@ -201,10 +201,10 @@ void sub_bytes(uint8_t *state) {
 	}
 }
 
-void inv_sub_bytes(uint8_t *state) {
+void inv_sub_bytes(unsigned char *state) {
 
-	uint8_t i, j;
-	uint8_t row, col;
+	unsigned char i, j;
+	unsigned char row, col;
 
 	for (i = 0; i < 4; i++) {
 		for (j = 0; j < Nb; j++) {
@@ -215,19 +215,19 @@ void inv_sub_bytes(uint8_t *state) {
 	}
 }
 
-void sub_word(uint8_t *w) {
+void sub_word(unsigned char *w) {
 
-	uint8_t i;
+	unsigned char i;
 
 	for (i = 0; i < 4; i++) {
 		w[i] = s_box[16*((w[i] & 0xf0) >> 4) + (w[i] & 0x0f)];
 	}
 }
 
-void rot_word(uint8_t *w) {
+void rot_word(unsigned char *w) {
 
-	uint8_t tmp;
-	uint8_t i;
+	unsigned char tmp;
+	unsigned char i;
 
 	tmp = w[0];
 
@@ -238,11 +238,11 @@ void rot_word(uint8_t *w) {
 	w[3] = tmp;
 }
 
-void key_expansion(uint8_t *key, uint8_t *w) {
+void key_expansion(unsigned char *key, unsigned char *w) {
 
-	uint8_t tmp[4];
-	uint8_t i, j;
-	uint8_t len = Nb*(Nr+1);
+	unsigned char tmp[4];
+	unsigned char i, j;
+	unsigned char len = Nb*(Nr+1);
 
 	for (i = 0; i < Nk; i++) {
 		w[4*i+0] = key[4*i+0];
@@ -276,9 +276,9 @@ void key_expansion(uint8_t *key, uint8_t *w) {
 	}
 }
 
-void cipher(uint8_t *in, uint8_t *w) {
-	uint8_t state[4*Nb];
-	uint8_t r, i, j;
+void cipher(unsigned char *in, unsigned char *w) {
+	unsigned char state[4*Nb];
+	unsigned char r, i, j;
 
 	for (i = 0; i < 4; i++) {
 		for (j = 0; j < Nb; j++) {
@@ -306,9 +306,9 @@ void cipher(uint8_t *in, uint8_t *w) {
 	}
 }
 
-void inv_cipher(uint8_t *in, uint8_t *w) {
-	uint8_t state[4*Nb];
-	uint8_t r, i, j;
+void inv_cipher(unsigned char *in, unsigned char *w) {
+	unsigned char state[4*Nb];
+	unsigned char r, i, j;
 
 	for (i = 0; i < 4; i++) {
 		for (j = 0; j < Nb; j++) {
@@ -336,12 +336,12 @@ void inv_cipher(uint8_t *in, uint8_t *w) {
 	}
 }
 
-uint8_t pkcs7padding(uint8_t* in, uint8_t in_len, uint8_t** out){
-	uint8_t out_len, pad, i;
+unsigned char pkcs7padding(unsigned char* in, unsigned char in_len, unsigned char** out){
+	unsigned char out_len, pad, i;
 	pad = 16 - in_len%16;
 	out_len = in_len + pad;
 
-	*out = (uint8_t*)malloc(out_len);
+	*out = (unsigned char*)malloc(out_len);
 	if(*out == NULL) return -1;
 
 	memcpy(*out, in, in_len);
@@ -352,8 +352,8 @@ uint8_t pkcs7padding(uint8_t* in, uint8_t in_len, uint8_t** out){
 	return out_len;
 }
 
-uint8_t inv_pkcs7padding(uint8_t* in, uint8_t in_len){
-	uint8_t i, pad, out_len;
+unsigned char inv_pkcs7padding(unsigned char* in, unsigned char in_len){
+	unsigned char i, pad, out_len;
 	pad = in[in_len-1];
 	for(i=0; i<pad; i++)
 		in[in_len++-pad] = 0;
@@ -361,8 +361,8 @@ uint8_t inv_pkcs7padding(uint8_t* in, uint8_t in_len){
 }
 
 
-uint8_t aes128_en(uint8_t* in, int len, uint8_t** out){
-	uint8_t i, pad, out_len;
+unsigned char aes128_en(unsigned char* in, int len, unsigned char** out){
+	unsigned char i, pad, out_len;
 	out_len = pkcs7padding(in, len, out);
 
 	for(i=0; i*16<out_len; i++){
@@ -371,8 +371,8 @@ uint8_t aes128_en(uint8_t* in, int len, uint8_t** out){
 	return out_len;
 }
 
-uint8_t aes128_de(uint8_t* in, int len){
-	uint8_t i, pad, out_len;
+unsigned char aes128_de(unsigned char* in, int len){
+	unsigned char i, pad, out_len;
 
 	for(i=0; i*16<len; i++){
 		inv_cipher(in+i*16, key);
@@ -383,12 +383,12 @@ uint8_t aes128_de(uint8_t* in, int len){
 
 /*
 int main(int argc, char *argv[]) {
-	uint8_t i;
+	unsigned char i;
 	int len = 0;
-	uint8_t* out = 0;
+	unsigned char* out = 0;
 	int out_len = 0;
 
-	uint8_t in[] = "abcdefghigklmnopa";
+	unsigned char in[] = "abcdefghigklmnopa";
 	len = strlen(in);
 
 	for(i=0; i<len; i++){

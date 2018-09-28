@@ -35,8 +35,6 @@ static ssize_t hello_write(struct file *filp, const char __user *buf, size_t siz
 		kfree(buff);
 		buff = NULL;
 	}
-		
-	printk(KERN_ALERT "hello are written\n");
 	return 0;
 }
 

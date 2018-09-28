@@ -1,5 +1,5 @@
 obj-m	:= tt.o
-tt-objs	:= checkfunc.o
+tt-objs	:= createdev.o
 
 KDIR	:= /lib/modules/$(shell uname -r)/build
 PWD	 := $(shell pwd)
