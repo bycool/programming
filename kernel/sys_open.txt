@@ -55,6 +55,7 @@ ptr & 0xfff == 0
 SYSCALL_DEFINE3(open, const char __user *, filename, int, flags, int, mode)
     force_o_largefile() //是不是32位？这个标志为了在32位上用64位的方法打开大文件。
     ret = do_sys_open(AT_FDCWD, filename, flags, mode);
+	{
         char *tmp = getname(filename)；分配内存,tmp是首地址，将filename用户空间的字符串放到tmp指向的内存里
         tmp= __getname(); ==> kmem_cache_alloc(names_cachep,GFP_KERNEL);//分配内存tmp是首地址
             kmem_cache_alloc_node(names_cachep,GFP_KERNEL, -1);
@@ -62,20 +63,21 @@ SYSCALL_DEFINE3(open, const char __user *, filename, int, flags, int, mode)
             trace_kmem_cache_alloc_node(_RET_IP_, ret, s->objsize, s->size, gfpflags, node);
         int fd = PTR_ERR(tmp);  //将分配的内存的首地址tmp做类型转换。
 
-			if (!IS_ERR(tmp)) {
-        fd = get_unused_fd_flags(flags);
-        if (fd >= 0) {
-            struct file *f = do_filp_open(dfd, tmp, flags, mode, 0);
-            if (IS_ERR(f)) {
-                put_unused_fd(fd);
-                fd = PTR_ERR(f);
-            } else {
-                fsnotify_open(f->f_path.dentry);
-                fd_install(fd, f);
-            }
-        }
-        putname(tmp);
-    }   
+		if (!IS_ERR(tmp)) {
+        	fd = get_unused_fd_flags(flags);
+        	if (fd >= 0) {
+            	struct file *f = do_filp_open(dfd, tmp, flags, mode, 0);
+            	if (IS_ERR(f)) {
+                	put_unused_fd(fd);
+                	fd = PTR_ERR(f);
+            	} else {
+                	fsnotify_open(f->f_path.dentry);
+                	fd_install(fd, f);
+            	}
+        	}
+       		putname(tmp);
+    	}
+	}   
 
 
            

@@ -14,7 +14,7 @@ int recbytes;
 int sin_size;
 char buffer[1024]={0};
 int portnum=8889;  
-char* ip = "127.0.0.1";
+char* ip = "192.168.253.145";
 //char* ip = "192.168.0.62";
 
 

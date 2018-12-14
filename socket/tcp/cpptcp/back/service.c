@@ -31,9 +31,12 @@ void* handle(void* argc){
 int main(){
 	int sfp,nfp;
 	char buffer[1024]={0};
-	struct sockaddr_in s_add,c_add;
+    char g_ip[20] = {0};
+    char p_ip[20] = {0};
+	struct sockaddr_in s_add,c_add, g_add, p_add;
+	int g_len = sizeof(g_add), p_len = sizeof(p_add);
 	int sin_size;
-	int portnum=8889;
+	int portnum=0;
 
 	printf("Hello,welcome to my server !\n");
 	sfp = socket(AF_INET, SOCK_STREAM, 0);
@@ -52,6 +55,11 @@ int main(){
 	    return -1;
 	}
 	printf("bind ok !\n");
+
+		getsockname(nfp, (struct sockaddr *)&g_add, &g_len);
+        inet_ntop(AF_INET, &g_add.sin_addr, g_ip, sizeof(g_ip));
+        printf("ip: %s, port: %d\n", g_ip, ntohs(g_add.sin_port));
+
 	if(-1 == listen(sfp,10)){
 	    printf("listen fail !\n");
 	    return -1;  
@@ -62,11 +70,21 @@ int main(){
 		sin_size = sizeof(struct sockaddr_in);  
 		nfp = accept(sfp, (struct sockaddr *)(&c_add), &sin_size);
 
+
+
 		if(-1 == nfp){
 		    printf("accept fail !\n");
 		    return -1;
 		}
 		printf("accept ok!\nServer start get connect from client[%d]:%#x : %#x\n",nfp,ntohl(c_add.sin_addr.s_addr),ntohs(c_add.sin_port));
+
+		getsockname(nfp, (struct sockaddr *)&g_add, &g_len);
+        getpeername(nfp, (struct sockaddr *)&p_add, &p_len);
+        inet_ntop(AF_INET, &g_add.sin_addr, g_ip, sizeof(g_ip));
+        inet_ntop(AF_INET, &p_add.sin_addr, p_ip, sizeof(p_ip));
+        printf("ip: %s, port: %d\n", g_ip, ntohs(g_add.sin_port));
+        printf("ip: %s, port: %d\n", p_ip, ntohs(p_add.sin_port));
+
 
 		pthread_t tid1,tid2,tid3;
 		pthread_create(&tid1,NULL,handle,(void*)nfp);

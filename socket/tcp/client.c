@@ -13,7 +13,7 @@ int sin_size;
 char buffer[1024]={0};    /* 接受缓冲区 */
 struct sockaddr_in s_add,c_add; /* 存储服务端和本端的ip、端口等信息结构体 */
 int portnum=8889;  /* 服务端使用的通信端口，可以更改，需和服务端相同 */
-char ip[] = "127.0.0.1\0";
+char ip[] = "192.168.253.145\0";
 
 printf("Hello,welcome to client !\r\n");
 /* 建立socket 使用因特网，TCP流传输 */

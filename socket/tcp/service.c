@@ -10,9 +10,11 @@
 int main(){
 	int sfp,nfp; /* 定义两个描述符 */
 	char buffer[1024]={0};
-	struct sockaddr_in s_add,c_add;
+	char g_ip[20] = {0};
+	char p_ip[20] = {0};
+	struct sockaddr_in s_add,c_add, g_add, p_add;
 	int sin_size;
-	unsigned short portnum=0x8889; /* 服务端使用端口 */
+	unsigned short portnum=0x8888; /* 服务端使用端口 */
 
 	printf("Hello,welcome to my server !\n");
 	sfp = socket(AF_INET, SOCK_STREAM, 0);
@@ -32,7 +34,9 @@ int main(){
 	    printf("bind fail !\n");
 	    return -1;
 	}
-	printf("bind ok !\n");
+
+	printf("bind ok!\n");
+	
 	/* 开始监听相应的端口 */
 	if(-1 == listen(sfp,10)){
 	    printf("listen fail !\n");
@@ -40,6 +44,8 @@ int main(){
 	}
 	printf("listen ok\n");
     
+	int g_len = sizeof(g_add), p_len = sizeof(p_add);
+	int rc = -1;
 	while(1){
 		sin_size = sizeof(struct sockaddr_in);  
 	/* accept服务端使用函数，调用时即进入阻塞状态，等待用户进行连接，在没有客户端进行连接时，程序停止在此处，
@@ -47,6 +53,7 @@ int main(){
 	 *       此处accept的第二个参数用于获取客户端的端口和地址信息。
 	 *           */
 		nfp = accept(sfp, (struct sockaddr *)(&c_add), &sin_size);
+
 
 		if(-1 == nfp){
 		    printf("accept fail !\n");
@@ -56,6 +63,13 @@ int main(){
 
 		if(-1 == read(nfp,buffer,1024)) return -1;
 		printf("1:%s\n",buffer);
+
+	rc = getsockname(nfp, (struct sockaddr *)&g_add, &g_len);
+		getpeername(nfp, (struct sockaddr *)&p_add, &p_len);
+		inet_ntop(AF_INET, &g_add.sin_addr, g_ip, sizeof(g_ip));
+		inet_ntop(AF_INET, &p_add.sin_addr, p_ip, sizeof(p_ip));
+		printf("ip: %s, port: %d\n", g_ip, ntohs(g_add.sin_port));
+		printf("ip: %s, port: %d\n", p_ip, ntohs(p_add.sin_port));
 
 		/* 这里使用write向客户端发送信息，也可以尝试使用其他函数实现 */
 
