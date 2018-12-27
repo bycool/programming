@@ -1,0 +1,1 @@
+cmd_/home/ten/programming/kernel/operatime/optime.ko.unsigned := ld -r -m elf_x86_64 -T /usr/src/kernels/2.6.32-431.el6.x86_64/scripts/module-common.lds --build-id -o /home/ten/programming/kernel/operatime/optime.ko.unsigned /home/ten/programming/kernel/operatime/optime.o /home/ten/programming/kernel/operatime/optime.mod.o 

@@ -23,21 +23,7 @@
 
 
 static int __init callsys_init(void){
-
-	struct file *filep = NULL;
-	mm_segment_t old_fs;
-	loff_t pos;
-	char path[128] = "/home/ten/7.txt";
-	char buf[7] = "123456";
-
-	filep = filp_open(path, O_WRONLY|O_CREAT, 0600);
-	old_fs = get_fs();
-	set_fs(KERNEL_DS);
-	pos = 0;
-	vfs_write(filep, buf, strlen(buf), &pos);
-	set_fs(old_fs);
-	filp_close(filep, NULL);
-	printk("callsys_init\n");
+	printk("callsys_init: %lu\n", get_seconds());
 	return 0;
 }
 

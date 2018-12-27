@@ -3,6 +3,7 @@
 
 int main(){
 	long tim = time(0);
+	printf("tim: %ld\n", tim);
 	struct tm *p;
 	p = gmtime(&tim);
     char s[100];

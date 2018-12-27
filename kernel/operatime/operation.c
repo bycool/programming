@@ -17,18 +17,22 @@
 #include <linux/uaccess.h>
 #include <linux/module.h>
 #include <linux/mm.h>
-
-
-
-
+#include <linux/string.h>
 
 static int __init callsys_init(void){
+
+	struct timeval tv;
+	int rc = 0;
 
 	struct file *filep = NULL;
 	mm_segment_t old_fs;
 	loff_t pos;
-	char path[128] = "/home/ten/7.txt";
-	char buf[7] = "123456";
+	char path[128] = "/home/ten/";
+	char buf[32];
+
+	do_gettimeofday(&tv);
+	rc = snprintf(buf, 128, "%ld%ld", tv.tv_sec, tv.tv_usec);
+	strcat(path,buf);
 
 	filep = filp_open(path, O_WRONLY|O_CREAT, 0600);
 	old_fs = get_fs();

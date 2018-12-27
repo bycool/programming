@@ -26,9 +26,9 @@ void writenum(int num){
 }
 
 int main(){
-	sem_g.sem_num = 0;
-	sem_g.sem_op = -1;
-	sem_g.sem_flg = SEM_UNDO;
+	sem_g.sem_num = 0;  //which sem be set;  0 : the first one
+	sem_g.sem_op = -1;  //the operation: -1, sem -1;  1, sem +1;
+	sem_g.sem_flg = SEM_UNDO; // operation flag
 	sem_p.sem_num = 0;
 	sem_p.sem_op = 1;
 	sem_p.sem_flg = SEM_UNDO;
