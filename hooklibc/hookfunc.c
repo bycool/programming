@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
 #include <dlfcn.h>
@@ -19,9 +20,7 @@ int      fclose(FILE *);
 FILE    *fopen(const char *restrict, const char *restrict);
 int      pclose(FILE *);
 int  creat(const char *, mode_t);
-*/
 typedef int(*OPEN)(const char *, int, ...);
-typedef ssize_t(*WRITE)(int, const void*, size_t);
 
 int open(const char* path, int flage,...){
 	static void *handle = NULL;
@@ -33,14 +32,21 @@ int open(const char* path, int flage,...){
 	printf("hack open\n");
 	return libc_open(path,flage);
 }
+*/
 
 
 
+typedef ssize_t(*WRITE)(int, const void*, size_t);
 ssize_t write(int fd, const void* buf, size_t count){
 	int rc = -1;
 	off_t offset = 0;
 	static void *handle = NULL;
 	static WRITE libc_write = NULL;
+
+	char* map_path = NULL;
+
+	map_path = getenv("MAP_PATH");
+	if(map_path) printf("MAP_PATH: %s\n", map_path);
 
 	if(!handle){
 		handle = dlopen("libc.so.6", RTLD_LAZY);
@@ -51,5 +57,6 @@ ssize_t write(int fd, const void* buf, size_t count){
 		offset = lseek(fd, 0, SEEK_CUR) - rc;
 		printf("offset=%lu\n", offset);
 	}
+	printf("hack write\n");
 	return rc;
 }
