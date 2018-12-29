@@ -5,4 +5,4 @@ hook.so: hookfunc.c
 	gcc -fPIC -shared hookfunc.c -o hook.so -ldl
 
 clean:
-	rm main 1.txt1 hook.so *.o -f
+	rm main 1.txt1 *.o -f
