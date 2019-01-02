@@ -6,6 +6,6 @@ int main(){
 
 	gettimeofday(&tv, &tz);
 
-	printf("%d, %d\n",tv.tv_sec, 100000 + tv.tv_usec);
+	printf("%d, %d\n",tv.tv_sec, tv.tv_usec);
 }
 

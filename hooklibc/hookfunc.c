@@ -4,15 +4,54 @@
 #include <string.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <sys/time.h>
 #include <fcntl.h>
 #include <stdarg.h>
 #include <dlfcn.h>
+
+int hasextenname(const char  *filename)
+{
+    char *extenset[4]={"~",".swp",".swpx",".swx"};
+    int index=0;
+    for(index=0;index<4;index++)
+    {
+        if(strcmp(filename+strlen(filename)-strlen(extenset[index]),extenset[index])==0)
+        {
+            return 1;
+        }
+    }
+    return 0;
+}
+
+int monitered(char* realpath){
+	char* map_path = NULL;
+	map_path = getenv("MAP_PATH");
+
+	if(map_path){
+		if(hasextenname(realpath)){
+			return 0;
+		}
+		if(memcmp(map_path, realpath, strlen(map_path)) == 0){
+			return 1;
+		}
+	}
+	return 0;
+}
+
 
 ssize_t getrealpath(int fd, char* realpath, int size){
 	ssize_t rc = -1;
 	char buf[64];
 	sprintf(buf, "/proc/self/fd/%d", fd);
 	rc = readlink(buf, realpath, size);
+	return rc;
+}
+
+int getnamebytime(char* timebuf){
+	int rc = -1;
+	struct timeval tv;
+	rc = gettimeofday(&tv, NULL);
+	sprintf(timebuf, "%.10d%.10d", tv.tv_sec, tv.tv_usec);
 	return rc;
 }
 
@@ -149,25 +188,30 @@ ssize_t write(int fd, const void* buf, size_t count){
 	off_t offset = 0;
 	static void *handle = NULL;
 
+	int infofd = -1;
 	char realpath[4096];
+	char timebuf[32] = {0};
 	int realpathlen = -1;
 
 	if(!handle){
 		handle = dlopen("libc.so.6", RTLD_LAZY);
+		libc_open = (OPEN)dlsym(handle,"open");
 		libc_write = (WRITE)dlsym(handle, "write");
 	}
 //	printf("hack write\n");
 
-	char* map_path = NULL;
-	map_path = getenv("MAP_PATH");
-	if(map_path)
-	//	printf("MAP_PATH: %s\n", map_path);
 
 	rc = libc_write(fd, buf, count);
 	if(rc>0){
 		realpathlen = getrealpath(fd, realpath, 4096);
 		realpath[realpathlen] = 0;
 		offset = lseek(fd, 0, SEEK_CUR) - rc;
+		if(monitered(realpath)){
+			getnamebytime(timebuf);
+			infofd = libc_open(timebuf, O_CREAT | O_WRONLY, 0600);
+			libc_write(infofd, realpath, strlen(realpath)+1);
+			close(infofd);
+		}
 	//	printf("write.realpath = %s\n", realpath);
 	//	printf("write.offset=%lu\n", offset);
 	//	printf("write.content=%s\n", buf);
