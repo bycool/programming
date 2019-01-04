@@ -23,7 +23,7 @@ int hasextenname(const char  *filename)
     return 0;
 }
 
-int monitered(char* realpath){
+int monitored(char* realpath){
 	char* map_path = NULL;
 	map_path = getenv("MAP_PATH");
 
@@ -70,13 +70,17 @@ static RENAME libc_rename = NULL;
 int creat(const char *pathname, mode_t mode){
 	int rc = -1;
 	int tmp = -1;
+	int infofd = -1;
 	static void* handle = NULL;
 	int realpathlen = 0;
 	char realpath[4096];
+	char outpath[4096];
+	char timebuf[32] = {0};
 
 	if(!handle){
 		handle = dlopen("libc.so.6", RTLD_LAZY);
 		libc_open = (OPEN)dlsym(handle,"open");
+		libc_write = (WRITE)dlsym(handle, "write");
 		libc_creat = (CREAT)dlsym(handle, "creat");
 	}
 //	printf("hack creat\n");
@@ -89,6 +93,14 @@ int creat(const char *pathname, mode_t mode){
 			realpath[realpathlen] = 0;
 		//	printf("creat.realpath: %s\n", realpath);
 			close(tmp);
+			if(monitored(realpath)){
+				strcpy(outpath, getenv("OUT_PATH"));
+				getnamebytime(timebuf);
+				strcat(outpath, timebuf);
+				infofd = libc_open(outpath, O_CREAT | O_WRONLY, 0600);
+				libc_write(infofd, realpath, strlen(realpath));
+				close(infofd);
+			}
 		}
 	}
 	return rc;
@@ -190,6 +202,8 @@ ssize_t write(int fd, const void* buf, size_t count){
 
 	int infofd = -1;
 	char realpath[4096];
+	char outpath[4096];
+	char* outenv = NULL;
 	char timebuf[32] = {0};
 	int realpathlen = -1;
 
@@ -206,10 +220,13 @@ ssize_t write(int fd, const void* buf, size_t count){
 		realpathlen = getrealpath(fd, realpath, 4096);
 		realpath[realpathlen] = 0;
 		offset = lseek(fd, 0, SEEK_CUR) - rc;
-		if(monitered(realpath)){
+		if(monitored(realpath)){
+			outenv = getenv("OUT_PATH");
+			strcpy(outpath, outenv);
 			getnamebytime(timebuf);
-			infofd = libc_open(timebuf, O_CREAT | O_WRONLY, 0600);
-			libc_write(infofd, realpath, strlen(realpath)+1);
+			strcat(outpath, timebuf);
+			infofd = libc_open(outpath, O_CREAT | O_WRONLY, 0600);
+			libc_write(infofd, realpath, strlen(realpath));
 			close(infofd);
 		}
 	//	printf("write.realpath = %s\n", realpath);
