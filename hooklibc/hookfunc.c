@@ -83,7 +83,6 @@ int creat(const char *pathname, mode_t mode){
 		libc_write = (WRITE)dlsym(handle, "write");
 		libc_creat = (CREAT)dlsym(handle, "creat");
 	}
-//	printf("hack creat\n");
 
 	rc = libc_creat(pathname, mode);
 	if(rc > 0){
@@ -91,8 +90,6 @@ int creat(const char *pathname, mode_t mode){
 		if(tmp > 0){
 			realpathlen = getrealpath(tmp, realpath, 4096);
 			realpath[realpathlen] = 0;
-		//	printf("creat.realpath: %s\n", realpath);
-			close(tmp);
 			if(monitored(realpath)){
 				strcpy(outpath, getenv("OUT_PATH"));
 				getnamebytime(timebuf);
@@ -119,13 +116,11 @@ int rename(const char *oldpath, const char *newpath){
 		libc_rename = (RENAME)dlsym(handle, "rename");
 		libc_open = (OPEN)dlsym(handle, "open");
 	}
-//	printf("hack rename\n");
 
 	tmp = libc_open(oldpath, O_RDONLY);
 	if(tmp>0){
 		realpathlen = getrealpath(tmp, oldrealpath, 4096);
 		oldrealpath[realpathlen] = 0;
-	//	printf("rename.oldrealpath: %s\n", oldrealpath);
 		close(tmp);
 	}
 
@@ -135,7 +130,6 @@ int rename(const char *oldpath, const char *newpath){
 		if(tmp>0){
 			realpathlen = getrealpath(tmp, newrealpath, 4096);
 			newrealpath[realpathlen] = 0;
-		//	printf("rename.newrealpath: %s\n", newrealpath);
 			close(tmp);
 		}
 	}
@@ -152,7 +146,6 @@ int openat(int dirfd, const char *pathname, int flags, ...){
 		handle = dlopen("libc.so.6", RTLD_LAZY);
 		libc_openat = (OPENAT)dlsym(handle, "openat");
 	}
-//	printf("hack openat\n");
 
 	va_list ap;
 	va_start(ap, 0);
@@ -172,13 +165,11 @@ int open(const char* path, int flage, ...){
         handle = dlopen("libc.so.6", RTLD_LAZY);
         libc_open = (OPEN)dlsym(handle, "open");
     }
-//	printf("hack open\n");
 
 	va_list ap;
 	va_start(ap, 0);
 	mode_t mode = va_arg(ap, mode_t);
 
-//	printf("open.mode=%d\n", mode);
 	
 #if 0
 	return libc_open(path,flage, mode);
@@ -187,7 +178,6 @@ int open(const char* path, int flage, ...){
 	if(rc > 0){
 		realpathlen = getrealpath(rc, realpath, 4096);
 		realpath[realpathlen] = 0;
-	//	printf("open.realpath: %s\n", realpath);
 	}
 	return rc;
 #endif
@@ -212,8 +202,6 @@ ssize_t write(int fd, const void* buf, size_t count){
 		libc_open = (OPEN)dlsym(handle,"open");
 		libc_write = (WRITE)dlsym(handle, "write");
 	}
-//	printf("hack write\n");
-
 
 	rc = libc_write(fd, buf, count);
 	if(rc>0){
@@ -229,10 +217,6 @@ ssize_t write(int fd, const void* buf, size_t count){
 			libc_write(infofd, realpath, strlen(realpath));
 			close(infofd);
 		}
-	//	printf("write.realpath = %s\n", realpath);
-	//	printf("write.offset=%lu\n", offset);
-	//	printf("write.content=%s\n", buf);
-	//	printf("write.size = %d\n", count);
 	}
 	return rc;
 }
