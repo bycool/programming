@@ -5,5 +5,5 @@ int main(){
 	char b = '1';
 	printf("%d\n",a);
 	printf("%d\n",a & 0xFF);
-	printf("%d\n")
+	printf("%d\n", b);
 }
