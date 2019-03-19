@@ -1,6 +1,8 @@
-#include <unistd.h>
+#include <stdio.h>
 
 int main(){
-	int rc = rmdir("./1");
-	printf("%d\n",rc);
+	int a = 2312312;
+	char b = 1;
+	a = b;
+	printf("%d\n", a);
 }

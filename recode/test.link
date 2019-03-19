@@ -1,0 +1,29 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct test {
+	char mapid_cnt;
+	char* mapid;	
+};
+
+void valeq(char* mapid_cnt, char* mapid){
+	char cnt = 0;
+	for( cnt = 0; cnt < 5; cnt++ ){
+		printf("1\n");
+		mapid[cnt] = cnt;
+	}
+	*mapid_cnt = cnt;
+}
+
+int main(){
+	char i = 0;
+	struct test test;
+	test.mapid_cnt = 0;
+	test.mapid = (char*)malloc(10);
+	valeq(&test.mapid_cnt, test.mapid);
+	printf("cnt: %d\n", test.mapid_cnt);
+	for(i=0; i<test.mapid_cnt; i++){
+		printf("mapid[%d] = %d\n", i, test.mapid[i]);
+	}
+	free(test.mapid);
+}

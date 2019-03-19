@@ -1,14 +1,8 @@
 #include <stdio.h>
 #include <string.h>
 
-void* change(long title){
-	printf("%p\n",&title);
-	return (void*)title;
-}
-
 int main(){
-	long title = 1;
-	char* tmp = change(title);
-	printf("%lu\n", tmp);
-	printf("%p\n", &tmp);
+	char buf[32] = "abcd";
+	int ret = sprintf(buf, "%s%s", buf, "abc");
+	printf("%d:%d: %s\n",ret, strlen(buf), buf);
 }
