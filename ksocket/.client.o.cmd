@@ -1,0 +1,1 @@
+cmd_/home/ten/programming/ksocket/client.o := ld -m elf_x86_64   -r -o /home/ten/programming/ksocket/client.o /home/ten/programming/ksocket/ksocket.o ; scripts/mod/modpost /home/ten/programming/ksocket/client.o
