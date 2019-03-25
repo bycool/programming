@@ -11,6 +11,7 @@
 #include "ksocket.h"
 
 int tcp_client(){
+	int rc = 0;
 	struct socket* sock = NULL;
 	struct sockaddr_in addr_srv;
 	char buf[1024], *tmp;
@@ -38,7 +39,8 @@ int tcp_client(){
 	printk("cli.connected to : %s %d\n", tmp, ntohs(addr_srv.sin_port));
 	kfree(tmp);
 
-	krecv(sock, buf, 1024, 0);
+	rc = krecv(sock, buf, 1024, 0);
+	buf[rc] = 0;
 	printk("cli.got message : %s", buf);
 
 	kclose(sock);
