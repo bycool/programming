@@ -1,6 +1,6 @@
-obj-m := client.o service.o
-client-objs := client.o ksocket.o
-service-objs := service.o ksocket.o
+obj-m := cli.o srv.o
+cli-objs := client.o ksocket.o
+srv-objs := service.o ksocket.o
 
 KDIR  := /lib/modules/$(shell uname -r)/build
 PWD   := $(shell pwd)

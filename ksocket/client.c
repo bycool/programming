@@ -7,7 +7,7 @@
 #include <asm/processor.h>
 #include <asm/uaccess.h>
 #include <linux/in.h>
-
+#if 1
 #include "ksocket.h"
 
 int tcp_client(){
@@ -39,22 +39,22 @@ int tcp_client(){
 	kfree(tmp);
 
 	krecv(sock, buf, 1024, 0);
-	printk("cli.got message : %s\n", buf);
+	printk("cli.got message : %s", buf);
 
 	kclose(sock);
 
 	return 0;
 }
-
-static int client_init(void){
-	kernel_thread(tcp_client, NULL, 0);
+#endif
+static int __init client_init(void){
 	printk("ksocket tcp client init ok\n");
+	kernel_thread(tcp_client, NULL, 0);
 	return 0;
 }
 
-static void client_exit(void){
+static void __exit client_exit(void){
 	printk("ksocket tcp client exit\n");
 }
 
 module_init(client_init);
-client_exit(client_exit);
+module_exit(client_exit);

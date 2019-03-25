@@ -8,6 +8,8 @@
 #include <asm/uaccess.h>
 #include <linux/security.h>
 
+#include "ksocket.h"
+
 struct socket* ksocket(int family, int type, int protocol) {  //has security_xx
 	int err = -1;
 	struct socket* skt = NULL;
@@ -28,10 +30,11 @@ int kconnect(struct socket* socket, struct sockaddr* address, int address_len) {
 	skt = (struct socket*)socket;
 	if(!skt)
 		goto out;
-
+#ifdef SECURITY_NET
 	err = security_socket_connect(skt, address, address_len);
 	if(err)
 		goto out;
+#endif
 
 	err = skt->ops->connect(skt, address, address_len, 0);
 
@@ -45,8 +48,10 @@ int kbind(struct socket* socket, struct sockaddr* address, int address_len) {
 
 	skt = (struct socket*)socket;
 	if(skt){
+#ifdef SECURITY_NET
 		err = security_socket_bind(skt, address, address_len);
 		if(!err)
+#endif
 			err = skt->ops->bind(skt, address, address_len);
 		printk("ksocket.kbind ok, err:%d\n", err);
 	}
@@ -63,9 +68,10 @@ int klisten(struct socket* socket, int backlog) {
 		somaxconn = sock_net(skt->sk)->core.sysctl_somaxconn;
 		if ((unsigned)backlog > somaxconn)
 			backlog = somaxconn;
-
+#ifdef SECURITY_NET
 		err = security_socket_listen(skt, backlog);
 		if(!err)
+#endif
 			err = skt->ops->listen(skt, backlog);
 	}
 
@@ -88,17 +94,17 @@ struct socket* kaccept(struct socket* socket, struct sockaddr* address, int* add
 
 	nskt->type = skt->type;
 	nskt->ops = skt->ops;
-
+#ifdef SECURITY_NET
 	err = security_socket_accept(skt, nskt);
 	if(err)
 		goto out_err;
-
+#endif
 	err = skt->ops->accept(skt, nskt, 0);
 	if(err < 0)
 		goto out_err;
 
 	if(address){
-		if(nskt->ops->getname(nskt, address, &address_len, 2) < 0)
+		if(nskt->ops->getname(nskt, address, address_len, 2) < 0)
 			goto out_err;
 	}
 
@@ -119,6 +125,8 @@ ssize_t ksend(struct socket* socket, const void* buffer, size_t buffer_len, int 
 	struct msghdr msg;
 	struct iovec iov;
 
+	mm_segment_t old_fs;
+
 	skt = (struct socket*)socket;
 	if(!skt)
 		goto out;
@@ -134,7 +142,12 @@ ssize_t ksend(struct socket* socket, const void* buffer, size_t buffer_len, int 
 	msg.msg_controllen = 0;
 	msg.msg_flags = flags;
 
+    old_fs = get_fs();
+    set_fs(KERNEL_DS);
+
 	err = sock_sendmsg(skt, &msg, buffer_len);
+
+	set_fs(old_fs);
 
 out:
 	return err;
@@ -145,6 +158,8 @@ ssize_t krecv(struct socket* socket, void* buffer, size_t buffer_len, int flags)
 	struct socket* skt = NULL;
 	struct msghdr msg;
 	struct iovec iov;
+
+	mm_segment_t old_fs;
 
 	skt = (struct socket*)socket;
 	if(!skt)
@@ -160,7 +175,12 @@ ssize_t krecv(struct socket* socket, void* buffer, size_t buffer_len, int flags)
 	msg.msg_control = NULL;
 	msg.msg_controllen = 0;
 
+    old_fs = get_fs();
+    set_fs(KERNEL_DS);
+
 	err = sock_recvmsg(skt, &msg, buffer_len, flags);
+
+	set_fs(old_fs);
 
 out:
 	return err;
@@ -186,17 +206,27 @@ int ksetsockopt(struct socket* socket, int level, int optname, void* optval, int
 	int err = -1;
 	struct socket* skt = NULL;
 
+	mm_segment_t old_fs;
+
 	skt = (struct socket*)skt;
+
+    old_fs = get_fs();
+    set_fs(KERNEL_DS);
+
 	if(skt != NULL){
+#ifdef SECURITY_NET
 		err = security_socket_setsockopt(skt, level, optname);
 		if(err)
 			goto out;
+#endif
 		if(level == SOL_SOCKET)
 			err = sock_setsockopt(skt, level, optname, optval, optlen);
 		else
 			err = skt->ops->setsockopt(skt, level, optname, optval, optlen);
 	}
-		
+
+	set_fs(old_fs);
+
 out:
 	return err;
 }
@@ -236,15 +266,3 @@ char *inet_ntoa(struct in_addr *in)
     return str_ip;
 }
 
-
-EXPORT_SYMBOL(ksocket);
-EXPORT_SYMBOL(kbind);
-EXPORT_SYMBOL(klisten);
-EXPORT_SYMBOL(kconnect);
-EXPORT_SYMBOL(kaccept);
-EXPORT_SYMBOL(krecv);
-EXPORT_SYMBOL(ksend);
-EXPORT_SYMBOL(kclose);
-EXPORT_SYMBOL(ksetsockopt);
-EXPORT_SYMBOL(inet_addr);
-EXPORT_SYMBOL(inet_ntoa);
