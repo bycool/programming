@@ -86,7 +86,7 @@ void midprintree(Tnode *node){
 	return ;
 }
 
-void main(){
+int main(){
 	Tnode* rootnode = creatree();
 	insertree(rootnode,2);
 	insertree(rootnode,10);
@@ -102,4 +102,6 @@ void main(){
 //	backprintree(rootnode);
 	midprintree(rootnode);
 	printf("\n");
+
+	return 0;
 }

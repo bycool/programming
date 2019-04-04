@@ -225,6 +225,8 @@ int get_dns(char* dnsip){
 	char path[32] = { "/etc/resolv.conf" };
 	FILE* fp = fopen(path, "rb");
 	while(!feof(fp) && fgets(buf, linebuf, fp) != NULL){
+		if(buf[0] == '#')
+			continue;
 		if((ret = strstr(buf, "nameserver")) == NULL)
 			continue;
 
@@ -232,11 +234,15 @@ int get_dns(char* dnsip){
 		break;
 	}
 	fclose(fp);
+	if(ret==NULL)
+		return -1;
+
 	ret = ret + 1;
 	end = ret+strlen(ret)-1;
 	if(*end = '\n')
 		*end = '\0';
 	memcpy(dnsip, ret, 32);
+
 	return 0;
 }
 
