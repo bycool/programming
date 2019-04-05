@@ -86,6 +86,25 @@ void midprintree(Tnode *node){
 	return ;
 }
 
+/*
+ * 销毁二叉树	
+ */
+
+void destroytree(Tnode *node){
+	if(node==NULL)
+		return;
+	if(node->lnode){
+		destroytree(node->lnode);
+		node->lnode=NULL;
+	}
+	if(node->rnode){
+		destroytree(node->rnode);
+		node->rnode=NULL;
+	}
+	free(node);
+	node=NULL;
+}
+
 int main(){
 	Tnode* rootnode = creatree();
 	insertree(rootnode,2);
@@ -100,7 +119,10 @@ int main(){
 	insertree(rootnode,3);
 	insertree(rootnode,12);
 //	backprintree(rootnode);
+
+	destroytree(rootnode);
 	midprintree(rootnode);
+
 	printf("\n");
 
 	return 0;
