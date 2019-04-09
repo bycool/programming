@@ -100,13 +100,28 @@ tnode* deletenode(tnode* root, int val){
 	if(root == NULL)
 		return NULL;
 
-	tnode* pnode = root;
-	tnode* lcnode = NULL;
-
-	if()
-
+	tnode* cnode = NULL;
 	
-	
+	if(val < root->val){
+		root->left = deletenode(root->left, val);
+	}else if( val > root->val ){
+		root->right = deletenode(root->right, val);
+	}else if( root->right && root->left){
+		cnode = findmin(root->right);
+		root->val = cnode->val;
+		root->right = deletenode(root->right, root->val);
+	}else{
+		cnode = root;
+		if(root->left==NULL)
+			root = root->right;
+		else if( root->right == NULL )
+			root = root->left;
+
+		free(cnode);
+	}
+
+	return root;
+
 }
 
 
@@ -114,19 +129,15 @@ int main(){
 	tnode* root = NULL;
 	tnode* tmp = NULL;
 
-	int arr[3] = {6,3,7};
+	int arr[5] = {3,6,9,7,8};
 
 	int i = 0;
-	for(i=0; i<3; i++)
+	for(i=0; i<5; i++)
 		insertotree(&root, arr[i]);
-	midisplaytree(root);
-	printf("\b \n");
+//	midisplaytree(root);
+//	printf("\b \n");
 
-	tmp = searchnode(root, 6);
-	if(tmp){
-		printf("%d\n", tmp->val);
-		tmp->val = 100;
-	}
+	deletenode(root, 6);
 
 	midisplaytree(root);
 	printf("\b \n");
