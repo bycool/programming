@@ -137,6 +137,9 @@ int main(){
 //	midisplaytree(root);
 //	printf("\b \n");
 
+	tmp = searchnode(root, 4);
+	printf("search:%d\n", tmp->val);
+
 	deletenode(root, 6);
 
 	midisplaytree(root);
