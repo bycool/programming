@@ -6,57 +6,39 @@ typedef struct node {
 	struct node *left, *right;
 }node;
 
-/*
- * 生成新节点，返回指针
- */
 node* newnode(int val){
-	node* rc = (node*)malloc(sizeof(node));
+	node *rc = (node*)malloc(sizeof(node));
 	rc->val = val;
 	rc->left = NULL;
 	rc->right = NULL;
 	return rc;
 }
 
-/*
- * 向节点插入新值
- */
-void insertnode(node** root, int val){
-	if(*root == NULL){
+void insertnode(node **root, int val){
+	if(*root==NULL){
 		*root = newnode(val);
-		return;
+		return ;
 	}
 
-	if(val < (*root)->val)
+	if((*root)->val > val){
 		insertnode(&((*root)->left), val);
-	else
-		insertnode(&((*root)->right), val);
+	}else{
+		insertnode((&(*root)->right), val);
+	}
 }
 
-/*
- * 找出树内最小节点
- */
 node* findmin(node* root){
-	node* tmp = root;
-	while(tmp->left)
-		tmp = tmp->left;
-	return tmp;
-}
-
-/*
- * 找出树内最大节点
- */
-node* findmax(node* root){
-	node* tmp = root;
-	while(tmp->right)
-		tmp = tmp->right;
-	return tmp;
-}
-
-/*
- * 删除树中节点
- */
-node* deletenode(node* root, int val){
 	if(root==NULL) return NULL;
+
+	node* tmp = root;
+	while(tmp->left != NULL){
+		tmp = tmp->left;
+	}
+	return tmp;
+}
+
+node* deletenode(node* root, int val){
+	if(root==NULL) return ;
 
 	node* tmp = NULL;
 
@@ -72,54 +54,44 @@ node* deletenode(node* root, int val){
 		tmp = root;
 		if(root->left == NULL) root = root->right;
 		else if(root->right == NULL) root = root->left;
-		printf("dle:%d\n", tmp->val);
+		printf("del:%d\n", tmp->val);
 		free(tmp);
 	}
 	return root;
 }
 
-
-/*
- * 中序遍历
- */
 void midisplay(node* root){
 	if(root==NULL) return;
 	midisplay(root->left);
-	printf("[%d]", root->val);
+	printf(" [%d]", root->val);
 	midisplay(root->right);
 }
 
-/*
- * 销毁树
- */
-void destroytree(node* root){
+void destroy(node* root){
 	if(root==NULL) return;
-	destroytree(root->left);
-	destroytree(root->right);
-	printf(".[%d]", root->val);
-	free(root);
+	destroy(root->left);
+	destroy(root->right);
+	printf("-[%d]", root->val);
+	return ;
 }
-
 
 void main(){
 	int i = 0;
 	node* root = NULL;
-	int arr[5] = {5,2,8,1,6};
+	int arr[5] = { 8,4,1,9,3};
 
-	for(i=0; i<5; i++)
+	for(i=0;i<5;i++)
 		insertnode(&root, arr[i]);
-
-	node* tmp = NULL;
-	tmp = findmin(root);
-	printf("min:%d\n", tmp->val);
-	tmp = findmax(root);
-	printf("max:%d\n", tmp->val);
-
-	deletenode(root, 6);
 
 	midisplay(root);
 	printf("\n");
-	destroytree(root);
+
+	deletenode(root, 1);
+
+	midisplay(root);
+	printf("\n");
+
+	destroy(root);
 	printf("\n");
 }
 
