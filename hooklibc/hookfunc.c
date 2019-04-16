@@ -9,6 +9,10 @@
 #include <stdarg.h>
 #include <dlfcn.h>
 
+enum optype {
+	create, open, write, write
+};
+
 int hasextenname(const char  *filename)
 {
     char *extenset[4]={"~",".swp",".swpx",".swx"};
