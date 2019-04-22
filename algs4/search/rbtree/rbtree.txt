@@ -10,12 +10,6 @@ R-B Tree:全称red-black tree, 又称红黑树. 它是一种特殊的二叉查�
 	红黑树的基本操作是添加，删除。在对红黑树进行添加或删除后，都会用旋转方法。旋转的目的是让树保持红黑树的特性。
 	旋转包括：左旋，右旋。旋转依然保持二叉查找树的有序性。
 
-struct node {
-	int val;
-	struct node *parent;
-	struct node *left, *right;
-}
-
 1,左旋:
       |                           |
       x                           y
@@ -26,25 +20,21 @@ struct node {
 
 红黑树T的x节点进行左旋:
 [伪代码]:
-	node x;
-	node y;
+base:
+	x->left  = a;
 	x->right = y;
-	y->parent = x;
-
-left-rotate(T, x){
-	x->right = y->left;				// y的左孩子变成x的右孩子。
-	if(y->left != NULL)				// 如果y的左孩子不是空，则这个孩子的爹变成x.
-		y->left->parent = x;
-	y->parent = x->parent;			// x的爹变成y的爹
-	if(x->parent == NULL)			// x要是没爹，y就是这个树的祖先。
-		T.root = y;
-	elseif(x == x->parent->left)	// 如果x是它爹的左儿子，那这位父亲的左儿子变成了y
-		x->parent->left = y;
+	y->left  = b;
+	y->right = c;
+func_left_rotate(T,x):
+	x->right = y->right = b;	//x的右孩子指向y的左孩子，即x->right = b。
+	y->left  = x;				//y的左孩子指向x。
+	p[x] = p[y];				//指向x的链接旋转后指向y。
+	if p[x] = nil[T]			//如果x的父节点为空，即x原本为树的root节点
+		root[T] = y;       			则y为新的root节点。
+	else if p[x]->left = x		//如果x是其父节点的左孩子。
+		p[x]->left = y;			    则x的父节点的左孩子指向y。
 	else
-		x->parent->right = y;		// 如果x是它爹的右儿子，那么y变成了它右儿子了。
-	y->left = x;					// x成为y的左儿子
-	x->parent = y;					// x也叫y一声爹
-}
+		p[x]->right = y;		//如果x是其父节点的右孩子，则x父节点的右孩子指向y。
 	
 2,右旋:
       |	                         |											
