@@ -10,6 +10,12 @@ R-B Tree:全称red-black tree, 又称红黑树. 它是一种特殊的二叉查�
 	红黑树的基本操作是添加，删除。在对红黑树进行添加或删除后，都会用旋转方法。旋转的目的是让树保持红黑树的特性。
 	旋转包括：左旋，右旋。旋转依然保持二叉查找树的有序性。
 
+struct node {
+	int val;
+	struct node *parent;
+	struct node *left, *right;
+}
+
 1,左旋:
       |                           |
       x                           y
@@ -20,21 +26,25 @@ R-B Tree:全称red-black tree, 又称红黑树. 它是一种特殊的二叉查�
 
 红黑树T的x节点进行左旋:
 [伪代码]:
-base:
-	x->left  = a;
+	node x;
+	node y;
 	x->right = y;
-	y->left  = b;
-	y->right = c;
-func_left_rotate(T,x):
-	x->right = y->right = b;	//x的右孩子指向y的左孩子，即x->right = b。
-	y->left  = x;				//y的左孩子指向x。
-	p[x] = p[y];				//指向x的链接旋转后指向y。
-	if p[x] = nil[T]			//如果x的父节点为空，即x原本为树的root节点
-		root[T] = y;       			则y为新的root节点。
-	else if p[x]->left = x		//如果x是其父节点的左孩子。
-		p[x]->left = y;			    则x的父节点的左孩子指向y。
+	y->parent = x;
+
+left-rotate(T, x){
+	x->right = y->left;				// y的左孩子变成x的右孩子。
+	if(y->left != NULL)				// 如果y的左孩子不是空，则这个孩子的爹变成x.
+		y->left->parent = x;
+	y->parent = x->parent;			// x的爹变成y的爹
+	if(x->parent == NULL)			// x要是没爹，y就是这个树的祖先。
+		T.root = y;
+	elseif(x == x->parent->left)	// 如果x是它爹的左儿子，那这位父亲的左儿子变成了y
+		x->parent->left = y;
 	else
-		p[x]->right = y;		//如果x是其父节点的右孩子，则x父节点的右孩子指向y。
+		x->parent->right = y;		// 如果x是它爹的右儿子，那么y变成了它右儿子了。
+	y->left = x;					// x成为y的左儿子
+	x->parent = y;					// x也叫y一声爹
+}
 	
 2,右旋:
       |	                         |											
@@ -53,14 +63,17 @@ base:
 	y->right = c;
 func_right_rotate(T,y):
 	y->left = x->right;
-	x->right = y;
-	p[y] = p[x];
-	if p[y] = nil[T]
-		root[T] = x;
-	else if p[y]->left = y
-		p[x]->left = x;
+	if(x->right != NULL)
+		x->right->parent = y;
+	x->parent = y->parent;
+	if(y->parent == NULL)
+		T.root = x;
+	elseif(y == y->parent->left)
+		y->parent->left = x;
 	else
-		p[x]->right = y;
+		y->parent->right = x;
+	x->right = y;
+	y->parent = x;
 
 
 3,添加:
@@ -75,13 +88,28 @@ func_right_rotate(T,y):
 
 [伪代码]: 像二叉查找树一样插入z
 func_insert(T, z):
-	insert(T,z);
-	z->left  = NULL;
+	y = NULL;
+	x = T.root;
+	while (x != NULL){
+		y = x;
+		if(z->val < x->val)
+			x = x->left;
+		else
+			x = x->right;
+	}
+	z->parent = y;
+	if(y == NULL)
+		T.root = z;
+	else if(z->val <  y->val)
+		y->left = z;
+	else
+		y->right = z;
+	z->left = NULL;
 	z->right = NULL;
-	z->coloer= RED;
+	z->color = RED;
+	FUNC_INSERT_FIXUP(T,z);		//需要对插入z后的树进行颜色和旋转的调整，使其成为红黑树。
 
 func_insert_fixup(T,z):
-	define y
 	while( p[z].color == RED ){					//如果新节点的父节点是红色
 		if( p[z] == p[p[z]]->left ){			//	如果z的父节点是z的祖父节点的左孩子
 			y = p[p[z]]->right;					//  y指向z的叔叔节点
@@ -89,11 +117,20 @@ func_insert_fixup(T,z):
 				p[z].coloer= BLACK;				//    z的父节点变为黑色。
 				y.color = BLACK;				//    z的叔叔节点变为黑色。
 				p[p[z]].color = RED;			//    z的祖父节点设为红色。
-				p[p[z]] = z;					//    将z的祖父节点设为当前节点.
+				z = p[p[z]];					//    将z的祖父节点设为当前节点.
+				continue;
+			}elseif(z == p[z].right){			//  如果z的叔叔节点是黑色的，且z是右孩子。
+				z = p[z]];						//
+				right_rotate(T, z);
 			}
-			
+			left_rotate(T,z);
+			p[z].color = BLACK;
+			p[p[z]].color = RED;
+		}elseif(p[z] == p[p[z]]->right){
+
 		}
 	}
+	T.root.color = BLACK;
 
 
 
