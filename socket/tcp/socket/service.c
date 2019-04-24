@@ -5,6 +5,13 @@
 #include <sys/socket.h>
 #include <linux/in.h>
 #include <string.h>
+#include <signal.h>
+
+int exit_flag = 0;
+
+void thread_exit(){
+	exit_flag = 1;
+}
 
 void main(){
 	int sfd, cfd;
@@ -13,6 +20,12 @@ void main(){
 	char buffer[32]={0};
 	struct sockaddr_in s_add,c_add;
 	struct timeval tv;
+
+	signal(SIGINT, thread_exit);
+
+	printf("input port:");
+	scanf("%d", &portnum);
+	printf("service.port:%d\n", portnum);
 
 	sfd = socket(AF_INET, SOCK_STREAM, 0);
 	if(sfd == -1){ printf("socket fail\n") ; return; } printf("socket ok\n");
@@ -34,17 +47,16 @@ void main(){
 	}
 	printf("listen ok\n");
 
-	while(1){
-		sin_size = sizeof(struct sockaddr_in);
-		cfd = accept(sfd, (struct sockaddr *)(&c_add), &sin_size);
+	sin_size = sizeof(struct sockaddr_in);
+	cfd = accept(sfd, (struct sockaddr *)(&c_add), &sin_size);
 
-		if(read(cfd, buffer, 32) == -1) return ;
+	while(!exit_flag){
+		if(recv(cfd, buffer, 32, 0) == -1) return ;
+//		if(read(cfd, buffer, 32) == -1) return ;
 		gettimeofday(&tv, NULL);
 		printf("%d:%s\n", tv.tv_usec, buffer);
-
-		close(cfd);
 	}
-
+	close(cfd);
 	close(sfd);
 }
 
