@@ -104,9 +104,10 @@ void destroytree(node* root){
 void main(){
 	int i = 0;
 	node* root = NULL;
-	int arr[5] = {5,2,8,1,6};
+//	int arr[5] = {5,2,8,1,6};
+	int arr[10] = {4,2,5,7,9,0,1,8,6,3};
 
-	for(i=0; i<5; i++)
+	for(i=0; i<10; i++)
 		insertnode(&root, arr[i]);
 
 	node* tmp = NULL;
@@ -115,7 +116,7 @@ void main(){
 	tmp = findmax(root);
 	printf("max:%d\n", tmp->val);
 
-	deletenode(root, 6);
+	deletenode(root, 7);
 
 	midisplay(root);
 	printf("\n");
