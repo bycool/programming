@@ -14,24 +14,26 @@
 
 void main()
 {
-    int a[] = {10, 40, 30, 60, 90, 70, 20, 50, 80, 90, 100, 110, 120, 130,140, 150, 160, 170, 180, 190};
+    //int a[] = {10, 40, 30, 60, 90, 70, 20, 50, 80, 90, 100, 110, 120, 130,140, 150, 160, 170, 180, 190};
+    int a[] = {0,1,2,3,4,5,6,7,8,9};
     int i, ilen=LENGTH(a);
     RBRoot *root=NULL;
 
     root = create_rbtree();
+/*
     printf("== 原始数据: ");
     for(i=0; i<ilen; i++)
         printf("%d ", a[i]);
     printf("\n");
-
+*/
     for(i=0; i<ilen; i++)
     {
         insert_rbtree(root, a[i]);
 #if CHECK_INSERT
-        printf("== 添加节点: %d\n", a[i]);
-        printf("== 树的详细信息: \n");
-        print_rbtree(root);
-        printf("\n");
+ //       printf("== 添加节点: %d\n", a[i]);
+ //       printf("== 树的详细信息: \n");
+ //       print_rbtree(root);
+ //       printf("\n");
 #endif
     }
 

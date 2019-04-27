@@ -70,7 +70,7 @@ void right_rotate(Troot *root, node* y){
 
 	x->parent = y->parent;
 	if(y->parent == NULL){
-		root->root = y;
+		root->root = x;
 	}else{
 		if(y->parent->left == y)
 			y->parent->left = x;
@@ -80,7 +80,6 @@ void right_rotate(Troot *root, node* y){
 
 	x->right = y;
 	y->parent = x;
-
 }
 
 
@@ -115,17 +114,15 @@ void rbtree_insert(Troot *root, node* new){
 }
 
 void rbtree_insert_fixup(Troot *root, node* n){
-	printf("rbtree_insert_fixup: %d\n", n->val);
-	if(n->val == 60) return ;
 	node *parent, *gparent;
 
-	while((parent = n->parent) && (n->parent->color == RED)){
+	while((parent = n->parent) && (parent->color == RED)){
 		gparent = parent->parent;
 		if(parent == gparent->left){
 			// case1:
 			{
 				node* uncle = gparent->right;
-				if(uncle && uncle->color == RED){
+				if(uncle && (uncle->color == RED)){
 					uncle->color = BLACK;
 					parent->color = BLACK;
 					gparent->color = RED;
@@ -150,11 +147,11 @@ void rbtree_insert_fixup(Troot *root, node* n){
 		}else{
 			{
 				node* uncle = gparent->left;
-				if(uncle && uncle->color == RED){
+				if(uncle && (uncle->color == RED)){
 					uncle->color = BLACK;
 					parent->color = BLACK;
 					gparent->color = RED;
-					n = parent;
+					n = gparent;
 					continue;
 				}
 			}
@@ -193,11 +190,13 @@ node* newnode(int val){
 void midisplay(node* root){
 	if(root == NULL) return ;
 	midisplay(root->left);
-	if(root->color == RED)
+/*	if(root->color == RED)
 		printf("[%d|R]", root->val);
 	else
 		printf("[%d|B]", root->val);
+*/
 	midisplay(root->right);
+	printf(".[%d]", root->val);
 }
 
 void midisplaytree(Troot* root){
@@ -205,19 +204,34 @@ void midisplaytree(Troot* root){
 	midisplay(root->root);
 }
 
+void destroynodes(node *root){
+	if(root == NULL) return ;
+	destroynodes(root->left);
+	destroynodes(root->right);
+	printf("-[%d]", root->val);
+	free(root);
+}
+
+void destroytree(Troot* root){
+	if(root == NULL) return ;
+	destroynodes(root->root);
+}
+
+
+
 void main(){
 	Troot* tree = create_tree();
-	int arr[20] = {10, 40, 30, 60, 90, 70, 20, 50, 80, 90, 100, 110, 120, 130,140, 150, 160, 170, 180, 190};
 	node* tmp = NULL;
 	int i = 0;
-	for(i=0; i<4; i++){
-		tmp = newnode(arr[i]);
+	for(i=0; i<10; i++){
+		tmp = newnode(i);
 		rbtree_insert(tree, tmp);
-		printf("insert: %d\n", tmp->val);
 	}
 
 	midisplaytree(tree);
 	printf("\n");
 
+	destroytree(tree);
+	printf("\n");
 
 }
