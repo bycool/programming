@@ -1,8 +1,16 @@
 #include <stdio.h>
 
+void display(int* arr, int len){
+    int i = 0;
+    for(i=0;i<len;i++)
+        printf("[%d]",arr[i]);
+    printf("\n");
+}
+
 void sortsub(int* arr, int i , int len){
 	int child, tmp;
 
+	printf("i:%d  ", i);
 	for(; 2*i+1<len; i=child){
 		child = 2*i+1;
 		if(child+1<len && arr[child] < arr[child+1])
@@ -16,7 +24,7 @@ void sortsub(int* arr, int i , int len){
 			break;
 		}
 	}
-
+	display(arr, 10);
 }
 
 void heapsort(int* arr, int len){
@@ -24,6 +32,8 @@ void heapsort(int* arr, int len){
 
 	for(i=len/2-1; i>=0; i--)
 		sortsub(arr, i, len);
+
+	printf("\n");
 
 	for(i=len-1; i>0; i--){
 		tmp = arr[i];
@@ -33,16 +43,13 @@ void heapsort(int* arr, int len){
 	}
 }
 
-void display(int* arr, int len){
-    int i = 0;
-    for(i=0;i<len;i++)
-        printf("[%d]",arr[i]);
-    printf("\n");
-}
 
 int main(){
-    int arr[10] = {9,2,6,1,7,3,5,3,1,0};
+    int arr[10] = {2,9,6,4,7,8,5,1,0,3};
+	printf("b:");
+    display(arr,10);
     heapsort(arr,10);
+	printf("f:");
     display(arr,10);
 }
 

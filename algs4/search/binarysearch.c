@@ -15,10 +15,11 @@ int binarysearch(int* arr, int len, int key){
 			len = mid-1;
 		}else if(key>arr[mid]){
 			i = mid+1;
-		}else{
+		}else if(key == arr[mid]){
 			return mid;
 		}
 	}
+	return 0;
 }
 
 int main(){
