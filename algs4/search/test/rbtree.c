@@ -15,6 +15,18 @@ typedef struct rbtree {
 	struct rbnode* root;
 }rbtree;
 
+void lrd_display(rbnode* root){
+	if(root == NULL) return;
+	lrd_display(root->left);
+	lrd_display(root->right);
+	printf(".[%d]", root->val);
+}
+
+void lrd_displaytree(rbtree* tree){
+	if(tree == NULL) return ;
+	lrd_display(tree->root);
+}
+
 rbnode *newrbnode(int val){
 	rbnode *new = (rbnode*)malloc(sizeof(rbnode));
 	new->val = val;
@@ -160,6 +172,7 @@ void rbtree_insert_node(rbtree *tree, rbnode* n){
 	n->color = RED;
 
 	rbtree_insert_fixup(tree, n);
+	//lrd_displaytree(tree);
 }
 
 void rbtree_insertree(rbtree *tree, int val){
@@ -173,17 +186,6 @@ rbtree *create_tree(){
 	tree->root = NULL;
 }
 
-void lrd_display(rbnode* root){
-	if(root == NULL) return;
-	lrd_display(root->left);
-	lrd_display(root->right);
-	printf(".[%d]", root->val);
-}
-
-void lrd_displaytree(rbtree* tree){
-	if(tree == NULL) return ;
-	lrd_display(tree->root);
-}
 
 void destroynode(rbnode* root){
 	if(root == NULL) return ;
