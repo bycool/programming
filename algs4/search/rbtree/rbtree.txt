@@ -133,12 +133,85 @@ func_insert_fixup(T,z):
 	T.root.color = BLACK;
 
 
+插入后的fixup需要根据相应的条件对节点颜色，节点位置进行修改或旋转。
+
+rbtree_insert_fixup(rbtree* tree, rbnode* new){
+	rbnode *parent, *gparent;
+	while((parent = new->parent) && (parent->color == RED){
+		gparent = parent->parent;
+		if(parent == gparent->left){
+			rbnode *uncle = gparent->right;
+			if(uncle && (uncle->color == RED)){
+				parent->color = BLACK;
+				uncle->color = BLACK;
+				gparent->color = RED;
+				new = gparent;
+				continue;
+			}
+
+			if(parent->right == new){
+				rbnode *tmp;
+				rbtree_left_rotate(tree, parent);
+				tmp = parent;
+				parent = new;
+				new = tmp;
+			}
+
+			parent->color = BLACK;
+			gparent->color = RED;
+			rbtree_right_ratote(tree, gparent);
+		}else{
+			rbnode *uncle = gparent->right;
+			if(uncle && (uncle->color == RED)){
+				gparent->color = RED;
+				parent->color = BLACK;
+				uncle->color = BLACK;
+				new = gparent;
+				continue;
+			}
+
+			if(parent->left == new){
+				rbnode *tmp ;
+				rbtree_right_ratote(tree, parent);
+				tmp = parent;
+				parent = new;
+				new = tmp;
+			}
+
+			parent->color = BLACK;
+			gparent->color = RED;
+			rbtree_left_rotate(tree, gparent);
+		}
+	}
+	tree->root->color = BLACK;
+}
 
 
+case 1:
+
+                          |
+                         g(b)
+                    /           \
+                  p(r)          u(r)
+                /     \
+              b       n(r)
 
 
+case 2:
+                         |
+                        g(b)
+                   /          \
+                 p(r)        u(b) or (nil)
+                      \
+                     n(r)
 
-
+case 3:
+                        |
+                       g(b)
+                /              \
+              p(r)            u(b) or (nil)
+            /
+          n(r)
 
 
 
