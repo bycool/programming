@@ -1,13 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define RED 1
-#define BLACK 0
+#define BLACK  0
+#define RED    1
 
 typedef struct rbnode {
 	int val;
 	int color;
-	struct rbnode *parent, *left, *right;
+	struct rbnode *parent,*left, *right;
 }rbnode;
 
 typedef struct rbtree {
@@ -15,7 +15,7 @@ typedef struct rbtree {
 }rbtree;
 
 rbnode* newrbnode(int val){
-	rbnode* new = (rbnode*)malloc(sizeof(rbnode));
+	rbnode *new = (rbnode*)malloc(sizeof(rbnode));
 	new->val = val;
 	new->color = RED;
 	new->parent = NULL;
@@ -24,34 +24,46 @@ rbnode* newrbnode(int val){
 	return new;
 }
 
-rbtree* newrbtree(){
-	rbtree* new = (rbtree*)malloc(sizeof(rbtree));
-	new->root = NULL;
-	return new;
+void ldr_display(rbnode* root){
+	if(root == NULL)  return ;
+	ldr_display(root->left);
+	printf(".[%d|%d]", root->val, root->color);
+	ldr_display(root->right);
+}
+
+void ldr_displaytree(rbtree *tree){
+	if(tree == NULL) return ;
+	ldr_display(tree->root);
+	printf("\n");
+}
+
+rbtree* creatree(){
+	rbtree *tree = (rbtree*)malloc(sizeof(rbtree));
+	tree->root = NULL;
+	return tree;
 }
 
 /*          |
  *          x
  *         / \
- *        a   y
+ *            y
  *           / \
- *          b   c
  */
 void rbtree_left_rotate(rbtree* tree, rbnode* x){
-	rbnode* y = x->right;
+	rbnode *y = x->right;
 
 	x->right = y->left;
 	if(y->left)
 		y->left->parent = x;
 
 	y->parent = x->parent;
-	if(x->parent == NULL){
-		tree->root = y;
-	}else{
+	if(x->parent){
 		if(x->parent->left == x)
 			x->parent->left = y;
 		else
 			x->parent->right = y;
+	}else{
+		tree->root = y;
 	}
 
 	y->left = x;
@@ -61,47 +73,46 @@ void rbtree_left_rotate(rbtree* tree, rbnode* x){
 /*         |
  *         y
  *        / \
- *       x   a
+ *       x
  *      / \
- *     b   c
  */
 void rbtree_right_rotate(rbtree* tree, rbnode* y){
-	rbnode* x = y->left;
+	rbnode *x = y->left;
 
 	y->left = x->right;
 	if(x->right)
 		x->right->parent = y;
 
 	x->parent = y->parent;
-	if(x->parent == NULL){
-		tree->root = x;
-	}else{
+	if(y->parent){
 		if(y->parent->left == y)
 			y->parent->left = x;
 		else
 			y->parent->right = x;
+	}else{
+		tree->root = x;
 	}
 
 	x->right = y;
 	y->parent = x;
 }
 
-void rbtree_insert_fixup(rbtree* tree, rbnode* new){
-	rbnode *gparent, *parent;
 
-	while((parent = new->parent) && (parent->color == RED)){
+void rbtree_insert_fixup(rbtree* tree, rbnode* new){
+	rbnode *parent, *gparent;
+	while((parent=new->parent) && (parent->color == RED)){
 		gparent = parent->parent;
-		if(gparent && (gparent->left == parent)){
+		if(parent == gparent->left){
 			rbnode* uncle = gparent->right;
 			if(uncle && (uncle->color == RED)){
-				gparent->color = RED;
 				parent->color = BLACK;
 				uncle->color = BLACK;
+				gparent->color = RED;
 				new = gparent;
 				continue;
 			}
 
-			if(parent->right == new){
+			if(new == parent->right){
 				rbnode* tmp;
 				rbtree_left_rotate(tree, parent);
 				tmp = parent;
@@ -115,14 +126,14 @@ void rbtree_insert_fixup(rbtree* tree, rbnode* new){
 		}else{
 			rbnode* uncle = gparent->left;
 			if(uncle && (uncle->color == RED)){
-				gparent->color = RED;
 				parent->color = BLACK;
 				uncle->color = BLACK;
-				new = gparent;;
+				gparent->color = RED;
+				new = gparent;
 				continue;
 			}
 
-			if(parent->left == new){
+			if(new == parent->left){
 				rbnode* tmp;
 				rbtree_right_rotate(tree, parent);
 				tmp = parent;
@@ -130,83 +141,70 @@ void rbtree_insert_fixup(rbtree* tree, rbnode* new){
 				new = tmp;
 			}
 
-			gparent->color = RED;
 			parent->color = BLACK;
+			gparent->color = RED;
 			rbtree_left_rotate(tree, gparent);
 		}
 	}
 	tree->root->color = BLACK;
 }
 
+
 void rbtree_insert_rbnode(rbtree* tree, rbnode* new){
-	if(tree == NULL) return ;
-	rbnode* pn = NULL;
+	rbnode* np = NULL;
 	rbnode* tmp = tree->root;
 
 	while(tmp){
-		pn = tmp;
+		np = tmp;
 		if(new->val < tmp->val)
 			tmp = tmp->left;
 		else
 			tmp = tmp->right;
 	}
-
-	new->parent = pn;
-	if(pn == NULL){
-		tree->root = new;
-	}else{
-		if(new->val < pn->val)
-			pn->left = new;
+	new->parent = np;
+	if(np){
+		if(new->val < np->val)
+			np->left = new;
 		else
-			pn->right = new;
+			np->right = new;
+	}else{
+		tree->root = new;
 	}
-
 	new->color = RED;
 
 	rbtree_insert_fixup(tree, new);
+	ldr_displaytree(tree);
 }
 
-void lrd_displayrbnode(rbnode* root){
+
+void destroynode(rbnode *root){
 	if(root == NULL) return ;
-	lrd_displayrbnode(root->left);
-	lrd_displayrbnode(root->right);
-	printf(".[%d|%d]", root->val, root->color);
-}
-
-void lrd_displaytree(rbtree* tree){
-	if(tree == NULL) return ;
-	lrd_displayrbnode(tree->root);
-	printf("\n");
-}
-
-void destroyrbnode(rbnode* root){
-	if(root == NULL) return ;
-	destroyrbnode(root->left);
-	destroyrbnode(root->right);
+	destroynode(root->left);
+	destroynode(root->right);
 	printf("-[%d|%d]", root->val, root->color);
 	free(root);
 }
 
-void destroyrbtree(rbtree* tree){
+void destroytree(rbtree* tree){
 	if(tree == NULL) return ;
-	destroyrbnode(tree->root);
+	destroynode(tree->root);
 	printf("-[tree]\n");
 	free(tree);
 }
 
+
 void main(){
+	int i = 0;
 	rbtree* tree = NULL;
 	rbnode* tmp = NULL;
-	int i = 0;
 
-	tree = newrbtree();
+	tree = creatree();
 	for(i=0; i<10; i++){
 		tmp = newrbnode(i);
 		rbtree_insert_rbnode(tree, tmp);
 	}
 
-	lrd_displaytree(tree);
-
-	destroyrbtree(tree);
+	ldr_displaytree(tree);
+	destroytree(tree);
 }
 
