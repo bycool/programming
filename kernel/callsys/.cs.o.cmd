@@ -1,1 +1,0 @@
-cmd_/home/ten/programming/kernel/callsys/cs.o := ld -m elf_x86_64   -r -o /home/ten/programming/kernel/callsys/cs.o /home/ten/programming/kernel/callsys/test.o ; scripts/mod/modpost /home/ten/programming/kernel/callsys/cs.o
