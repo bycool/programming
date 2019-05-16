@@ -173,6 +173,47 @@ void rbtree_insert_rbnode(rbtree *tree, rbnode *new){
 	rbtree_insert_fixup(tree, new);
 }
 
+void rbtree_delete_fixup(rbtree *tree, rbnode* dnode, rbnode* parent){
+
+}
+
+void rbtree_delete_rbnode(rbtree *tree, rbnode *dnode){
+	rbnode *child, *parent;
+	int color;
+
+	if((dnode->left != NULL) && (dnode->right != NULL)){
+		rbnode *replace = dnode->right;
+		while(replace->left != NULL)
+			replace = replace->left;
+
+		if(dnode->parent){
+			if(dnode->parent->left == dnode)
+				dnode->parent->left = replace;
+			else
+				dnode->parent->right = replace;
+		}else{
+			tree->root = replace;
+		}
+
+		child = replace->right;
+		parent = replace->parent;
+		color = replace->color;
+
+		if(parent == dnode){
+			parent = replace;
+		}else{
+			if(child)
+				child->parent = parent;
+			parent->left = child;
+			node->right->parent = replace;
+		}
+
+		
+	}
+}
+
+
+
 void lrd_display(rbnode *root){
 	if(root == NULL) return ;
 	lrd_display(root->left);
