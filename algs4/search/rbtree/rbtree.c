@@ -178,12 +178,29 @@ void rbtree_delete_fixup(rbtree *tree, rbnode* dnode, rbnode* parent){
 }
 
 void rbtree_delete_rbnode(rbtree *tree, rbnode *dnode){
+	
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+void rbtree_delete_rbnode(rbtree *tree, rbnode *dnode){
 	rbnode *child, *parent;
 	int color;
 
-	if((dnode->left != NULL) && (dnode->right != NULL)){
+	if(dnode->left && dnode->right){
 		rbnode *replace = dnode->right;
-		while(replace->left != NULL)
+		while(replace->left)
 			replace = replace->left;
 
 		if(dnode->parent){
@@ -205,13 +222,47 @@ void rbtree_delete_rbnode(rbtree *tree, rbnode *dnode){
 			if(child)
 				child->parent = parent;
 			parent->left = child;
-			node->right->parent = replace;
+
+			replace->right = dnode->right;
+			dnode->right->parent = replace;
 		}
 
-		
-	}
-}
+		replace->left = dnode->left;
+		dnode->left->parent = replace;
+		replace->parent = dnode->parent;
+		replace->color = dnode->color;
 
+		if(color == BLACK)
+			rebtree_delete_fixup(tree, child, parent);
+
+		free(dnode);
+		return ;
+	}
+
+	if(dnode->left != NULL)
+		child = dnode->left;
+	else
+		child = dnode->right;
+	child->parent = dnode->parent;
+
+	parent = dnode->parent;
+	color = dnode->color;
+
+
+	if(parent){
+		if(parent->left == dnode)
+			parent->left = child;
+		else
+			parent->right = child;
+	}else{
+		tree->root = child;
+	}
+
+	if(color == BLACK)
+		rbtree_delete_fixup(tree, child, parent);
+
+	free(dnode);
+}
 
 
 void lrd_display(rbnode *root){
