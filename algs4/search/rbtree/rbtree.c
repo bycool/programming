@@ -178,7 +178,72 @@ void rbtree_delete_fixup(rbtree *tree, rbnode* dnode, rbnode* parent){
 }
 
 void rbtree_delete_rbnode(rbtree *tree, rbnode *dnode){
-	
+	rbnode *child, *parent;
+	int color;
+
+	if(dnode->left && dnode->right){
+		rbnode *replace = dnode->right;
+		while(replace->left)
+			replace = replace->left;
+
+		if(dnode->parent){
+			if(dnode->parent->left == dnode)
+				dnode->parent->left = replace;
+			else
+				dnode->parent->right = replace;
+		}eles{
+			tree->root = replace;
+		}
+
+		parent = replace->parent;
+		child = replace->right;
+		color = replace->color;
+
+		if(parent == dnode){
+			parent = replace;
+		}else{
+			if(child)
+				child->parent = parent;
+			parent->left = child;
+
+			replace->right = dnode->right;
+			dnode->right->parent = replace;
+		}
+
+		replace->left = dnode->left;
+		dnode->left->parent = replace;
+		replace->parent = dnode->parent;
+		replace->color = dnode->color;
+
+		if(color == BLACK)
+			rbtree_delete_fixup(tree, child, parent);
+
+		free(dnode);
+	}
+
+	if(dnode->left != NULL)
+		child = dnode->left;
+	else
+		child = dnode->right;
+
+	parent = dnode->parent;
+	color = dnode->color;
+	if(parent){
+		if(parent->left == dnode)
+			parent->left = child;
+		else
+			parent->right = child;
+	}else{
+		tree->root = child;
+	}
+
+	child->parent = parent;
+
+	if(color == BLACK)
+		rbtree_delete_fixup(tree,  child, parent);
+
+	free(dnode);
+
 }
 
 
