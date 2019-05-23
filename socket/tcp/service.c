@@ -14,7 +14,7 @@ int main(){
 	char p_ip[20] = {0};
 	struct sockaddr_in s_add,c_add, g_add, p_add;
 	int sin_size;
-	unsigned short portnum=0x8888; /* 服务端使用端口 */
+	unsigned short portnum=8888; /* 服务端使用端口 */
 
 	printf("Hello,welcome to my server !\n");
 	sfp = socket(AF_INET, SOCK_STREAM, 0);
