@@ -515,7 +515,14 @@ static void rbtree_delete_fixup(RBRoot *root, Node *node, Node *parent)
     {
         if (parent->left == node)
         {
-            other = parent->right;
+            //1.         parent                     parent.r                     old.ohter.b         
+            //           /     \                   /        \                    /         \
+            //       child.b    other.r         child.b    other.b           parent.r       d
+            //        /   \    /      \         /     \    /     \           /       \
+            //       a     b  c        d       a     b     c      d       child.b     c  <- new.other
+            //                                                            /     \
+            //                                                           a       b
+            other = parent->right;                    
             if (rb_is_red(other))
             {
                 // Case 1: x的兄弟w是红色的  
@@ -524,6 +531,14 @@ static void rbtree_delete_fixup(RBRoot *root, Node *node, Node *parent)
                 rbtree_left_rotate(root, parent);
                 other = parent->right;
             }
+			//2.       gparent                     gparent  <- new.parent
+			//           |
+			//         parent                      parent   <- new.child
+			//        /      \                    /      \
+			//   child.b     other         old.child.b    other.r  <- color = RED
+			//   /     \     /    \
+			//  a      b    c.b  d.b    
+
             if ((!other->left || rb_is_black(other->left)) &&
                 (!other->right || rb_is_black(other->right)))
             {
@@ -533,15 +548,29 @@ static void rbtree_delete_fixup(RBRoot *root, Node *node, Node *parent)
                 parent = rb_parent(node);
             }
             else
-            {
+            {   
                 if (!other->right || rb_is_black(other->right))
                 {
+			//3.1         parent                  parent                                            parent
+			//           /      \                /      \                                          /        \
+			//     child.b     other.b     child.b      other.r      <- color RED           child.b        c.b                 <- new.other
+			//     /    \      /     \      /  \         /    \                              /   \            \
+			//    a      b    c      d.b   a   b       c.b     d.b   <- c.color BLACK        a    b           old.other.r
+			//                                                                                                /        \
+			//                                                                                                         d.b
                     // Case 3: x的兄弟w是黑色的，并且w的左孩子是红色，右孩子为黑色。  
                     rb_set_black(other->left);
                     rb_set_red(other);
                     rbtree_right_rotate(root, other);
                     other = parent->right;
                 }
+			//3.2       parent.c                parent.b          2<- color BLACK                       other.b
+			//         /      \                /        \                                             /       \
+			//    child.b    other.b         child.b    other.c   1<- color parent.color         parent.b      d.b
+			//    /    \     /      \        /     \    /     \                                 /     \
+			//   a     b    c       d.r    a      b     c     d.b 3<- color BLACK            child.b    c
+			//                                                                              /     \
+			//                                                                             a       b
                 // Case 4: x的兄弟w是黑色的；并且w的右孩子是红色的，左孩子任意颜色。
                 rb_set_color(other, rb_color(parent));
                 rb_set_black(parent);
@@ -605,6 +634,14 @@ void rbtree_delete(RBRoot *root, Node *node)
 {
     Node *child, *parent;
     int color;
+
+	//                  tree
+	//                 /    \
+	//                       dnode
+	//                      /     \
+	//                   left      right
+	//                            /     \
+	//                        replace    right
 
     // 被删除节点的"左右孩子都不为空"的情况。
     if ( (node->left!=NULL) && (node->right!=NULL) ) 

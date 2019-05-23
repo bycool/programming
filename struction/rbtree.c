@@ -168,6 +168,44 @@ void rbtree_insert_rbnode(rbtree* tree, rbnode* new){
 }
 
 void rbtree_delete_fixup(rbtree* tree, rbnode* child, rbnode* parent){
+	rbnode *other;
+
+	while((!child || child->color == BLACK) && tree->root != child){
+		if(parent->left == child){
+			other = parent->right;
+			if(other->color == RED){
+				other->color = BLACK;
+				parent->color = RED;
+				rbtree_left_rotate(tree, parent);
+				other = parent->right;
+			}
+
+			if( (!other->left || other->left->color == BLACK) &&
+				(!other->right || other->right->color == BLACK)){
+				other->color = BLACK;
+				child = parent;
+				parent = parent->parent;
+			}eles{
+				if(!other->right || other->right->color == BLACK){
+					other->left->color = BLACK;
+					other->color = RED;
+					rbtree_right_rotate(tree, other);
+					other = parent->right;
+				}
+
+				other->color = parent->color;
+				parent->color = BLACK;
+				other->right->color = BLACK;
+				rbtree_left_rotate(tree, parent);
+				child = tree->root;
+				break;
+			}
+		}else{
+
+		}
+	}
+	if(child)
+		child->color = BLACK;
 
 }
 

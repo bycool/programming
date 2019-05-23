@@ -217,8 +217,8 @@ void rbtree_delete_rbnode(rbtree *tree, rbnode *dnode){
 
 		if(color == BLACK)
 			rbtree_delete_fixup(tree, child, parent);
-
 		free(dnode);
+		return ;
 	}
 
 	if(dnode->left != NULL)

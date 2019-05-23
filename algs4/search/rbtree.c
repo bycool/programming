@@ -159,6 +159,99 @@ void rbtree_insert_node(rbtree* tree, rbnode* new){
 	rbtree_insert_fixup(tree, new);
 }
 
+void rbtree_delete_fixup(rbtree* tree, rbnode* child, rbnode* parent){
+	rbnode *other;
+
+	while((!child || child->color == BLACK) && tree->root != child){
+		if(parent->left == child){
+			other = parent->right;
+			if(other->color == RED){
+				other->color = BLACK;
+				parent->color = RED;
+				rbtree_left_rotate(tree, parent);
+				other = parent->right;
+			}
+
+			if(	(!other->left || other->left->color == BLACK) &&
+				(!other->right || other->right->color == BLACK)){
+				other->color = RED;
+				child = parent;
+				parent = child->parent;
+			}else{
+				if(
+			}
+		}else{
+
+		}
+	}
+}
+
+void rbtree_delete_rbnode(rbtree* tree, rbnode* dnode){
+	rbnode *child, * parent;
+	int color;
+
+	if(dnode->left && dnode->right){
+		rbnode *replace = dnode->right;
+		while(replace->left)
+			replace = replace->left;
+
+		child = replace->right;
+		parent = replace->parent;
+		color = replace->color;
+
+		if(dnode->parent){
+			if(dnode->parent->left == dnode)
+				dnode->parent->left = replace;
+			else
+				dnode->parent->right = replace;
+		}else{
+			tree->root = replace;
+		}
+
+		if(parent == dnode){
+			parent = replace;
+		}else{
+			if(child)
+				child->parent = parent;
+			parent->left = child;
+
+			replace->right = dnode->right;
+			dnode->right->parent = replace;
+		}
+
+		replace->left = dnode->left;
+		dnode->left->parent = replace;
+		replace->color = dnode->color;
+		replace->parent = dnode->parent;
+
+		if(color == BLACK)
+			rbtree_delete_fixup(tree, child, parent);
+		free(dnode);
+		return ;
+	}
+
+	if(dnode->left)
+		child = dnode->left;
+	else
+		child = dnode->right;
+
+	parent = dnode->parent;
+	color = dnode->color;
+	if(parent){
+		if(parent->left == dnode)
+			parent->left = child;
+		else
+			parent->right = child;
+	}else{
+		tree->root = child;
+	}
+
+	if(color == BLACK)
+		rbtree_delete_fixup(tree, child, parent);
+	free(dnode);
+}
+
+
 rbtree* create_tree(){
 	rbtree *tree = (rbtree*)malloc(sizeof(rbtree));
 	tree->root = NULL;
@@ -168,13 +261,14 @@ rbtree* create_tree(){
 void lrd_displaynodes(rbnode* root){
 	if(root==NULL) return;
 	lrd_displaynodes(root->left);
-	lrd_displaynodes(root->right);
 	printf(".[%d]", root->val);
+	lrd_displaynodes(root->right);
 }
 
 void lrd_display(rbtree* tree){
 	if(tree == NULL) return;
 	lrd_displaynodes(tree->root);
+	printf("\n");
 }
 
 void destroynodes(rbnode* root){
@@ -188,6 +282,8 @@ void destroynodes(rbnode* root){
 void destroytree(rbtree *tree){
 	if(tree == NULL) return;
 	destroynodes(tree->root);
+	free(tree);
+	printf("-[tree]\n");
 }
 
 
@@ -202,10 +298,8 @@ void main(){
 	}
 
 	lrd_display(tree);
-	printf("\n");
 
 	destroytree(tree);
-	printf("\n");
 }
 
 
