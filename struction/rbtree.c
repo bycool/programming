@@ -168,6 +168,96 @@ void rbtree_insert_rbnode(rbtree* tree, rbnode* new){
 }
 
 void rbtree_delete_fixup(rbtree* tree, rbnode* child, rbnode* parent){
+	rbnode* other;
+
+	while((!child || child->color == BLACK) && tree->root != child){
+		if(child == parent->left){
+			other = parent->right;
+			if(other->color == RED){
+				other->color = BLACK;
+				parent->color = RED;
+				rbtree_left_rotate(tree, parent);
+				other = parent->right;
+			}
+
+			if((!other->left || other->left->color == BLACK) &&
+				(!other->right || other->right->color == BLACK)){
+				other->color = RED;
+				child = parent;
+				parent = child->parent;
+			}else{
+				//          other.b
+				//    left.r      right.b
+				//
+				if(!other->right || other->right->color == BLACK){
+					other->left->color = BLACK;
+					other->color = RED;
+					rbtree_right_rotate(tree, other);
+					other = parent->right;
+				}
+
+				//          other.r
+				//    left        right.r
+				other->color = parent->color;
+				parent->color = BLACK;
+				other->right->color = BLACK;
+				rbtree_left_rotate(tree, parent);
+				child = tree->root;
+				break;
+			}
+		}else{
+			other = parent->left;
+			if(other->color == RED){
+				other->color = BLACK;
+				parent->color = RED;
+				rbtree_right_rotate(tree, other);
+				other = parent->right;
+			}
+
+			if((!other->left || other->left->color == BLACK) &&
+                (!other->right || other->right->color == BLACK)){
+				other->color = RED;
+				child = parent;
+				parent = child->parent;
+			}else{
+				if(!other->left || other->left->color == BLACK){
+					other->right->color = BLACK;
+					other->color = RED;
+					rbtree_left_rotate(tree, other);
+					other = parent->left;
+				}
+				other->color = parent->color;
+				parent->color = BLACK;
+				other->left->color = BLACK;
+				rbtree_right_rotate(tree, parent);
+				child = tree->root;
+				break;
+			}
+			
+		}
+	}
+	if(child)
+		child->color = BLACK;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+void rbtree_delete_fixup(rbtree* tree, rbnode* child, rbnode* parent){
 	rbnode *other;
 
 	while((!child || child->color == BLACK) && tree->root != child){

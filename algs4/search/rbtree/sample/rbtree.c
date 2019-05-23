@@ -531,11 +531,11 @@ static void rbtree_delete_fixup(RBRoot *root, Node *node, Node *parent)
                 rbtree_left_rotate(root, parent);
                 other = parent->right;
             }
-			//2.       gparent                     gparent  <- new.parent
+			//2.       gparent                     gparent         3. <- new.parent
 			//           |
-			//         parent                      parent   <- new.child
+			//         parent                      parent          2. <- new.child
 			//        /      \                    /      \
-			//   child.b     other         old.child.b    other.r  <- color = RED
+			//   child.b     other         old.child.b    other.r  1. <- color = RED
 			//   /     \     /    \
 			//  a      b    c.b  d.b    
 
