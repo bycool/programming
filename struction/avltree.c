@@ -97,7 +97,6 @@ anode* avltree_insert(anode* root, int val){
 			else
 				root = left_right_rotate(root);
 		}
-			
 	}else if(val > root->val){
 		root->right = avltree_insert(root->right, val);
 		if(HEIGHT(root->right) - HEIGHT(root->left) == 2){
@@ -105,7 +104,6 @@ anode* avltree_insert(anode* root, int val){
 				root = right_left_rotate(root);
 			else
 				root = right_right_rotate(root);
-			
 		}
 	}else{
 		printf("same val in avl tree\n");
