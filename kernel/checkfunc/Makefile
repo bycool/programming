@@ -1,7 +1,9 @@
 obj-m	:= tt.o
-tt-objs	:= createdev.o
+tt-objs	:= checkfunc.o
+#tt-objs	:= createdev.o
 
-KDIR	:= /lib/modules/$(shell uname -r)/build
+#KDIR	:= /lib/modules/$(shell uname -r)/build
+KDIR	:= /
 PWD	 := $(shell pwd)
 INCL	:= -I .
 
