@@ -108,7 +108,7 @@ void DFStraverse(Graph* g){
 		visited[i] = 0;
 	}
 
-	printf("DFStraverse:");
+	printf("DFS:");
 	for(i=0; i<g->vexnum; i++){
 		if(!visited[i])
 			DFS(g, i, visited);
@@ -116,6 +116,39 @@ void DFStraverse(Graph* g){
 	printf("\n");
 }
 
+
+void BFS(Graph* g){
+	int head = 0;
+	int rear = 0;
+	int queue[MAX];
+	int visited[MAX];
+	int i, j, k;
+
+	for(i=0; i<g->vexnum; i++)
+		visited[i] = 0;
+
+	printf("BFS:");
+	for(i=0; i<g->vexnum; i++){
+		if(!visited[i]){
+			visited[i] = 1;
+			printf(" -> [%c]", g->vexs[i]);
+			queue[rear++] = i;
+		}
+
+		while(head != rear){
+			j = queue[head++];
+
+			for(k=first_vertex(g, j); k>=0; k=next_vertex(g, j, k)){
+				if(!visited[k]){
+					visited[k] = 1;
+					printf(" -> [%c]", g->vexs[k]);
+					queue[rear++] = k;
+				}
+			}
+		}
+	}
+	printf("\n");
+}
 
 
 
@@ -145,6 +178,8 @@ void main(){
 	print_graph(g);
 
 	DFStraverse(g);
+
+	BFS(g);
 
 	free(g);
 }
