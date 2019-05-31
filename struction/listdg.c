@@ -116,6 +116,46 @@ void DFStravese(Graph* g){
 	printf("\n");
 }
 
+void BFS(Graph* g){
+	int i, j, k;
+	int visited[MAX];
+	int queue[MAX];
+	int head = 0, rear = 0;
+	enode* p = NULL;
+
+	for(i=0; i<g->vexnum; i++){
+		visited[i] = 0;
+	}
+
+	printf("BFS: ");
+	for(i=0; i<g->vexnum; i++){
+		if(!visited[i]){
+			visited[i] = 1;
+			printf(" -> %c", g->vexs[i].c);
+			queue[head++] = i;
+		}
+
+		while(head != rear){
+			j = queue[rear++];
+			p = g->vexs[j].next;
+
+			while(p){
+				k = p->v;
+				if(!visited[k]){
+					visited[k] = 1;
+					printf(" -> %c", g->vexs[k].c);
+					queue[head++] = k;
+				}
+				p = p->next;
+			}
+
+		}
+	}
+	printf("\n");
+
+	
+}
+
 
 
 void print_vnodelist(vnode vn){
@@ -168,6 +208,7 @@ void main(){
 	Graph* g = create_graph();
 
 	DFStravese(g);
+	BFS(g);
 
 	print_graph(g);
 
