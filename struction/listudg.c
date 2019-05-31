@@ -101,6 +101,72 @@ Graph* create_graph(){
 	return g;
 }
 
+void DFS(Graph* g, int c, int *visited){
+	enode* p = NULL;
+
+	visited[c] = 1;
+	printf(" -> [%c]", g->vexs[c].v);
+
+	p = g->vexs[c].next;
+	while(p){
+		if(!visited[p->v])
+			DFS(g, p->v, visited);
+		p = p->next;
+	}
+}
+
+void DFStraverse(Graph* g){
+	int i = 0;
+	int visited[MAX];
+
+	for(i=0; i<g->vexnum; i++)
+		visited[i] = 0;
+
+	printf("DFS: ");
+	for(i=0; i<g->vexnum; i++){
+		if(!visited[i])
+			DFS(g, i, visited);
+	}
+	printf("\n");
+}
+
+void BFS(Graph* g){
+	int i, j, k;
+	enode* p = NULL;
+	int visited[MAX];
+	int queue[MAX];
+	int head = 0, rear = 0;
+
+	for(i=0; i<g->vexnum; i++)
+		visited[i] = 0;
+
+	printf("BFS: ");
+	for(i=0; i<g->vexnum; i++){
+		if(!visited[i]){
+			visited[i] = 1;
+			printf(" -> [%c]", g->vexs[i].v);
+			queue[head++] = i;
+		}
+
+		while(head != rear){
+			j = queue[rear++];
+			p = g->vexs[j].next;
+
+			while(p){
+				k = p->v;
+				if(!visited[k]){
+					visited[k] = 1;
+					printf(" -> [%c]", g->vexs[k].v);
+					queue[head++] = k;
+				}
+				p = p->next;
+			}
+		}
+	}
+	printf("\n");
+}
+
+
 void print_vnodelist(vnode vn){
 	enode* p = NULL;
 	printf("[%c] ", vn.v);
@@ -148,6 +214,11 @@ void main(){
 	Graph* g = create_graph();
 	print_graph(g);
 
+	DFStraverse(g);
+
+	BFS(g);
+
+	printf("\ndestory:");
 	for(i=0; i<g->vexnum; i++)
 		destoryvnodelist(g->vexs[i]);
 
