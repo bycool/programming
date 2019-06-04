@@ -27,6 +27,38 @@ bnode* btree_insert(bnode* root, int val){
 	return root;
 }
 
+bnode* findmin(bnode* root){
+	if(root == NULL) return NULL;
+
+	bnode* p = root;
+	while(p->left)
+		p = p->left;
+	return p;
+}
+
+bnode* btree_delete(bnode* root, int val){
+	if(root == NULL) return NULL;
+
+	if(val < root->val){
+		root->left = btree_delete(root->left, val);
+	}else if(val > root->val){
+		root->right = btree_delete(root->right, val);
+	}else if(root->left && root->right){
+		bnode* min = findmin(root->right);
+		root->val = min->val;
+		root->right = btree_delete(root->right, root->val);
+	}else{
+		bnode* dnode = root;
+		if(root->left)
+			root = root->left;
+		else
+			root = root->right;
+
+		free(dnode);
+	}
+	return root;
+}
+
 void ldr_display(bnode* root){
 	if(root == NULL) return ;
 	ldr_display(root->left);
@@ -51,6 +83,11 @@ void main(){
 
 	for(i=0; i<alen; i++)
 		root = btree_insert(root, arr[i]);
+
+	ldr_display(root);
+	printf("\n");
+
+	btree_delete(root, 5);
 
 	ldr_display(root);
 	printf("\n");
