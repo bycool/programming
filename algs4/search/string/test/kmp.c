@@ -1,34 +1,28 @@
-#include <string.h>
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 int* getnext(char* p){
 	int i = 0, j = -1;
 	int pl = strlen(p);
-
 	int* next = (int*)malloc(sizeof(int)*pl);
 	next[0] = -1;
 
 	while(i<pl){
 		if(j==-1 || p[i] == p[j]){
-			j++;
 			i++;
-			if(p[i] == p[j])
+			j++;
+			if(p[i] == p[j]){
 				next[i] = next[j];
-			else
+			}else{
 				next[i] = j;
+			}
 		}else{
 			j = next[j];
 		}
 	}
-	return next;
-}
 
-void display(int* next, int tl){
-	int i = 0;
-	for(i=0; i<tl; i++)
-		printf("[%d]", next[i]);
-	printf("\n");
+	return next;
 }
 
 int kmp(char* src, char* tgt){
@@ -44,23 +38,23 @@ int kmp(char* src, char* tgt){
 			j++;
 		}else{
 			j = next[j];
-			if(j == -1){
+			if(j==-1){
 				i++;
 				j++;
 			}
 		}
 	}
-	free(next);
-	if(tl == j)
+
+	if(j==tl)
 		return i-j;
 	else
 		return -1;
 }
 
 void main(){
-	char src[] = "abcdefgsgeilisjifes";
-	char tgt[] = "gsgei";
+	char src[] = "sdjfowiejnfosndsdfwefafwesdfsdwfsdfwe";
+    char tgt[] = "fwefafwesdf";
 
 	int rc = kmp(src, tgt);
-	printf("rc: %d\n", rc);
+	printf("rc = %d\n", rc);
 }
