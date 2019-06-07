@@ -15,7 +15,7 @@ node* newnode(int val){
 	new->val = val;
 	new->height = 0;
 	new->left = NULL;
-	new->left = NULL;
+	new->right = NULL;
 	return new;
 }
 
