@@ -45,6 +45,8 @@ int kmp(char* src, char* tgt){
 		}
 	}
 
+	free(next);
+
 	if(j==tl)
 		return i-j;
 	else

@@ -536,8 +536,8 @@ static void rbtree_delete_fixup(RBRoot *root, Node *node, Node *parent)
 			//         parent                      parent          2. <- new.child
 			//        /      \                    /      \
 			//   child.b     other         old.child.b    other.r  1. <- color = RED
-			//   /     \     /    \
-			//  a      b    c.b  d.b    
+			//   /     \     /    \                       /    \
+			//  a      b    c.b  d.b                    c.b    d.b
 
             if ((!other->left || rb_is_black(other->left)) &&
                 (!other->right || rb_is_black(other->right)))
@@ -585,12 +585,21 @@ static void rbtree_delete_fixup(RBRoot *root, Node *node, Node *parent)
             other = parent->left;
             if (rb_is_red(other))
             {
+				//       parent                         parent.r                   other.b
+				//  other.r    child.b             other.b     child.b                    parent.r
+				//                                                                      a         child.b         a <- new other
+
                 // Case 1: x的兄弟w是红色的  
                 rb_set_black(other);
                 rb_set_red(parent);
                 rbtree_right_rotate(root, parent);
                 other = parent->left;
             }
+
+			//        parent                       parent                     gparent           ->new parent
+			//   other.b   child.b           other.r     child.b              parent            ->new child
+			//  o1.b  o2.b               o1.b    o2.b                  other.r       child.b
+			//                                                       o1.b    o2.b
             if ((!other->left || rb_is_black(other->left)) &&
                 (!other->right || rb_is_black(other->right)))
             {

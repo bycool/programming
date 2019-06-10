@@ -2,18 +2,18 @@
 #include <stdlib.h>
 #include <string.h>
 
-int* getnext(char* p){
+int* getnext(char* tgt){
 	int i = 0, j = -1;
-	int tl = strlen(p);
+	int tl = strlen(tgt);
 
-	int* next = (int*)malloc(sizeof(int)*tl);
+	int *next = (int*)malloc(sizeof(int)*tl);
 	next[0] = -1;
 
 	while(i<tl){
-		if(j==-1 || p[i] == p[j]){
+		if(j==-1 || tgt[i] == tgt[j]){
 			i++;
 			j++;
-			if(p[i] == p[j])
+			if(tgt[i] == tgt[j])
 				next[i] = next[j];
 			else
 				next[i] = j;
@@ -43,22 +43,18 @@ int kmp(char* src, char* tgt){
 			}
 		}
 	}
-
 	free(next);
 
 	if(j==tl)
 		return i-j;
-	else
-		return -1;
+	return -1;
 }
 
 void main(){
-	char src[] = "qweretyuyioiop[sdfqwerfwe";
-	char tgt[] = "ioiop";
+	char src[] = "asdasdfadfasdfd";
+	char tgt[] = "fasdfad";
 
 	int rc = kmp(src, tgt);
+
 	printf("rc: %d\n", rc);
 }
-
-
-
