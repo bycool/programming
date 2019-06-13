@@ -1,12 +1,14 @@
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
+#include <stdlib.h>
 
 int* getnext(char* tgt){
 	int i = 0, j = -1;
 	int tl = strlen(tgt);
 
-	int *next = (int*)malloc(sizeof(int)*tl);
+	printf("tl: %d\n", tl);
+
+	int* next = (int*)malloc(sizeof(int)*(tl+1));
 	next[0] = -1;
 
 	while(i<tl){
@@ -51,10 +53,9 @@ int kmp(char* src, char* tgt){
 }
 
 void main(){
-	char src[] = "asdasdfadfasdfd";
-	char tgt[] = "fasdfad";
+	char src[] = "askdadfjadsdoasij";
+	char tgt[] = "adfjad";
 
 	int rc = kmp(src, tgt);
-
-	printf("rc: %d\n", rc);
+	printf("rc : %d\n", rc);
 }

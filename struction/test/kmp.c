@@ -1,21 +1,19 @@
 #include <stdio.h>
-#include <string.h>
 #include <stdlib.h>
+#include <string.h>
 
 int* getnext(char* tgt){
 	int i = 0, j = -1;
 	int tl = strlen(tgt);
 
-	printf("tl: %d\n", tl);
-
 	int* next = (int*)malloc(sizeof(int)*(tl+1));
 	next[0] = -1;
 
 	while(i<tl){
-		if(j==-1 || tgt[i] == tgt[j]){
+		if(j==-1 || tgt[i]==tgt[j]){
 			i++;
 			j++;
-			if(tgt[i] == tgt[j])
+			if(tgt[i]==tgt[j])
 				next[i] = next[j];
 			else
 				next[i] = j;
@@ -34,7 +32,7 @@ int kmp(char* src, char* tgt){
 	int* next = getnext(tgt);
 
 	while(i<sl && j<tl){
-		if(src[i] == tgt[j]){
+		if(src[i]==tgt[j]){
 			i++;
 			j++;
 		}else{
@@ -49,13 +47,14 @@ int kmp(char* src, char* tgt){
 
 	if(j==tl)
 		return i-j;
+
 	return -1;
 }
 
 void main(){
-	char src[] = "askdadfjadsdoasij";
-	char tgt[] = "adfjad";
+	char src[] = "sdfwefweffwegrgwefwefweff";
+	char tgt[] = "fweffwe";
 
 	int rc = kmp(src, tgt);
-	printf("rc : %d\n", rc);
+	printf("rc:%d\n", rc);
 }
