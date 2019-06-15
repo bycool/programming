@@ -1,39 +1,138 @@
 1 go开发环境搭建
 
-系统：rhel6.9
-go包: go1.12.5.linux-amd64.tar.gz
+	系统：rhel6.9
+	go包: go1.12.5.linux-amd64.tar.gz
 
-tar xvf go1.12.5.linux-amd64.tar.gz -C /usr/local
+	tar xvf go1.12.5.linux-amd64.tar.gz -C /usr/local
 
-export PATH=$PATH:/usr/local/go/bin
+	export PATH=$PATH:/usr/local/go/bin
 
-运行 go
-[ten@localhost datum]$ go
-Go is a tool for managing Go source code.
-
-Usage:
-
+	运行 go
+	[ten@localhost datum]$ go
+	Go is a tool for managing Go source code.
+	Usage:
 	go <command> [arguments]
     ...
 
-环境搭建成功。
+	环境搭建成功。
+
 
 2 帮助与文档
 
-https://studygolang.com/pkgdoc  Golang标准库文档
+	https://studygolang.com/pkgdoc  Golang标准库文档
 
-3  hello world
-helloworld.go
+3  hello world : helloworld.go
 
-package main
+	package main
+	import "fmt"
+	func main() {
+		fmt.Println("hello world");
+	}
 
-import "fmt"
+	go run helloworld.go      类似python 解释器运行
+	go build helloworld.go    类似gcc编译出二进制文件，在运行。
 
-func main() {
-	fmt.Println("hello world");
-}
+4 变量的声明 var.go
+	var      a       int       =    10
+    关键字   变量名  变量类型       变量的直
 
-go run helloworld.go      类似python 解释器运行
-go build helloworld.go    类似gcc编译出二进制文件，在运行。
+    a := 10   功能同上，自动判断类型  var关键字可省略
 
+	fmt.Printf("a:%T\n", a); 判断类型
 
+	i, j := 10, 20  多重赋值 结果:i=10,j=20
+
+	i, _ := 10, 20  匿名赋值  i=10  20被丢掉	配合函数返回值使用
+
+5 常量  const.go
+	变量: 运行时，可以改变的量，声明时用var
+	常量: 运行时，不可以改变的量，声明时用const
+
+	const   a        int   =   10
+	关键字  变量名   类型      变量值
+
+	const   a    =  10     自动推导类型  const不可以省略  且不许要使用 := 
+	关键字
+
+	常量声明时必须初始化
+
+6 多个变量或常量定义  several.go
+	var (  多个变量同时声明，也可以同时赋值, 且可以自动推导类型
+		a int = 1
+		b float = 3.14
+	)
+
+	const (
+		a = 10
+		b = 3.14
+	)
+
+7 iota枚举  iota.go
+	iota常量自动生成器，每个一行，自动累加1
+	iota给常量赋
+
+	只有换行的iota才会自动累加1
+
+8 bool类型  bool.go
+	var     a        bool       = true
+	关键字  变量名   变量类型
+
+	a := true   自动推导类型
+	var a = true  自动推导类型
+
+	如果只声明未初始化，则默认为false，既0.
+
+9 float 浮点型  float.go
+	var f1 float32
+	fmt.Printf("%g\n", f1)
+
+	自动推导出来的类型一般都是float64
+
+10 字符类型 char.go
+	var       char    byte
+					  类型
+
+11 字符串类型 string.go
+	var str1 string
+	str1 = "123456"
+
+	len() 内建函数，获得字符串长度，类似strlen，不算结尾的'\0'
+
+12 complex 复数类型 complex.go
+	var t complex128
+	t = 2.1 + 3.14i
+
+	获取实部 real(t)
+	获得虚部 imag(t)
+
+13 格式化输出
+
+	
+14 变量的输入 scan.go
+	fmt.Scan(&a)
+	fmt.Scanf("%d", &a)
+
+	类似 c语言的scanf
+
+15 类型转换 tconver.go
+	bool 不能兼容 int    对bool来说  0 == false, ~0 == true
+
+	兼容类型之间的转换:  char c = 'a',     int(c)为其转换的方法
+	
+16 if   if.go
+	go的if相对于c语言的if，不需要()包含判断表达式，但一定需要{}来包含分支执行语句	
+
+	if else if 和C语言一样
+
+17 switch switch.go
+	break：在switch的case内，不需要写break，go语言自带break，C语言内需要break跳出switch。
+	fallthrough ：相当与C语言中不带break，在对应的case之后的case无条件执行
+
+18 for  for.go
+	for 初始条件; 判断条件; 条件变化
+	和C语言的for几乎一样，更像c99的for
+
+19 range range.go
+	把range看作一个返回两个直的函数，第一个是位置，第二个是值
+
+20 break与continue的区别 bc.go
