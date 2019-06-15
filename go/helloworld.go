@@ -2,8 +2,6 @@ package main
 
 import "fmt"
 
-func returnva()
-
 func main() {
-	
+	fmt.Println("hello world")
 }

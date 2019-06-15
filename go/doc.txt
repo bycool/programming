@@ -1,0 +1,39 @@
+1 go开发环境搭建
+
+系统：rhel6.9
+go包: go1.12.5.linux-amd64.tar.gz
+
+tar xvf go1.12.5.linux-amd64.tar.gz -C /usr/local
+
+export PATH=$PATH:/usr/local/go/bin
+
+运行 go
+[ten@localhost datum]$ go
+Go is a tool for managing Go source code.
+
+Usage:
+
+	go <command> [arguments]
+    ...
+
+环境搭建成功。
+
+2 帮助与文档
+
+https://studygolang.com/pkgdoc  Golang标准库文档
+
+3  hello world
+helloworld.go
+
+package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("hello world");
+}
+
+go run helloworld.go      类似python 解释器运行
+go build helloworld.go    类似gcc编译出二进制文件，在运行。
+
+
