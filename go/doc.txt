@@ -136,3 +136,7 @@
 	把range看作一个返回两个直的函数，第一个是位置，第二个是值
 
 20 break与continue的区别 bc.go
+	go的break&continue和C语言的一样
+
+21 goto goto.go
+	和C的goto一样
