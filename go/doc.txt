@@ -230,4 +230,53 @@
 38 局部变量 全局变量
 	局部变量和C一样
 	全局变量不能使用自动推导, 正常定义可以初始化
-	
+
+39 不同作用域的同名变量
+	在不同域的同名变量使用就近原则,就近的域内的同名变量。和C很像
+
+40 包的导入
+	import . "fmt"  多一个点，可以在调用包内函数时可以不指定包名，如果相同函数名在不同包时使用次方法可能会出错
+	这个点也可以是 其它字符串，相当于给 "fmt" 换个名字
+	import _ "fmt" 相当于忽略这个包
+
+41 工程管理:同级目录  importpkg1/ mymath.go main.go
+	1.多个源文件放在相同目录下 src/
+	2.设置GOPATH环境变量
+	mymath.go 必须package main,和main.go的一样,因为两个文件在相同目录
+
+42 工程管理:不同级目录 importpkg2/ src/cale/calc.go src/main.go
+	对于不同级包的运行和编译必须设置GOPATH环境变量
+	1,不同目录，不同包名字(package)
+	2,调用不同包里的函数格式： 包名.函数名()
+	3,调用别的包的函数，如果这个函数名如果是小写，无法让别人调用，首字母为大写是可以被被人调用到
+
+	export GOPATH=/xxx/xxx/importpkg2/
+
+	importpkg2/src/cale/calc.go:
+	package calc
+	func Add(a, b int) int ;
+
+43 main函数和init函数
+	package  main                 calc
+	import "calc"                 init()
+
+	main函数内导入了calc包，则程序逻辑上是先去calc包内执行calc的init函数.
+
+	import _ "calc" 则是为了只调用calc内的init函数，其它都不允许调用.
+
+44 go_intall命令
+
+45 指针基本操作 ptr1.go
+	和C一样把
+
+46 new函数
+	和malloc一样，不是给大小，给的是类型
+	var a *int = new(int)
+
+47 指针和函数，指针参数 ptr2.go
+	和C一样
+
+48 数组 arr.go
+	var a [5]int = [5]int{3,2,4,1,5}   声明初始化
+	b := [5]int{3,2,4,1,5}   自动推导方式
+	c := [5]int{2:10, 4:20}   --> {0,0,10,0,20}}
