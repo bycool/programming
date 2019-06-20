@@ -299,3 +299,57 @@
 52 数组与切片的区别 slice2.go
 	数组的[]内指定数组的长度，是个固定的常量，数组不能改变长度，len和cap永远是固定的
 	切片的[]内为空或...，切片的长度和容量可以不固定, 切片末尾可以追加一个成员, slice = append(slice, val)
+	切片不一定需要依赖数组
+	切片对元素的操作和数组的是一样的
+
+53 切片的创建方法  slice3.go
+	1,自动推导  s1 := []int{1,2,3}
+	2,借助make函数  s2 := make([]int, 5, 10)    make( type, len, cap)   //cap可以不写，没指定cap则容量和长度相同
+
+54 append的使用 append1.go
+	在切片末尾添加新元素，且切片扩容是增加当前大小的一倍，和C++的动态数组相似
+
+55 copy函数的使用  copy.go
+	对应位置的覆盖而已
+
+56 map(映射，字典),key-val对应集  map1.go
+	键值唯一
+	map[keytype]valtype
+	基本使用:
+		var m1 map[int]string
+		m2 := make(map[int]string)
+		m3 := make(map[int]string, 10)
+		m4 := map[int]string{0:"str0", 1:"str1", 2:"str2"}
+
+57 map赋值 map2.go
+	C++的map一样
+
+58 map遍历  map3.go
+	range 即可
+
+59 map删除元素 map3.go
+	delete(m, 1) 删除key为1的内容
+
+60 map做参数 map4.go
+	map做参数传的的map的地址，array做参数传的是array的值
+
+61 struct结构体 struct1.go
+	初始化
+	type      structname   struct {
+	关键字    结构体名     关键字
+		age int
+	}
+	var s1 structname = structname{age:1}
+
+62 struct结构体 指针变量的初始化 struct2.go
+	使用结构体名称赋值，不需要用new分配空间
+
+63 使用结构体的成员 struct3.go
+	和C一样，使用结构体名称直接声明变量
+
+	指针类型的结构体赋值
+	结构体指针使用成员 s1.id 和(*s1).id是相同的
+
+64 结构体的比较 struct4.go
+	只能用等于和不等与，不能用大于小于
+	同类型的结构体是可以相互赋值的
