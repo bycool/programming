@@ -1,0 +1,17 @@
+三大核心，四大模块
+
+核心:HDFS，MapReduce, YARN
+模块:hadoop common, hadoop DFS, hadoop MapReduce, hadoop YARN
+
+hadoop common: 工具类
+hadoop dfs(): 高可靠，高吞吐量的分布式文件系统
+hadoop MapReduce: 分布式的离线并行计算框架
+hadoop YARN: 集群资源管理，资源统一管理和任务调度
+
+hdfs： 类似gfs
+1,存储量大
+2,自动快速检测应对硬件错误
+3,流式访问数据
+4,移动计算比移动数据本身更划算
+5,简单一致性模型
+6,异构平台可移植
