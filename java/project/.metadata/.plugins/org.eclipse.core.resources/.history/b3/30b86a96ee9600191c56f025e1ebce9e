@@ -1,0 +1,10 @@
+package learn;
+
+public class bubblesort {
+	int arr[];
+	
+	public void init_arr(){
+		arr[] = new int[10];
+	}
+	
+}
