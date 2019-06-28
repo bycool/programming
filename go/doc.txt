@@ -424,4 +424,6 @@
 
 78 空接口
 	万能类型,可以保存任意类型   []interface{}
+
+79 error 接口 error.go
 	
