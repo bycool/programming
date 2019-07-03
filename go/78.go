@@ -18,4 +18,12 @@ func main () {
 	}
 
 	fmt.Println(i)
+
+	var i1 interface{};
+	i1 = 1
+	fmt.Println(i1)
+	i1 = "string"
+	fmt.Println(i1)
+	i1 = student{"make", 11}
+	fmt.Println(i1)
 }
