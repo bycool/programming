@@ -431,8 +431,25 @@
 77 接口转化 77.go
 	类似接口的包含关系， 在实现func1(interface i)  被包含的接口可当参数时，包含的它的那个接口也可以，反过来不行
 
-78 空接口
+78 空接口  78.go
 	万能类型,可以保存任意类型   []interface{}
+	如75.go，空接口可以指向任意类型的变量，即任何类型都实现了空接口。  类似void类型的指针指向任意类型变量的内存空间。
 
-79 error 接口 error.go
+79 error 接口 error1.go
+
+80 error接口的应用 error2.go
+
+81 panic  panic.go
+	显示调用panic，使得程序主动崩溃退出 
+
+82 recover  recover.go
+	可以跳过崩溃继续执行程序。
+
+83 字符串操作基本函数 str1.go
+	1, contains  (v1, v2)    v1内是否包含v2
+	2，join
+	3，index     (v1, v2)    v1内v2在哪里，没有返回-1
+	4，repeat    重复
+	5，replace   替换
+	6，split     分割
 	

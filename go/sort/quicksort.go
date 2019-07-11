@@ -27,9 +27,6 @@ func quicksort(arr []int, b, e int) {
 
 	arr[b], arr[bb] = swap(arr[b], arr[bb])
 
-
-
-
 	quicksort(arr, b, bb-1)
 
 	if ee+1 >= len(arr){
