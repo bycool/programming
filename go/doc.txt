@@ -452,4 +452,53 @@
 	4，repeat    重复
 	5，replace   替换
 	6，split     分割
+	7，Trim      去掉字符串头尾指定的字符串
+	8，Fields    针对字符串内的空格，按空格进行分割保存到切片，并将空格去掉。
+    fmt.Println(strings.Contains("abcdefghijklmn", "ghi")) // Contains
+
+    s := []string{"abc", "def", "ghi"} //join 仿佛第一个参数只能用slice，类型不限。
+    fmt.Println(strings.Join(s,","))
+
+    fmt.Println(strings.Index("abcdefghijklmn", "ghi"))  // Index  字符串子串搜索
+
+    fmt.Println(strings.Repeat("abc", 5))  //第一个参数  要重复的字符串，第二个参数 次数
+
+    fmt.Println(strings.Replace("abcabcdefg", "abc","fff", 3))   // src, old, new, times  times:src内times个old被替换为new
+
+    fmt.Println(strings.Split("abc,def,ghig,klm,ede", ","))  //将src中 ，分割后保存到切片内，并返回
+
+    fmt.Println(strings.Trim("abcdefga", "a")) //两头查找指定字符串，然后去掉
+
+    fmt.Println(strings.Fields("ab cde fg  hig  hl  mn")) // 类似split，但针对空格分割，且把空格去掉。
+
+84 字符串转化  str2.go
+	append 追加在字符串后
 	
+
+85 正则表达式
+
+86 json 
+	json 是一种数据格式，用在CS模式的数据交换
+
+87 通过结构体生成json mkjson.go
+	json.Marshal(slice)
+
+88 文件操作 file1.go
+	Create(name string) (file *File, err Error)
+	Open(name string) (file *File, err Error)
+	func (file *File)Write(b []byte) (n int, err Error)
+	func (file *File)WriteAt(b []byte, off int64) (n int, err Error)
+	func (file *File)WriteString(s string) (ret int, err Error)
+
+89 文件的读写
+	copyfile.go
+
+
+
+90 并行与比发的区别
+	并行：多任务分别在多cpu内同时连续执行，不被调度切换
+	并发：单cpu执行多个任务，通过任务调度切换，用户觉得是同时运行，实则是串行。
+
+91 goroutine 
+	比线程更小的一个任务单位. 资源更少，更高效。
+	go funcname() 即可
