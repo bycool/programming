@@ -501,4 +501,38 @@
 
 91 goroutine 
 	比线程更小的一个任务单位. 资源更少，更高效。
-	go funcname() 即可
+	go funcname() 即可, 但此语句必须可以被运行到。
+
+92 主线程先退出 92.go
+	主线程退出，则子线程同样退出。
+
+93 主线程退出太快，导致子线程未被调用
+
+94 runtime 
+	1. Gosched   gosched.go  使当前线程让出时间片
+	2, Goexit    goexit.go
+	3, GOMAXPROCS  指定并行计算的cpu核数的最大值，并返回之前的值
+
+95 channel
+	channel:通信传送数据
+	创建：
+		make(chan    type)
+			 关键字  类型
+
+96 channel例子  channel.go
+	ch := make(chan int)	 //创建channel
+	<-ch       读取channel
+	ch <- 11    写入11到channel
+
+97 channel无缓冲区 channel3.go
+	协程B在读取channel时，如果channel没有数据，则协程B阻塞，等待channel被写入数据。
+	协程1写入channel，在channel内的数据被读取之前，协程A也是阻塞的。即，只有协程A写入channel，没有其它协程读取channel，协程A也是会处于阻塞的。
+
+98 channel有缓冲区 channel4.go
+	创建一个有缓冲区的channel，缓冲区为5
+	则协程A在写入channel时，如果len(ch)没有到达5，则协程A不会被阻塞，如果到达了缓冲极限，则需要写入channel的协程A等待其它协程读取channel，以便减少channel内的数据，使得协程A变成非阻塞状态。
+
+99 关闭channel channel5.go
+	close(ch)后，被channel阻塞的协程会收到false。关闭的channel是不能被写入的，会报错。但是channel还是可以读的。
+
+
