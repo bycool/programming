@@ -535,4 +535,19 @@
 99 关闭channel channel5.go
 	close(ch)后，被channel阻塞的协程会收到false。关闭的channel是不能被写入的，会报错。但是channel还是可以读的。
 
+100 使用range遍历channel  channel6.go
+	range在遍历channel时，如果channel内无数据，则range会被阻塞住，并不是像遍历数组之类的结构体一样，因为channel的读取是被阻塞的。
+	但当channel被关闭时，range就会知道遍历到了结尾，所以遍历结束。
 
+101 单项channel channel7.go
+	var ch1 chan int 双向int型channel
+	var ch2 chan<- int 单项写int型channel
+	var ch3 <-chan int 单项读int型channel
+
+	var ch = make(chan int)  创建channel ，双向的
+	var chwrite chan<- int = ch  chwrite是单向只写的
+	var chread  <-chan int = ch  chread是单向只读的
+
+	虽然chwrite和chread是新声明的channel但它们都指向了ch，使用chwrite和chread时这两个是只读只写的，但ch依然是双向的。
+
+102 单向channel的应用 channel8.go
