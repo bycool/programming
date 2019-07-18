@@ -551,3 +551,16 @@
 	虽然chwrite和chread是新声明的channel但它们都指向了ch，使用chwrite和chread时这两个是只读只写的，但ch依然是双向的。
 
 102 单向channel的应用 channel8.go
+
+203 定时器 timer
+	timer: 只提醒一次
+
+	1.timer.go 
+	2.使用timer实现延迟a timer2.go 三种延迟实现
+	3.定时器的停止 timer3.go  
+	4.定时器的重置 timer.Rest()  timer4.go 测试得到结论：定时器设置开始之后线程内依然可以执行其它语句，也可以添加延迟操作，都不会影响timer像timer.C内写入数据.
+
+204 定时器 ticker.go
+	ticker:循环提醒
+
+205 select
