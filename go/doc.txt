@@ -563,4 +563,8 @@
 204 定时器 ticker.go
 	ticker:循环提醒
 
-205 select
+205 select select1.go
+	select 类似switch，使得channel可以并行阻塞等待。
+
+206 select实现超时机制
+	select2.go

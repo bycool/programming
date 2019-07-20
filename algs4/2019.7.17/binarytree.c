@@ -50,13 +50,47 @@ void btree_insert_node(btree* tree, node* new) {
 }
 
 node* findmin(node* root) {
-	node* min = NULL;
+	node* min = root;
 
-	
+	while(min->left)
+		min = min->left;
+
+	return min;
+}
+
+node* findmax(node* root) {
+	node* max = root;
+
+	while(max->right)
+		max = max->right;
+
+	return max;
+}
+
+node* broot_delete_val(node* root, int val) {
+	if(root == NULL) return ;
+
+	if(val < root->val) {
+		root->left = broot_delete_val(root->left, val);
+	}else if(val > root->val) {
+		root->right = broot_delete_val(root->right, val);
+	}else if(root->left && root->right) {
+		node* min = findmin(root->right);
+		root->val = min->val;
+		root->right = broot_delete_val(root->right, root->val);
+	}else{
+		node* dnode = root;
+		if(root->left) root = root->left;
+		else root = root->right;
+		printf("-[%d]\n", dnode->val);
+		free(dnode);
+	}
+	return root;
 }
 
 void btree_delete_val(btree* tree, int val) {
-	
+	if(tree == NULL) return ;
+	broot_delete_val(tree->root, val);
 }
 
 
@@ -99,6 +133,10 @@ void main() {
 		btree_insert_node(tree, new);
 	}
 
+	ldr_display(tree);
+
+	btree_delete_val(tree, 4);
+	
 	ldr_display(tree);
 
 	destorytree(tree);
