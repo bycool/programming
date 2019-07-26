@@ -12,11 +12,10 @@ import (
 //  2 file create    [1|op] [filename]
 //  3 write          [1|op] [1|flienamelen][filename] [content]
 //  4 chmod          [1|op] [1|filenamelen] [uint32]
-//  5 chtimes
-//  
+//  5 chtimes        [1|op] [1|filenamelen] [uint64][uint64] 
 
 type fc struct {
-	type
+	
 }
 
 func main () {
