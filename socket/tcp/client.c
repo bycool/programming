@@ -1,6 +1,6 @@
 #include <stdlib.h>
-#include <sys/types.h>
 #include <stdio.h>
+#include <sys/types.h>
 #include <sys/socket.h>
 #include <linux/in.h>
 #include <string.h>
