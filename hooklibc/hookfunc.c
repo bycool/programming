@@ -9,10 +9,11 @@
 #include <stdarg.h>
 #include <dlfcn.h>
 
+#if 0
 enum optype {
 	create, open, write, write
 };
-
+#endif
 int hasextenname(const char  *filename)
 {
     char *extenset[4]={"~",".swp",".swpx",".swx"};
@@ -214,6 +215,7 @@ ssize_t write(int fd, const void* buf, size_t count){
 		offset = lseek(fd, 0, SEEK_CUR) - rc;
 		if(monitored(realpath)){
 			outenv = getenv("OUT_PATH");
+			printf("outenv: %s\n", outenv);
 			strcpy(outpath, outenv);
 			getnamebytime(timebuf);
 			strcat(outpath, timebuf);

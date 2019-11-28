@@ -1,0 +1,1 @@
+void geta(int**);

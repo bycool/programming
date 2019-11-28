@@ -1,3 +1,8 @@
-export LD_PRELOAD=/home/ten/programming/hooklibc/hook.so
-export MAP_PATH=/home/ten/programming/
-export OUT_PATH=/home/ten/programming/hooklibc/out/
+pw=$(pwd)
+export LD_PRELOAD=$pw/hook.so
+export MAP_PATH=$pw
+export OUT_PATH=$pw/out/
+
+echo $LD_PRELOAD
+echo $MAP_PATH
+echo $OUT_PATH
