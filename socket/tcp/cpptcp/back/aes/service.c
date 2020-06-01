@@ -7,8 +7,8 @@
 #include <string.h>
 #include "aes128.h"
 
-void* handle(void* argc){
-	int newsock = (int)argc;
+void* handle(int* argc){
+	int newsock = *argc;
 	uint8_t* deout = 0;
 	char buf[1024];
 	while(1){
@@ -17,7 +17,7 @@ void* handle(void* argc){
 		aes128_de(buf, s);
 		if(s > 0){
 			buf[s] = 0;
-			printf("pid: %d -- client[%d]:%s\n",pthread_self(),newsock, buf);
+			printf("pid: %ul -- client[%d]:%s\n",pthread_self(),newsock, buf);
 			write(newsock,buf,strlen(buf));
 			free(deout);
 		}else if(s==0){
@@ -69,14 +69,8 @@ int main(){
 		printf("accept ok!\nServer start get connect from client[%d]:%#x : %#x\n",nfp,ntohl(c_add.sin_addr.s_addr),ntohs(c_add.sin_port));
 
 		pthread_t tid1,tid2,tid3;
-		pthread_create(&tid1,NULL,handle,(void*)nfp);
-		pthread_create(&tid2,NULL,handle,(void*)nfp);
-		pthread_create(&tid3,NULL,handle,(void*)nfp);
+		pthread_create(&tid1,NULL,handle,(int*)&nfp);
 		pthread_detach(tid1);
-		pthread_detach(tid2);
-		pthread_detach(tid3);
-
-	
 	}
 	close(sfp);
 	return 0;

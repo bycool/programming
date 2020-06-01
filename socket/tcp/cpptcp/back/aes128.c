@@ -380,7 +380,6 @@ unsigned char aes128_de(unsigned char* in, int len){
 	inv_pkcs7padding(in, len);
 	return 0;
 }
-
 /*
 int main(int argc, char *argv[]) {
 	unsigned char i;
@@ -416,7 +415,6 @@ int main(int argc, char *argv[]) {
 	return 0;
 }
 */
-
 
 
 
