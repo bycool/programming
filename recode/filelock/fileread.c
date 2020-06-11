@@ -8,7 +8,7 @@ int main(){
 	lock.l_whence = SEEK_SET;
 	lock.l_start = 0;
 	lock.l_len = 1;
-	lock.l_type = F_RDLCK;
+	lock.l_type = F_WRLCK;
 	lock.l_pid = -1;
 	if(-1==fcntl(fd,F_SETLKW,&lock)){
 		printf("set read lock error\n");

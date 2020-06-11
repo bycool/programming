@@ -31,7 +31,7 @@ void sendsignal(char* sigvalue){
 		exit(1);
 
 	//3.给连接到DBUS system bus的connection注册一个名字
-	ret = dbus_bus_request_name(conn, "mydbus.sigal.source", DBUS_NAME_FLAG_REPLACE_EXISTING, &err);
+	ret = dbus_bus_request_name(conn, "mydbus.sender.conn", DBUS_NAME_FLAG_REPLACE_EXISTING, &err);
 	if ( dbus_error_is_set(&err) ){
 		fprintf(stderr,"Name Error [%s]\n",err.message);
 		dbus_error_free(&err);
@@ -40,9 +40,9 @@ void sendsignal(char* sigvalue){
 		exit(1);
 
 	//4.创建一个信号
-	msg = dbus_message_new_signal("/mydbus/signal/Object",	//信号的对象名
-								  "mydbus.signal.Type",		//信号的接口名
-								  "Test");					//信号名
+	msg = dbus_message_new_signal("/mydbus/sender/msg",	//信号的对象名
+								  "mydbus.sender.msg",		//信号的接口名
+								  "send");					//信号名
 	if ( NULL == msg ){
 		fprintf(stderr,"Message NULL\n");
 		exit(1);
@@ -90,7 +90,7 @@ void receive(){
 	}
 
 	//3.request our name on the bus,check for errors
-	ret = dbus_bus_request_name(conn, "mydbus.signal.receive",DBUS_NAME_FLAG_REPLACE_EXISTING, &err);
+	ret = dbus_bus_request_name(conn, "mydbus.recv.conn",DBUS_NAME_FLAG_REPLACE_EXISTING, &err);
 	if(dbus_error_is_set(&err)){
 		fprintf(stderr,"Name error [%s]\n",err.message);
 		dbus_error_free(&err);
@@ -100,7 +100,7 @@ void receive(){
 	}
 
 	//4.添加规则
-	dbus_bus_add_match(conn, "type='signal',interface='mydbus.signal.Type'",&err);
+	dbus_bus_add_match(conn, "type='signal',interface='mydbus.sender.msg'",&err);
 	dbus_connection_flush(conn);
 	if(dbus_error_is_set(&err)){
 		fprintf(stderr,"Match Error [%s]\n",err.message);
@@ -119,7 +119,7 @@ void receive(){
 			continue;
 		}
 
-		if(dbus_message_is_signal(msg,"mydbus.signal.Type","Test")){
+		if(dbus_message_is_signal(msg,"mydbus.sender.msg","send")){
 			if (!dbus_message_iter_init(msg, &args))
 				fprintf(stderr,"Message has no parameters\n");
 			else if (DBUS_TYPE_STRING != dbus_message_iter_get_arg_type(&args))
