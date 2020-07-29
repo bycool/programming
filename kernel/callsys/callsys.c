@@ -18,10 +18,62 @@
 #include <linux/module.h>
 #include <linux/mm.h>
 
+#include <linux/types.h>
+
+static struct list_head head;
+struct myinfo {
+	int var;
+	struct list_head list;
+};
+
+
+static int __init callsys_init(void){
+	struct myinfo* ptr;
+	struct list_head *p;
+	int i ;
+
+	INIT_LIST_HEAD(&head);
+	for (i = 0; i< 10; i++)
+    {
+        ptr = kmalloc(sizeof(struct myinfo), GFP_KERNEL);
+        if (ptr)
+        {
+            memset(ptr, '\0', sizeof(struct myinfo));
+            ptr->var = i;
+            list_add_tail(&ptr->list, &head);
+        }
+    }
+    list_for_each(p, &head)
+    {
+        ptr = list_entry(p, struct myinfo, list);
+        printk(KERN_NOTICE "var = %d\n", ptr->var);    
+    }
+    
+    while (!list_empty(&head))
+    {
+        p = (&head)->next;
+        list_del(p);
+        ptr = list_entry(p, struct myinfo, list);
+        kfree(ptr);
+    }
+
+	printk("callsys_init\n");
+	return 0;
+}
+
+static void __exit callsys_exit(void){
+	printk("callsys_exit\n");
+}
+
+module_init(callsys_init);
+module_exit(callsys_exit);
+
+MODULE_LICENSE("GPL");
 
 
 
 
+#if 0
 static int __init callsys_init(void){
 
 	struct file *filep = NULL;
@@ -40,12 +92,4 @@ static int __init callsys_init(void){
 	printk("callsys_init\n");
 	return 0;
 }
-
-static void __exit callsys_exit(void){
-	printk("callsys_exit\n");
-}
-
-module_init(callsys_init);
-module_exit(callsys_exit);
-
-MODULE_LICENSE("GPL");
+#endif

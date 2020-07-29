@@ -1,5 +1,5 @@
-obj-m	:= cs.o
-cs-objs	:= test.o#callsys.o
+obj-m	:= tt.o
+tt-objs	:= callsys.o
 
 KDIR	:= /lib/modules/$(shell uname -r)/build
 PWD		:= $(shell pwd)
