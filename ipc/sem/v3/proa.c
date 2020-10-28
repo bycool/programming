@@ -29,12 +29,15 @@ int main(){
 	sem_g.sem_num = 0;  //which sem be set;  0 : the first one
 	sem_g.sem_op = -1;  //the operation: -1, sem -1;  1, sem +1;
 	sem_g.sem_flg = SEM_UNDO; // operation flag
+
 	sem_p.sem_num = 0;
 	sem_p.sem_op = 1;
 	sem_p.sem_flg = SEM_UNDO;
+
 	SEMUN semdel;
-	int sem_id = semget(ftok(".", 's'), 1, IPC_CREAT | IPC_EXCL | 0600);
+	int sem_id = semget(ftok(".", 's'), 32, IPC_CREAT | IPC_EXCL | 0600);
 	if(sem_id == -1){ printf("semid get fail\n"); return -1; }
+	printf("keys: %x, sem_id: %d\n", ftok(".",'s'), sem_id);
 
 	SEMUN seminit;
 	seminit.val = 1;

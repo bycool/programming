@@ -30,7 +30,7 @@ sem_g.sem_flg = SEM_UNDO;
 sem_p.sem_num = 0;
 sem_p.sem_op = 1;
 sem_p.sem_flg = SEM_UNDO;
-	int sem_id = semget(ftok(".", 's'), 1, 0666);
+	int sem_id = semget(ftok(".", 's'), 32, 0666);
 	if(sem_id == -1){ printf("sem_id get fail\n"); return -1; }
 
 	int i = 0;

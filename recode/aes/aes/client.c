@@ -74,7 +74,7 @@ int main(){
 //	pthread_t tid;
 //	pthread_create(&tid, NULL, client_recv,(void*)myfd);
 
-	char buffer[1024];
+	char buffer[2048];
 	char buf[256];
 	while(1){
 		printf("---------------------\n");
@@ -82,6 +82,7 @@ int main(){
 		scanf("%s",buffer);
 		len = strlen(buffer);
 
+		printf("input.size: %d\n", len);
 		out_len = aes128_en(buffer, len, &enout);
 
 		printf("buffer.size: %d\n", out_len);

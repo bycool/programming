@@ -103,6 +103,7 @@ void recver(){
 
         if(msg == NULL){
             sleep(1);
+			fprintf(stdout, "sleep 1\n");
             continue;
         }
 
@@ -115,6 +116,10 @@ void recver(){
                 dbus_message_iter_get_basic(&args, &recvmsg);
 
             printf("Got signal with value %s\n", recvmsg);
+
+			if(strcmp("exit", recvmsg)==0){
+				break;
+			}
         }
 
         dbus_message_unref(msg);

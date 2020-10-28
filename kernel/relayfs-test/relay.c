@@ -18,7 +18,7 @@ struct dentry *dir = NULL;
 
 static int write_start(void);
 
-static int subbuf_start_callback(struct rchan_buf *buf, void *subbuf, void *prev_subbuf, unsigned int prev_padding)
+static int subbuf_start_callback(struct rchan_buf *buf, void *subbuf, void *prev_subbuf, size_t prev_padding)
 {
 	static int warned;
 	if (!relay_buf_full(buf))
@@ -39,7 +39,7 @@ static void buf_unmapped_callback(struct rchan_buf* rbuf, struct file* pfile){
 	printk("buf_unmapped_callback\n");
 }
 
-static struct dentry * create_buf_file_callback(const char *filename, struct dentry *parent, umode_t mode, struct rchan_buf *buf, int *is_global)
+static struct dentry * create_buf_file_callback(const char *filename, struct dentry *parent, int mode, struct rchan_buf *buf, int *is_global)
 {
 	*is_global = 1;
 	return debugfs_create_file(filename, mode, parent, buf, &relay_file_operations);

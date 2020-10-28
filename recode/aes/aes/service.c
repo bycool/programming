@@ -10,7 +10,7 @@
 void* handle(void* argc){
 	int newsock = (int)argc;
 	uint8_t* deout = 0;
-	char buf[1024];
+	char buf[2048];
 	while(1){
 		int s = read(newsock, buf,sizeof(buf));
 		printf("buf.size: %d\n", s);
@@ -30,7 +30,7 @@ void* handle(void* argc){
 
 int main(){
 	int sfp,nfp;
-	char buffer[1024]={0};
+	char buffer[2048]={0};
 	struct sockaddr_in s_add,c_add;
 	int sin_size;
 	int portnum=8889;
