@@ -1,0 +1,1 @@
+cmd_/home/ten/datum/qemu-kernel/modules/blockdriver/blkdev-3/bb.ko := cp /home/ten/datum/qemu-kernel/modules/blockdriver/blkdev-3/bb.ko.unsigned /home/ten/datum/qemu-kernel/modules/blockdriver/blkdev-3/bb.ko

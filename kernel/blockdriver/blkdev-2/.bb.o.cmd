@@ -1,0 +1,1 @@
+cmd_/home/ten/datum/qemu-kernel/modules/blockdriver/blkdev-2/bb.o := ld -m elf_x86_64   -r -o /home/ten/datum/qemu-kernel/modules/blockdriver/blkdev-2/bb.o /home/ten/datum/qemu-kernel/modules/blockdriver/blkdev-2/blkmdev.o ; scripts/mod/modpost /home/ten/datum/qemu-kernel/modules/blockdriver/blkdev-2/bb.o
