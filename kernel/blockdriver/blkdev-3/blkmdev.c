@@ -19,46 +19,44 @@ unsigned char blkmdev_data[BLKMDEV_BYTES];
 static struct gendisk *blkmdev_disk;
 static struct request_queue *blkmdev_queue;
 
-static void blkmdev_do_request(struct request_queue* q){
-	struct request* req;
-	struct req_iterator ri;
-	struct bio_vec *bvec;
-	char *disk_mem;
-	char *buffer;
+static int blkmdev_make_request(struct request_queue* q, struct bio* bio){
+	struct bio_vec* bvec;
+	int i ;
+	void *dsk_mem;
 
-	while((req = blk_fetch_request(q)) != NULL){
-		if((blk_rq_pos(req) << 9) + blk_rq_cur_bytes(req) > BLKMDEV_BYTES){
-			printk(KERN_ERR BLKMDEV_DISKNAME ":bad request: blk=%llu, count=%u\n", (unsigned long long)blk_rq_pos(req), blk_rq_cur_bytes(req));
-			__blk_end_request_all(req, -EIO);
-			continue;
-		}
-		disk_mem = blkmdev_data + (blk_rq_pos(req) << 9);
-		switch(rq_data_dir(req)){
+	if((bio->bi_sector << 9) + bio->bi_size > BLKMDEV_BYTES){
+		printk(KERN_ERR BLKMDEV_DISKNAME ":bad request: block=%llu, count=%u\n", (unsigned long long)bio->bi_sector, bio->bi_size);
+		bio_endio(bio, -EIO);
+		return 0;
+	}
+
+	dsk_mem = blkmdev_data + (bio->bi_sector << 9);
+
+	bio_for_each_segment(bvec, bio, i){
+		void *iovec_mem;
+		switch(bio_rw(bio)){
 			case READ:
-				printk("blkmdev: READ\n");
-				rq_for_each_segment(bvec, req, ri){
-					buffer = kmap(bvec->bv_page) + bvec->bv_offset;
-					memcpy(buffer, disk_mem, bvec->bv_len);
-					kunmap(bvec->bv_page);
-					disk_mem += bvec->bv_len;
-				}
-				__blk_end_request_all(req, 0);
+			case READA:
+//				printk("blkmdev:READ:%d\n", bvec->bv_len);
+				iovec_mem = kmap(bvec->bv_page) + bvec->bv_offset;
+				memcpy(iovec_mem, dsk_mem, bvec->bv_len);
+				kunmap(bvec->bv_page);
 				break;
-
 			case WRITE:
-				printk("blkmdev: WRITE\n");
-				rq_for_each_segment(bvec, req, ri){
-					buffer = kmap(bvec->bv_page) + bvec->bv_offset;
-					memcpy(disk_mem, buffer, bvec->bv_len);
-					kunmap(bvec->bv_page);
-					disk_mem += bvec->bv_len;
-				}
-				__blk_end_request_all(req, 0);
+				printk("blkmdev:WRITE:%d\n", bvec->bv_len);
+				iovec_mem = kmap(bvec->bv_page) + bvec->bv_offset;
+				memcpy(dsk_mem, iovec_mem, bvec->bv_len);
+				kunmap(bvec->bv_page);
 				break;
 			default:
-				break;
+				printk(KERN_ERR BLKMDEV_DISKNAME ":unknown value of bio_rw: %lu\n", bio_rw(bio));
+				bio_endio(bio, -EIO);
+				return 0;
 		}
+		dsk_mem += bvec->bv_len;
 	}
+	bio_endio(bio, 0);
+	return 0;
 }
 
 struct block_device_operations blkmdev_fops = {
@@ -69,11 +67,12 @@ struct block_device_operations blkmdev_fops = {
 static int __init init_blkmdev(void){
 	int ret = -1;
 
-	blkmdev_queue = blk_init_queue(blkmdev_do_request, NULL);
+	blkmdev_queue = blk_alloc_queue(GFP_KERNEL);
 	if(!blkmdev_queue){
 		ret = -ENOMEM;
-		goto err_init_queue;
+		goto err_alloc_queue;
 	}
+	blk_queue_make_request(blkmdev_queue, blkmdev_make_request);
 
 	blkmdev_disk = alloc_disk(1);
 	if(!blkmdev_disk){
@@ -94,7 +93,7 @@ static int __init init_blkmdev(void){
 err_alloc_disk:
 	blk_cleanup_queue(blkmdev_queue);
 
-err_init_queue:
+err_alloc_queue:
 	return ret;
 }
 

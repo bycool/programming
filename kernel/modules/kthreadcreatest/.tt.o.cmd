@@ -1,0 +1,1 @@
+cmd_/home/ten/datum/qemu-kernel/modules/kthreadcreatest/tt.o := ld -m elf_x86_64   -r -o /home/ten/datum/qemu-kernel/modules/kthreadcreatest/tt.o /home/ten/datum/qemu-kernel/modules/kthreadcreatest/kthreadcreatest.o ; scripts/mod/modpost /home/ten/datum/qemu-kernel/modules/kthreadcreatest/tt.o

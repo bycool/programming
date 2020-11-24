@@ -1,8 +1,8 @@
 obj-m	:= bb.o
 bb-objs	:=	blkmdev.o
 
-#KDIR	:= /home/ten/datum/qemu-kernel/linux-4.10
-KDIR	:= /lib/modules/$(shell uname -r)/build
+KDIR	:= /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64
+#KDIR	:= /lib/modules/$(shell uname -r)/build
 PWD	:= $(shell pwd)
 
 all:

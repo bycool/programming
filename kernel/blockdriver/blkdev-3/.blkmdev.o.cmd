@@ -1,12 +1,7 @@
-cmd_/home/ten/datum/qemu-kernel/modules/blockdriver/blkdev-3/blkmdev.o := gcc -Wp,-MD,/home/ten/datum/qemu-kernel/modules/blockdriver/blkdev-3/.blkmdev.o.d  -nostdinc -isystem /usr/lib/gcc/x86_64-redhat-linux/4.4.7/include -Iinclude  -I/usr/src/kernels/2.6.32-696.el6.x86_64/include/uapi -I/usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include -Iarch/include/generated -Iinclude -include /usr/src/kernels/2.6.32-696.el6.x86_64/include/linux/kconfig.h -D__KERNEL__ -Wall -Wundef -Wstrict-prototypes -Wno-trigraphs -fno-strict-aliasing -fno-common -Werror-implicit-function-declaration -Wno-format-security -fno-delete-null-pointer-checks -O2 -m64 -mtune=generic -mno-red-zone -mcmodel=kernel -funit-at-a-time -maccumulate-outgoing-args -fstack-protector -DCONFIG_AS_CFI=1 -DCONFIG_AS_CFI_SIGNAL_FRAME=1 -DCONFIG_AS_CFI_SECTIONS=1 -DCONFIG_AS_AVX=1 -pipe -Wno-sign-compare -fno-asynchronous-unwind-tables -mno-sse -mno-mmx -mno-sse2 -mno-3dnow -Wframe-larger-than=2048 -Wno-unused-but-set-variable -fno-omit-frame-pointer -fno-optimize-sibling-calls -g -pg -Wdeclaration-after-statement -Wno-pointer-sign -fno-strict-overflow -fno-dwarf2-cfi-asm -fconserve-stack  -DMODULE -D"KBUILD_STR(s)=\#s" -D"KBUILD_BASENAME=KBUILD_STR(blkmdev)"  -D"KBUILD_MODNAME=KBUILD_STR(bb)" -D"DEBUG_HASH=11" -D"DEBUG_HASH2=57" -c -o /home/ten/datum/qemu-kernel/modules/blockdriver/blkdev-3/.tmp_blkmdev.o /home/ten/datum/qemu-kernel/modules/blockdriver/blkdev-3/blkmdev.c
+cmd_/home/ten/go-engineer/programming/kernel/blockdriver/blkdev-3/blkmdev.o := gcc -Wp,-MD,/home/ten/go-engineer/programming/kernel/blockdriver/blkdev-3/.blkmdev.o.d  -nostdinc -isystem /usr/lib/gcc/x86_64-redhat-linux/4.4.7/include -Iinclude  -I/home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include -include include/linux/autoconf.h -D__KERNEL__ -Wall -Wundef -Wstrict-prototypes -Wno-trigraphs -fno-strict-aliasing -fno-common -Werror-implicit-function-declaration -Wno-format-security -fno-delete-null-pointer-checks -Os -m64 -mtune=generic -mno-red-zone -mcmodel=kernel -funit-at-a-time -maccumulate-outgoing-args -DCONFIG_AS_CFI=1 -DCONFIG_AS_CFI_SIGNAL_FRAME=1 -pipe -Wno-sign-compare -fno-asynchronous-unwind-tables -mno-sse -mno-mmx -mno-sse2 -mno-3dnow -Wframe-larger-than=2048 -fno-stack-protector -fno-omit-frame-pointer -fno-optimize-sibling-calls -Wdeclaration-after-statement -Wno-pointer-sign -fno-strict-overflow -fno-dwarf2-cfi-asm -fconserve-stack  -DMODULE -D"KBUILD_STR(s)=\#s" -D"KBUILD_BASENAME=KBUILD_STR(blkmdev)"  -D"KBUILD_MODNAME=KBUILD_STR(bb)"  -c -o /home/ten/go-engineer/programming/kernel/blockdriver/blkdev-3/blkmdev.o /home/ten/go-engineer/programming/kernel/blockdriver/blkdev-3/blkmdev.c
 
-deps_/home/ten/datum/qemu-kernel/modules/blockdriver/blkdev-3/blkmdev.o := \
-  /home/ten/datum/qemu-kernel/modules/blockdriver/blkdev-3/blkmdev.c \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/include/linux/kconfig.h \
-    $(wildcard include/config/h.h) \
-    $(wildcard include/config/.h) \
-    $(wildcard include/config/booger.h) \
-    $(wildcard include/config/foo.h) \
+deps_/home/ten/go-engineer/programming/kernel/blockdriver/blkdev-3/blkmdev.o := \
+  /home/ten/go-engineer/programming/kernel/blockdriver/blkdev-3/blkmdev.c \
   include/linux/module.h \
     $(wildcard include/config/modules.h) \
     $(wildcard include/config/modversions.h) \
@@ -23,18 +18,6 @@ deps_/home/ten/datum/qemu-kernel/modules/blockdriver/blkdev-3/blkmdev.o := \
     $(wildcard include/config/sysfs.h) \
   include/linux/list.h \
     $(wildcard include/config/debug/list.h) \
-  include/linux/types.h \
-    $(wildcard include/config/uid16.h) \
-    $(wildcard include/config/lbdaf.h) \
-    $(wildcard include/config/arch/dma/addr/t/64bit.h) \
-    $(wildcard include/config/phys/addr/t/64bit.h) \
-    $(wildcard include/config/64bit.h) \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/types.h \
-  include/asm-generic/types.h \
-  include/asm-generic/int-ll64.h \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/bitsperlong.h \
-  include/asm-generic/bitsperlong.h \
-  include/linux/posix_types.h \
   include/linux/stddef.h \
   include/linux/compiler.h \
     $(wildcard include/config/trace/branch/profiling.h) \
@@ -45,44 +28,50 @@ deps_/home/ten/datum/qemu-kernel/modules/blockdriver/blkdev-3/blkmdev.o := \
     $(wildcard include/config/arch/supports/optimized/inlining.h) \
     $(wildcard include/config/optimize/inlining.h) \
   include/linux/compiler-gcc4.h \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/posix_types.h \
-    $(wildcard include/config/x86/32.h) \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/posix_types_64.h \
   include/linux/poison.h \
-    $(wildcard include/config/illegal/pointer/value.h) \
   include/linux/prefetch.h \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/processor.h \
-    $(wildcard include/config/x86/vsmp.h) \
+  include/linux/types.h \
+    $(wildcard include/config/uid16.h) \
+    $(wildcard include/config/lbdaf.h) \
+    $(wildcard include/config/phys/addr/t/64bit.h) \
+    $(wildcard include/config/64bit.h) \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/types.h \
     $(wildcard include/config/x86/64.h) \
+    $(wildcard include/config/highmem64g.h) \
+  include/asm-generic/types.h \
+  include/asm-generic/int-ll64.h \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/bitsperlong.h \
+  include/asm-generic/bitsperlong.h \
+  include/linux/posix_types.h \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/posix_types.h \
+    $(wildcard include/config/x86/32.h) \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/posix_types_64.h \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/processor.h \
+    $(wildcard include/config/x86/vsmp.h) \
     $(wildcard include/config/cc/stackprotector.h) \
     $(wildcard include/config/paravirt.h) \
     $(wildcard include/config/m386.h) \
     $(wildcard include/config/m486.h) \
     $(wildcard include/config/x86/debugctlmsr.h) \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/processor-flags.h \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/processor-flags.h \
     $(wildcard include/config/vm86.h) \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/vm86.h \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/ptrace.h \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/ptrace-abi.h \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/segment.h \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/cache.h \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/vm86.h \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/ptrace.h \
+    $(wildcard include/config/x86/ptrace/bts.h) \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/ptrace-abi.h \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/segment.h \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/cache.h \
     $(wildcard include/config/x86/l1/cache/shift.h) \
   include/linux/linkage.h \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/linkage.h \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/linkage.h \
     $(wildcard include/config/x86/alignment/16.h) \
   include/linux/stringify.h \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/page_types.h \
-  include/linux/const.h \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/page_64_types.h \
-    $(wildcard include/config/physical/start.h) \
-    $(wildcard include/config/physical/align.h) \
-    $(wildcard include/config/flatmem.h) \
   include/linux/init.h \
     $(wildcard include/config/hotplug.h) \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/math_emu.h \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/sigcontext.h \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/current.h \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/percpu.h \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/math_emu.h \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/sigcontext.h \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/current.h \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/percpu.h \
     $(wildcard include/config/x86/64/smp.h) \
   include/linux/kernel.h \
     $(wildcard include/config/preempt/voluntary.h) \
@@ -92,19 +81,18 @@ deps_/home/ten/datum/qemu-kernel/modules/blockdriver/blkdev-3/blkmdev.o := \
     $(wildcard include/config/dynamic/debug.h) \
     $(wildcard include/config/ring/buffer.h) \
     $(wildcard include/config/numa.h) \
-    $(wildcard include/config/compaction.h) \
   /usr/lib/gcc/x86_64-redhat-linux/4.4.7/include/stdarg.h \
   include/linux/bitops.h \
     $(wildcard include/config/generic/find/first/bit.h) \
     $(wildcard include/config/generic/find/last/bit.h) \
     $(wildcard include/config/generic/find/next/bit.h) \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/bitops.h \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/bitops.h \
     $(wildcard include/config/x86/cmov.h) \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/alternative.h \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/asm.h \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/cpufeature.h \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/alternative.h \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/asm.h \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/cpufeature.h \
     $(wildcard include/config/x86/invlpg.h) \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/required-features.h \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/required-features.h \
     $(wildcard include/config/x86/minimum/cpu/family.h) \
     $(wildcard include/config/math/emulation.h) \
     $(wildcard include/config/x86/pae.h) \
@@ -116,10 +104,10 @@ deps_/home/ten/datum/qemu-kernel/modules/blockdriver/blkdev-3/blkmdev.o := \
   include/asm-generic/bitops/fls64.h \
   include/asm-generic/bitops/ext2-non-atomic.h \
   include/asm-generic/bitops/le.h \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/byteorder.h \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/byteorder.h \
   include/linux/byteorder/little_endian.h \
   include/linux/swab.h \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/swab.h \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/swab.h \
     $(wildcard include/config/x86/bswap.h) \
   include/linux/byteorder/generic.h \
   include/asm-generic/bitops/minix.h \
@@ -127,14 +115,13 @@ deps_/home/ten/datum/qemu-kernel/modules/blockdriver/blkdev-3/blkmdev.o := \
     $(wildcard include/config/arch/has/ilog2/u32.h) \
     $(wildcard include/config/arch/has/ilog2/u64.h) \
   include/linux/typecheck.h \
-  include/linux/printk.h \
   include/linux/ratelimit.h \
   include/linux/param.h \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/param.h \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/param.h \
   include/asm-generic/param.h \
     $(wildcard include/config/hz.h) \
   include/linux/dynamic_debug.h \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/bug.h \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/bug.h \
     $(wildcard include/config/bug.h) \
     $(wildcard include/config/debug/bugverbose.h) \
   include/asm-generic/bug.h \
@@ -147,14 +134,14 @@ deps_/home/ten/datum/qemu-kernel/modules/blockdriver/blkdev-3/blkmdev.o := \
     $(wildcard include/config/base/small.h) \
   include/linux/percpu-defs.h \
     $(wildcard include/config/debug/force/weak/per/cpu.h) \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/system.h \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/system.h \
     $(wildcard include/config/ia32/emulation.h) \
     $(wildcard include/config/x86/32/lazy/gs.h) \
     $(wildcard include/config/x86/ppro/fence.h) \
     $(wildcard include/config/x86/oostore.h) \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/cmpxchg.h \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/cmpxchg_64.h \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/nops.h \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/cmpxchg.h \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/cmpxchg_64.h \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/nops.h \
     $(wildcard include/config/mk7.h) \
   include/linux/irqflags.h \
     $(wildcard include/config/trace/irqflags.h) \
@@ -162,23 +149,35 @@ deps_/home/ten/datum/qemu-kernel/modules/blockdriver/blkdev-3/blkmdev.o := \
     $(wildcard include/config/preempt/tracer.h) \
     $(wildcard include/config/trace/irqflags/support.h) \
     $(wildcard include/config/x86.h) \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/irqflags.h \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/irqflags.h \
     $(wildcard include/config/debug/lock/alloc.h) \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/paravirt.h \
-    $(wildcard include/config/transparent/hugepage.h) \
-    $(wildcard include/config/paravirt/spinlocks.h) \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/pgtable_types.h \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/page.h \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/page_types.h \
+  include/linux/const.h \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/page_64_types.h \
+    $(wildcard include/config/physical/start.h) \
+    $(wildcard include/config/physical/align.h) \
+    $(wildcard include/config/flatmem.h) \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/page_64.h \
+  include/asm-generic/memory_model.h \
+    $(wildcard include/config/discontigmem.h) \
+    $(wildcard include/config/sparsemem/vmemmap.h) \
+    $(wildcard include/config/sparsemem.h) \
+  include/asm-generic/getorder.h \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/pgtable_types.h \
     $(wildcard include/config/kmemcheck.h) \
     $(wildcard include/config/compat/vdso.h) \
     $(wildcard include/config/proc/fs.h) \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/pgtable_64_types.h \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/paravirt_types.h \
-    $(wildcard include/config/x86/local/apic.h) \
-    $(wildcard include/config/paravirt/debug.h) \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/desc_defs.h \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/kmap_types.h \
-    $(wildcard include/config/debug/highmem.h) \
-  include/asm-generic/kmap_types.h \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/pgtable_64_types.h \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/msr.h \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/msr-index.h \
+  include/linux/ioctl.h \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/ioctl.h \
+  include/asm-generic/ioctl.h \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/errno.h \
+  include/asm-generic/errno.h \
+  include/asm-generic/errno-base.h \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/cpumask.h \
   include/linux/cpumask.h \
     $(wildcard include/config/cpumask/offstack.h) \
     $(wildcard include/config/hotplug/cpu.h) \
@@ -187,39 +186,21 @@ deps_/home/ten/datum/qemu-kernel/modules/blockdriver/blkdev-3/blkmdev.o := \
   include/linux/bitmap.h \
   include/linux/string.h \
     $(wildcard include/config/binary/printf.h) \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/string.h \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/string_64.h \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/page.h \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/page_64.h \
-  include/asm-generic/memory_model.h \
-    $(wildcard include/config/discontigmem.h) \
-    $(wildcard include/config/sparsemem/vmemmap.h) \
-    $(wildcard include/config/sparsemem.h) \
-  include/asm-generic/getorder.h \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/msr.h \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/msr-index.h \
-    $(wildcard include/config/tdp/nominal.h) \
-    $(wildcard include/config/tdp/level/1.h) \
-    $(wildcard include/config/tdp/level/2.h) \
-    $(wildcard include/config/tdp/control.h) \
-    $(wildcard include/config/tdp/level1.h) \
-    $(wildcard include/config/tdp/level2.h) \
-  include/linux/ioctl.h \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/ioctl.h \
-  include/asm-generic/ioctl.h \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/errno.h \
-  include/asm-generic/errno.h \
-  include/asm-generic/errno-base.h \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/cpumask.h \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/string.h \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/string_64.h \
+  include/linux/errno.h \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/desc_defs.h \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/ds.h \
+    $(wildcard include/config/x86/ds.h) \
+  include/linux/err.h \
   include/linux/personality.h \
   include/linux/cache.h \
     $(wildcard include/config/arch/has/cache/line/size.h) \
   include/linux/math64.h \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/div64.h \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/div64.h \
   include/asm-generic/div64.h \
-  include/linux/err.h \
   include/linux/stat.h \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/stat.h \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/stat.h \
   include/linux/time.h \
     $(wildcard include/config/arch/uses/gettimeoffset.h) \
   include/linux/seqlock.h \
@@ -231,24 +212,26 @@ deps_/home/ten/datum/qemu-kernel/modules/blockdriver/blkdev-3/blkmdev.o := \
     $(wildcard include/config/preempt/notifiers.h) \
   include/linux/thread_info.h \
     $(wildcard include/config/compat.h) \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/thread_info.h \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/thread_info.h \
     $(wildcard include/config/debug/stack/usage.h) \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/ftrace.h \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/ftrace.h \
     $(wildcard include/config/function/tracer.h) \
     $(wildcard include/config/dynamic/ftrace.h) \
-    $(wildcard include/config/ftrace/syscalls.h) \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/atomic.h \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/atomic_64.h \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/atomic.h \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/atomic_64.h \
   include/asm-generic/atomic-long.h \
   include/linux/bottom_half.h \
   include/linux/spinlock_types.h \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/spinlock_types.h \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/spinlock_types.h \
   include/linux/lockdep.h \
     $(wildcard include/config/lockdep.h) \
     $(wildcard include/config/lock/stat.h) \
     $(wildcard include/config/generic/hardirqs.h) \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/spinlock.h \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/rwlock.h \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/spinlock.h \
+    $(wildcard include/config/paravirt/spinlocks.h) \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/rwlock.h \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/paravirt.h \
+    $(wildcard include/config/highpte.h) \
   include/linux/spinlock_api_smp.h \
   include/linux/kmod.h \
   include/linux/gfp.h \
@@ -282,51 +265,47 @@ deps_/home/ten/datum/qemu-kernel/modules/blockdriver/blkdev-3/blkmdev.o := \
     $(wildcard include/config/have/arch/nodedata/extension.h) \
     $(wildcard include/config/memory/hotremove.h) \
   include/linux/notifier.h \
-  include/linux/errno.h \
   include/linux/mutex.h \
     $(wildcard include/config/debug/mutexes.h) \
-    $(wildcard include/config/have/default/no/spin/mutexes.h) \
-    $(wildcard include/config/have/arch/mutex/cpu/relax.h) \
   include/linux/rwsem.h \
     $(wildcard include/config/rwsem/generic/spinlock.h) \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/rwsem.h \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/rwsem.h \
   include/linux/srcu.h \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/mmzone.h \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/mmzone_64.h \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/mmzone.h \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/mmzone_64.h \
     $(wildcard include/config/numa/emu.h) \
   include/linux/mmdebug.h \
     $(wildcard include/config/debug/virtual.h) \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/smp.h \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/smp.h \
+    $(wildcard include/config/x86/local/apic.h) \
     $(wildcard include/config/x86/io/apic.h) \
     $(wildcard include/config/x86/32/smp.h) \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/mpspec.h \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/mpspec.h \
     $(wildcard include/config/x86/numaq.h) \
     $(wildcard include/config/mca.h) \
     $(wildcard include/config/eisa.h) \
     $(wildcard include/config/x86/mpparse.h) \
     $(wildcard include/config/acpi.h) \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/mpspec_def.h \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/x86_init.h \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/bootparam.h \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/mpspec_def.h \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/x86_init.h \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/bootparam.h \
   include/linux/screen_info.h \
   include/linux/apm_bios.h \
   include/linux/edd.h \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/e820.h \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/e820.h \
     $(wildcard include/config/efi.h) \
-    $(wildcard include/config/intel/txt.h) \
     $(wildcard include/config/hibernation.h) \
     $(wildcard include/config/memtest.h) \
   include/linux/ioport.h \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/ist.h \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/ist.h \
   include/video/edid.h \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/apic.h \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/apic.h \
     $(wildcard include/config/x86/x2apic.h) \
   include/linux/delay.h \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/delay.h \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/delay.h \
   include/linux/pm.h \
     $(wildcard include/config/pm/sleep.h) \
     $(wildcard include/config/pm/runtime.h) \
-    $(wildcard include/config/ppc/pseries.h) \
   include/linux/workqueue.h \
   include/linux/timer.h \
     $(wildcard include/config/timer/stats.h) \
@@ -335,51 +314,49 @@ deps_/home/ten/datum/qemu-kernel/modules/blockdriver/blkdev-3/blkmdev.o := \
     $(wildcard include/config/ktime/scalar.h) \
   include/linux/jiffies.h \
   include/linux/timex.h \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/timex.h \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/tsc.h \
+    $(wildcard include/config/no/hz.h) \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/timex.h \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/tsc.h \
     $(wildcard include/config/x86/tsc.h) \
   include/linux/debugobjects.h \
     $(wildcard include/config/debug/objects.h) \
     $(wildcard include/config/debug/objects/free.h) \
-  include/linux/completion.h \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/apicdef.h \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/fixmap.h \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/apicdef.h \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/fixmap.h \
     $(wildcard include/config/provide/ohci1394/dma/init.h) \
     $(wildcard include/config/x86/visws/apic.h) \
     $(wildcard include/config/x86/f00f/bug.h) \
     $(wildcard include/config/x86/cyclone/timer.h) \
     $(wildcard include/config/pci/mmconfig.h) \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/acpi.h \
+    $(wildcard include/config/intel/txt.h) \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/acpi.h \
     $(wildcard include/config/acpi/numa.h) \
   include/acpi/pdc_intel.h \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/numa.h \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/numa_64.h \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/mmu.h \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/vsyscall.h \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/numa.h \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/numa_64.h \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/mmu.h \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/vsyscall.h \
     $(wildcard include/config/generic/time.h) \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/idle.h \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/io_apic.h \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/irq_vectors.h \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/io_apic.h \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/irq_vectors.h \
     $(wildcard include/config/sparse/irq.h) \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/sparsemem.h \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/sparsemem.h \
   include/linux/topology.h \
     $(wildcard include/config/sched/smt.h) \
     $(wildcard include/config/sched/mc.h) \
-    $(wildcard include/config/sched/book.h) \
   include/linux/smp.h \
     $(wildcard include/config/use/generic/smp/helpers.h) \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/topology.h \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/topology.h \
     $(wildcard include/config/x86/ht.h) \
     $(wildcard include/config/x86/64/acpi/numa.h) \
   include/asm-generic/topology.h \
-  include/linux/sysctl.h \
   include/linux/elf.h \
   include/linux/elf-em.h \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/elf.h \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/user.h \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/user_64.h \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/auxvec.h \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/vdso.h \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/elf.h \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/user.h \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/user_64.h \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/auxvec.h \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/vdso.h \
   include/linux/kobject.h \
   include/linux/sysfs.h \
   include/linux/kref.h \
@@ -391,9 +368,9 @@ deps_/home/ten/datum/qemu-kernel/modules/blockdriver/blkdev-3/blkmdev.o := \
   include/linux/rcupdate.h \
     $(wildcard include/config/tree/preempt/rcu.h) \
     $(wildcard include/config/tree/rcu.h) \
+  include/linux/completion.h \
   include/linux/rcutree.h \
-    $(wildcard include/config/no/hz.h) \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/local.h \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/local.h \
   include/linux/percpu.h \
     $(wildcard include/config/have/legacy/per/cpu/area.h) \
     $(wildcard include/config/need/per/cpu/embed/first/chunk.h) \
@@ -404,10 +381,16 @@ deps_/home/ten/datum/qemu-kernel/modules/blockdriver/blkdev-3/blkmdev.o := \
     $(wildcard include/config/slub.h) \
     $(wildcard include/config/slob.h) \
     $(wildcard include/config/debug/slab.h) \
-  include/linux/slab_def.h \
-  include/linux/kmalloc_sizes.h \
+  include/linux/slub_def.h \
+    $(wildcard include/config/slub/stats.h) \
+    $(wildcard include/config/slub/debug.h) \
+    $(wildcard include/config/kmemtrace.h) \
+  include/linux/kmemtrace.h \
+  include/trace/events/kmem.h \
+  include/trace/define_trace.h \
+  include/linux/kmemleak.h \
   include/linux/pfn.h \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/module.h \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/module.h \
     $(wildcard include/config/m586.h) \
     $(wildcard include/config/m586tsc.h) \
     $(wildcard include/config/m586mmx.h) \
@@ -433,26 +416,21 @@ deps_/home/ten/datum/qemu-kernel/modules/blockdriver/blkdev-3/blkmdev.o := \
     $(wildcard include/config/4kstacks.h) \
   include/asm-generic/module.h \
   include/trace/events/module.h \
-  include/trace/define_trace.h \
   include/linux/blkdev.h \
     $(wildcard include/config/block.h) \
-    $(wildcard include/config/blk/cgroup.h) \
     $(wildcard include/config/blk/dev/io/trace.h) \
     $(wildcard include/config/blk/dev/bsg.h) \
-    $(wildcard include/config/blk/dev/throttling.h) \
     $(wildcard include/config/bounce.h) \
     $(wildcard include/config/mmu.h) \
     $(wildcard include/config/blk/dev/integrity.h) \
   include/linux/sched.h \
     $(wildcard include/config/sched/debug.h) \
-    $(wildcard include/config/lockup/detector.h) \
+    $(wildcard include/config/detect/softlockup.h) \
     $(wildcard include/config/detect/hung/task.h) \
     $(wildcard include/config/core/dump/default/elf/headers.h) \
     $(wildcard include/config/bsd/process/acct.h) \
     $(wildcard include/config/taskstats.h) \
     $(wildcard include/config/audit.h) \
-    $(wildcard include/config/sched/autogroup.h) \
-    $(wildcard include/config/cgroups.h) \
     $(wildcard include/config/inotify/user.h) \
     $(wildcard include/config/epoll.h) \
     $(wildcard include/config/posix/mqueue.h) \
@@ -465,16 +443,15 @@ deps_/home/ten/datum/qemu-kernel/modules/blockdriver/blkdev-3/blkmdev.o := \
     $(wildcard include/config/rt/group/sched.h) \
     $(wildcard include/config/sysvipc.h) \
     $(wildcard include/config/auditsyscall.h) \
-    $(wildcard include/config/utrace.h) \
     $(wildcard include/config/rt/mutexes.h) \
     $(wildcard include/config/task/xacct.h) \
     $(wildcard include/config/cpusets.h) \
+    $(wildcard include/config/cgroups.h) \
     $(wildcard include/config/futex.h) \
     $(wildcard include/config/fault/injection.h) \
     $(wildcard include/config/latencytop.h) \
     $(wildcard include/config/function/graph/tracer.h) \
     $(wildcard include/config/have/unstable/sched/clock.h) \
-    $(wildcard include/config/cfs/bandwidth.h) \
     $(wildcard include/config/stack/growsup.h) \
     $(wildcard include/config/group/sched.h) \
     $(wildcard include/config/mm/owner.h) \
@@ -491,17 +468,17 @@ deps_/home/ten/datum/qemu-kernel/modules/blockdriver/blkdev-3/blkmdev.o := \
   include/linux/page-debug-flags.h \
     $(wildcard include/config/page/poisoning.h) \
     $(wildcard include/config/page/debug/something/else.h) \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/cputime.h \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/cputime.h \
   include/asm-generic/cputime.h \
   include/linux/sem.h \
   include/linux/ipc.h \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/ipcbuf.h \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/ipcbuf.h \
   include/asm-generic/ipcbuf.h \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/sembuf.h \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/sembuf.h \
   include/linux/signal.h \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/signal.h \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/signal.h \
   include/asm-generic/signal-defs.h \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/siginfo.h \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/siginfo.h \
   include/asm-generic/siginfo.h \
   include/linux/path.h \
   include/linux/pid.h \
@@ -509,17 +486,23 @@ deps_/home/ten/datum/qemu-kernel/modules/blockdriver/blkdev-3/blkmdev.o := \
   include/linux/percpu_counter.h \
   include/linux/seccomp.h \
     $(wildcard include/config/seccomp.h) \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/seccomp.h \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/seccomp_64.h \
+  include/linux/unistd.h \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/unistd.h \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/unistd_64.h \
+  include/asm/asm-offsets.h \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/ia32_unistd.h \
   include/linux/rculist.h \
   include/linux/rtmutex.h \
     $(wildcard include/config/debug/rt/mutexes.h) \
   include/linux/plist.h \
     $(wildcard include/config/debug/pi/list.h) \
   include/linux/resource.h \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/resource.h \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/resource.h \
   include/asm-generic/resource.h \
   include/linux/hrtimer.h \
     $(wildcard include/config/high/res/timers.h) \
-    $(wildcard include/config/timerfd.h) \
   include/linux/task_io_accounting.h \
     $(wildcard include/config/task/io/accounting.h) \
   include/linux/latencytop.h \
@@ -528,10 +511,9 @@ deps_/home/ten/datum/qemu-kernel/modules/blockdriver/blkdev-3/blkmdev.o := \
     $(wildcard include/config/security.h) \
   include/linux/key.h \
     $(wildcard include/config/sysctl.h) \
+  include/linux/sysctl.h \
   include/linux/selinux.h \
     $(wildcard include/config/security/selinux.h) \
-  include/linux/percpu-rwsem.h \
-  include/linux/atomic.h \
   include/linux/aio.h \
   include/linux/aio_abi.h \
   include/linux/uio.h \
@@ -548,7 +530,7 @@ deps_/home/ten/datum/qemu-kernel/modules/blockdriver/blkdev-3/blkmdev.o := \
     $(wildcard include/config/devtmpfs.h) \
   include/linux/klist.h \
   include/linux/semaphore.h \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/device.h \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/device.h \
     $(wildcard include/config/dmar.h) \
   include/linux/pm_wakeup.h \
     $(wildcard include/config/pm.h) \
@@ -563,12 +545,10 @@ deps_/home/ten/datum/qemu-kernel/modules/blockdriver/blkdev-3/blkmdev.o := \
     $(wildcard include/config/fs/xip.h) \
     $(wildcard include/config/migration.h) \
   include/linux/limits.h \
-  include/linux/blk_types.h \
   include/linux/dcache.h \
   include/linux/radix-tree.h \
   include/linux/fiemap.h \
   include/linux/quota.h \
-    $(wildcard include/config/quota/netlink/interface.h) \
   include/linux/dqblk_xfs.h \
   include/linux/dqblk_v1.h \
   include/linux/dqblk_v2.h \
@@ -578,46 +558,44 @@ deps_/home/ten/datum/qemu-kernel/modules/blockdriver/blkdev-3/blkmdev.o := \
   include/linux/sunrpc/msg_prot.h \
   include/linux/inet.h \
   include/linux/fcntl.h \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/fcntl.h \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/fcntl.h \
   include/asm-generic/fcntl.h \
   include/linux/pagemap.h \
   include/linux/mm.h \
-    $(wildcard include/config/ksm.h) \
     $(wildcard include/config/swap.h) \
     $(wildcard include/config/debug/pagealloc.h) \
-    $(wildcard include/config/hugetlbfs.h) \
   include/linux/debug_locks.h \
     $(wildcard include/config/debug/locking/api/selftests.h) \
-  include/linux/bit_spinlock.h \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/pgtable.h \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/pgtable_64.h \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/pgtable_64_types.h \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/mm_track.h \
-    $(wildcard include/config/track/dirty/pages.h) \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/pgtable.h \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/pgtable_64.h \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/pgtable_64_types.h \
   include/asm-generic/pgtable.h \
   include/linux/page-flags.h \
     $(wildcard include/config/pageflags/extended.h) \
+    $(wildcard include/config/have/mlocked/page/bit.h) \
     $(wildcard include/config/arch/uses/pg/uncached.h) \
     $(wildcard include/config/memory/failure.h) \
     $(wildcard include/config/s390.h) \
-  include/linux/huge_mm.h \
   include/linux/vmstat.h \
     $(wildcard include/config/vm/event/counters.h) \
   include/linux/highmem.h \
+    $(wildcard include/config/debug/highmem.h) \
   include/linux/uaccess.h \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/uaccess.h \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/uaccess.h \
     $(wildcard include/config/x86/wp/works/ok.h) \
     $(wildcard include/config/x86/intel/usercopy.h) \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/uaccess_64.h \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/cacheflush.h \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/uaccess_64.h \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/cacheflush.h \
     $(wildcard include/config/x86/pat.h) \
     $(wildcard include/config/debug/rodata.h) \
     $(wildcard include/config/debug/rodata/test.h) \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/kmap_types.h \
+  include/asm-generic/kmap_types.h \
   include/linux/hardirq.h \
     $(wildcard include/config/virt/cpu/accounting.h) \
   include/linux/ftrace_irq.h \
     $(wildcard include/config/ftrace/nmi/enter.h) \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/hardirq.h \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/hardirq.h \
     $(wildcard include/config/x86/mce.h) \
     $(wildcard include/config/x86/mce/threshold.h) \
   include/linux/irq.h \
@@ -630,14 +608,13 @@ deps_/home/ten/datum/qemu-kernel/modules/blockdriver/blkdev-3/blkmdev.o := \
     $(wildcard include/config/cpumasks/offstack.h) \
   include/linux/irqreturn.h \
   include/linux/irqnr.h \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/irq.h \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/irq_regs.h \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/hw_irq.h \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/irq.h \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/irq_regs.h \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/hw_irq.h \
   include/linux/profile.h \
     $(wildcard include/config/profiling.h) \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/sections.h \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/sections.h \
   include/asm-generic/sections.h \
-  include/linux/hugetlb_inline.h \
   include/linux/backing-dev.h \
     $(wildcard include/config/debug/fs.h) \
   include/linux/writeback.h \
@@ -645,17 +622,16 @@ deps_/home/ten/datum/qemu-kernel/modules/blockdriver/blkdev-3/blkmdev.o := \
   include/linux/bio.h \
   include/linux/ioprio.h \
   include/linux/iocontext.h \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/io.h \
-    $(wildcard include/config/mtrr.h) \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/io_64.h \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/io.h \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/io_64.h \
   include/linux/vmalloc.h \
   include/asm-generic/iomap.h \
   include/linux/bsg.h \
-  /usr/src/kernels/2.6.32-696.el6.x86_64/arch/x86/include/asm/scatterlist.h \
+  /home/ten/datum/qemu-kernel/linux-2.6.32.12.x86_64/arch/x86/include/asm/scatterlist.h \
   include/asm-generic/scatterlist.h \
     $(wildcard include/config/debug/sg.h) \
   include/linux/elevator.h \
 
-/home/ten/datum/qemu-kernel/modules/blockdriver/blkdev-3/blkmdev.o: $(deps_/home/ten/datum/qemu-kernel/modules/blockdriver/blkdev-3/blkmdev.o)
+/home/ten/go-engineer/programming/kernel/blockdriver/blkdev-3/blkmdev.o: $(deps_/home/ten/go-engineer/programming/kernel/blockdriver/blkdev-3/blkmdev.o)
 
-$(deps_/home/ten/datum/qemu-kernel/modules/blockdriver/blkdev-3/blkmdev.o):
+$(deps_/home/ten/go-engineer/programming/kernel/blockdriver/blkdev-3/blkmdev.o):
