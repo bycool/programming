@@ -37,7 +37,7 @@ static int blkmdev_make_request(struct request_queue* q, struct bio* bio){
 		switch(bio_rw(bio)){
 			case READ:
 			case READA:
-//				printk("blkmdev:READ:%d\n", bvec->bv_len);
+				printk("blkmdev:READ:%d\n", bvec->bv_len);
 				iovec_mem = kmap(bvec->bv_page) + bvec->bv_offset;
 				memcpy(iovec_mem, dsk_mem, bvec->bv_len);
 				kunmap(bvec->bv_page);

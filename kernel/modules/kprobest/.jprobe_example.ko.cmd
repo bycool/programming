@@ -1,0 +1,1 @@
+cmd_/home/ten/go-engineer/programming/kernel/modules/kprobest/jprobe_example.ko := cp /home/ten/go-engineer/programming/kernel/modules/kprobest/jprobe_example.ko.unsigned /home/ten/go-engineer/programming/kernel/modules/kprobest/jprobe_example.ko

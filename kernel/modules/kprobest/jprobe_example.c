@@ -67,7 +67,7 @@ static void jprobe_submit_bio(int rw, struct bio *bio){
 
 	char dname[128];
 	bdevname(bio->bi_bdev, dname);
-	printk("device:name: %s\n", dname);
+	printk("device: %s, sector: %lu\n", dname, bio->bi_sector);
 	bio_for_each_segment(bvec, bio, i){
 		switch(bio_rw(bio)){
 			case READ:
