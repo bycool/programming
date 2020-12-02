@@ -1,0 +1,1 @@
+cmd_/home/ten/go-engineer/programming/kernel/modules/incblkmon-new/bb.ko := cp /home/ten/go-engineer/programming/kernel/modules/incblkmon-new/bb.ko.unsigned /home/ten/go-engineer/programming/kernel/modules/incblkmon-new/bb.ko
