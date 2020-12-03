@@ -39,6 +39,7 @@ int send_to_user(char *info) //发送到用户空间
     //发送数据
     retval = netlink_unicast(netlinkfd, skb, user_process.pid, MSG_DONTWAIT);
     printk( "[kernel send] netlink_unicast return: %d\n", retval);
+	kfree(skb);
     return 0;
 }
 
@@ -59,11 +60,11 @@ void kernel_receive(struct sk_buff *__skb) //内核从用户空间接收数据
             user_process.pid = nlh->nlmsg_pid;
             printk( "[kernel recv] data receive from user are:%s\n", (char *)NLMSG_DATA(nlh));
             printk( "[kernel recv] user_pid:%d\n", user_process.pid);
-//            send_to_user(data);
+            send_to_user(data);
         }
     }else{
         printk( "[kernel recv] data receive from user are:%s\n",(char *)NLMSG_DATA(nlmsg_hdr(__skb)));
-//        send_to_user(data);
+        send_to_user(data);
     }
 
     kfree_skb(skb);

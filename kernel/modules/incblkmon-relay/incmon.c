@@ -26,7 +26,7 @@
 #include <linux/relay.h>
 #include <linux/debugfs.h>
 
-const char* dname = "/dev/sda3" ;
+const char* dname = "/dev/sdb1" ;
 static char ddname[16];
 
 static char rbio[16];
@@ -56,7 +56,7 @@ static int new_mrf(struct request_queue *q, struct bio *bio) {
 //			printk("read dev:%s: sector: %lu, [page: %p | len: %u | offset: %u]\n", ddname, bio->bi_sector, bvec->bv_page, bvec->bv_len, bvec->bv_offset) ;
 			break ;
 		case WRITE :
-			sprintf(rbio, "%s|%lu|%u", ddname,bio->bi_sector, bio->bi_size);
+			sprintf(rbio, "%lu,%u", bio->bi_sector, bio->bi_size);
 			relay_write(relay_rchan, rbio, strlen(rbio));
 //			printk("write [page: %p | len: %u | offset: %u]\n",  bvec->bv_page, bvec->bv_len, bvec->bv_offset) ;
 //			printk("write dev: %s: sector: %lu, size: %u\n", ddname, bio->bi_sector, bio->bi_size) ;
