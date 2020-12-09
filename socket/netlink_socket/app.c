@@ -35,6 +35,8 @@ int main(int argc, char* argv[])
         printf("can not create a netlink socket\n");
         return -1;
     }
+	int fd = open("/mnt/debugfs/nrt0",O_RDWR,770);
+
     memset(&local, 0, sizeof(local));
     local.nl_family = AF_NETLINK;
     local.nl_pid = getpid();
@@ -74,6 +76,8 @@ int main(int argc, char* argv[])
     printf("message receive from kernel:%s\n",(char *)info.msg);
     //内核和用户进行通信
 
+
     close(skfd);
+	close(fd);
     return 0;
 }
