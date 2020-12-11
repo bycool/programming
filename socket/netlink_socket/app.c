@@ -76,7 +76,7 @@ int main(int argc, char* argv[])
     printf("message receive from kernel:%s\n",(char *)info.msg);
     //内核和用户进行通信
 
-
+	kfree(message);
     close(skfd);
 	close(fd);
     return 0;
