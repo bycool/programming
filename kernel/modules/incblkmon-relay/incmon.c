@@ -29,7 +29,7 @@
 const char* dname = "/dev/sdb1" ;
 static char ddname[16];
 
-static char rbio[16];
+//static char rbio[16];
 
 struct block_device * bdev = NULL ;
 struct request_queue * cq;
@@ -41,23 +41,46 @@ u32 user_pid = 0;
 #define NETLINK_SOCKNO 22
 #endif
 
+typedef int bio_iter_t;
+typedef struct bio_vec *bio_iter_bvec_t;
+#define bio_iter_len(bio, iter) ((bio)->bi_io_vec[(iter)].bv_len)
+#define bio_iter_offset(bio, iter) ((bio)->bi_io_vec[(iter)].bv_offset)
+#if 0
+#define bio_iter_page(bio, iter) ((bio)->bi_io_vec[(iter)].bv_page)
+#define bio_iter_idx(iter) (iter)
+#define bio_sector(bio) (bio)->bi_sector
+#define bio_size(bio) (bio)->bi_size
+#define bio_idx(bio) (bio)->bi_idx
+#else
+#define bio_iovec_idx(bio, idx) (&((bio)->bi_io_vec[(idx)]))
+#define bio_iovec(bio)      bio_iovec_idx((bio), (bio)->bi_idx)
+#define bio_page(bio)       bio_iovec((bio))->bv_page
+#define bio_offset(bio)     bio_iovec((bio))->bv_offset
+#define bio_segments(bio)   ((bio)->bi_vcnt - (bio)->bi_idx)
+#define bio_sectors(bio)    ((bio)->bi_size >> 9)
+#define bio_empty_barrier(bio)  (bio_rw_flagged(bio, BIO_RW_BARRIER) && !bio_has_data(bio) && !bio_rw_flagged(bio, BIO_RW_DISCARD))
+#endif
 
 static struct rchan *relay_rchan = NULL;
 
 static int new_mrf(struct request_queue *q, struct bio *bio) {
 	struct bio_vec *bvec ;
-	int i ;
+	bio_iter_t iter;
 	bdevname(bio->bi_bdev, ddname);
-	bio_for_each_segment(bvec, bio, i) {
+	bio_for_each_segment(bvec, bio, iter) {
 		switch(bio_rw(bio)){
 		case READ :
 		case READA :
+			printk("READA::len: %u ,offset: %d ,start_sector: %lu,end_sector: %lu\n", bio_iter_len(bio, iter), bio_iter_offset(bio, iter), bio->bi_sector, bio->bi_sector + bio_iter_len(bio, iter) / 512 - 1 );
 //			printk("read : [page: %p | len: %u | offset: %u]\n", bvec->bv_page, bvec->bv_len, bvec->bv_offset) ;
 //			printk("read dev:%s: sector: %lu, [page: %p | len: %u | offset: %u]\n", ddname, bio->bi_sector, bvec->bv_page, bvec->bv_len, bvec->bv_offset) ;
 			break ;
 		case WRITE :
-			sprintf(rbio, "%lu,%u", bio->bi_sector, bio->bi_size);
-			relay_write(relay_rchan, rbio, strlen(rbio));
+			printk("WRITE::len: %u ,offset: %d ,start_sector: %lu,end_sector: %lu\n", bio_iter_len(bio, iter), bio_iter_offset(bio, iter), bio->bi_sector, bio->bi_sector + bio_iter_len(bio, iter) / 512 - 1 );
+			
+
+//			sprintf(rbio, "%lu,%u", bio->bi_sector, bio_iter_len(bio, iter));
+//			relay_write(relay_rchan, rbio, strlen(rbio));
 //			printk("write [page: %p | len: %u | offset: %u]\n",  bvec->bv_page, bvec->bv_len, bvec->bv_offset) ;
 //			printk("write dev: %s: sector: %lu, size: %u\n", ddname, bio->bi_sector, bio->bi_size) ;
 			break;

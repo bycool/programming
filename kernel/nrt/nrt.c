@@ -73,7 +73,7 @@ int netlink_m_init(void){
 }
 
 void netlink_m_exit(void){
-	sock_release(nl_sk->sk_socket);
+	netlink_kernel_release(nl_sk);
 	printk("netlink_m_exit\n");
 }
 

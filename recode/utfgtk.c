@@ -1,3 +1,5 @@
+#include <stdio.h>
+
 int is_str_utf8(const char* str)
 {
   unsigned int nBytes = 0;
@@ -84,4 +86,22 @@ int is_str_gbk(const char* str)
     return 1;
   }
   return 1;
+}
+
+void main(){
+	char utfstr[32] = "12345687654fghgfds";
+	char gdkstr[32] = "你好我是机器人呢";
+
+	if(is_str_utf8(utfstr)){
+		printf("utfstr is utf8\n");
+	}
+	if(is_str_utf8(gdkstr)){
+		printf("gdkstr is utf8\n");
+	}
+	if(is_str_gbk(utfstr)){
+		printf("utfstr is gbk\n");
+	}
+	if(is_str_gbk(gdkstr)){
+		printf("gdkstr is gbk\n");
+	}
 }

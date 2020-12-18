@@ -1,0 +1,1 @@
+cmd_/home/ten/go-engineer/programming/kernel/modules/superblk-test/bb.ko := cp /home/ten/go-engineer/programming/kernel/modules/superblk-test/bb.ko.unsigned /home/ten/go-engineer/programming/kernel/modules/superblk-test/bb.ko

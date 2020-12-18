@@ -1,0 +1,1 @@
+cmd_/home/ten/go-engineer/programming/kernel/modules/superblk-test/bb.o := ld -m elf_x86_64   -r -o /home/ten/go-engineer/programming/kernel/modules/superblk-test/bb.o /home/ten/go-engineer/programming/kernel/modules/superblk-test/superinfo.o ; scripts/mod/modpost /home/ten/go-engineer/programming/kernel/modules/superblk-test/bb.o

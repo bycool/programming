@@ -1,1 +1,0 @@
-cmd_/home/ten/go-engineer/programming/kernel/blockdriver/blkdev-3/bb.o := ld -m elf_x86_64   -r -o /home/ten/go-engineer/programming/kernel/blockdriver/blkdev-3/bb.o /home/ten/go-engineer/programming/kernel/blockdriver/blkdev-3/blkmdev.o 
