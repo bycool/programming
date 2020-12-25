@@ -1,0 +1,4 @@
+gcc -E function.c -o function.i  gcc预处理
+gcc -S function.c -o function.s  gcc生成汇编文件
+gcc -c function.c -o function.o  gcc生成目标文件(.o文件) 
+objdump -D function.o 反汇编目标文件
