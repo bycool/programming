@@ -29,7 +29,7 @@
 const char* dname = "/dev/sdb1" ;
 static char ddname[16];
 
-//static char rbio[16];
+static char rbio[32];
 
 struct block_device * bdev = NULL ;
 struct request_queue * cq;
@@ -76,9 +76,9 @@ static int new_mrf(struct request_queue *q, struct bio *bio) {
 //			printk("read dev:%s: sector: %lu, [page: %p | len: %u | offset: %u]\n", ddname, bio->bi_sector, bvec->bv_page, bvec->bv_len, bvec->bv_offset) ;
 			break ;
 		case WRITE :
-			printk("WRITE::len: %u ,offset: %d ,start_sector: %lu,end_sector: %lu\n", bio_iter_len(bio, iter), bio_iter_offset(bio, iter), bio->bi_sector, bio->bi_sector + bio_iter_len(bio, iter) / 512 - 1 );
-//			sprintf(rbio, "%lu,%u", bio->bi_sector, bio_iter_len(bio, iter));
-//			relay_write(relay_rchan, rbio, strlen(rbio));
+			printk("WRITE: %s :len: %u ,offset: %d ,start_sector: %lu,end_sector: %lu\n", ddname, bio_iter_len(bio, iter), bio_iter_offset(bio, iter), bio->bi_sector, bio->bi_sector + bio_iter_len(bio, iter) / 512 - 1 );
+			sprintf(rbio, "%lu,%u\n", bio->bi_sector, bio_iter_len(bio, iter));
+			relay_write(relay_rchan, rbio, strlen(rbio));
 //			printk("write [page: %p | len: %u | offset: %u]\n",  bvec->bv_page, bvec->bv_len, bvec->bv_offset) ;
 //			printk("write dev: %s: sector: %lu, size: %u\n", ddname, bio->bi_sector, bio->bi_size) ;
 			break;
@@ -270,7 +270,7 @@ static int __init incmon_init(void){
 
 	printk("=================== incmon_init ==================\n");
 
-//	relay_init();
+	relay_init();
 
 	bdev = incmon_get_bld_by_path(dname, FMODE_READ);
 	if(!bdev)
@@ -289,7 +289,7 @@ static void __exit incmon_exit(void){
 	if(bdev)
 		blkdev_put(bdev, FMODE_READ);
 
-//	relay_exit();
+	relay_exit();
 
 	printk("=================== incmon_exit ==================\n");
 }

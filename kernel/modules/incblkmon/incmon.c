@@ -21,7 +21,7 @@
 
 
 
-const char* dname = "/dev/sda3" ;
+const char* dname = "/dev/sdb" ;
 static char ddname[16];
 
 static char rbio[16];

@@ -26,7 +26,7 @@
 #include <linux/relay.h>
 #include <linux/debugfs.h>
 
-const char* dname = "/dev/sdb1" ;
+const char* dname = "/dev/sdb" ;
 static char ddname[16];
 
 //static char rbio[16];
