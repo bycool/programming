@@ -49,10 +49,12 @@ int kallsymcall(void *data , const char *namebuff, struct module *mu,unsigned lo
 
 static int __init callsys_init(void){
 	int ret = -1;
+	char * s = 0x9;
+	*s = "c";
 	ret = kallsyms_on_each_symbol(kallsymcall, "sys_call_table");	
 	if(addr != 0)
 		printk("get ok\n");
-	printk("callsys_init\n");
+	printk("callsys_init: \n");
 	return 0;
 }
 

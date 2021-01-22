@@ -6,7 +6,7 @@
 #include <linux/types.h>
 #include <linux/genhd.h>
 
-const char* gbdev = "/dev/sdb1";
+const char* gbdev = "/dev/sdd1";
 struct block_device* gbb_dev = NULL;
 
 
@@ -52,14 +52,22 @@ int __init binfo_init(void){
 	if(!gbb_dev)
 		printk("open %s block device fail\n", gbdev);
 
-	printk("gendisk.major: %d\n", gbb_dev->bd_disk->major);
+	printk("gendisk: .name: %s .major: %d\n", gbb_dev->bd_disk->disk_name ,gbb_dev->bd_disk->major);
+
+	printk("part0.partno: %d, start_sect: %lu, nr_sects: %lu\n", gbb_dev->bd_disk->part0.partno, gbb_dev->bd_disk->part0.start_sect, gbb_dev->bd_disk->part0.nr_sects);
+
+	printk("disk_part_tbl.len : %d\n", gbb_dev->bd_disk->part_tbl->len);
+
 
 	hds_tbl = gbb_dev->bd_disk->part_tbl->part;
-	for(i=0; hds_tbl[i]  ;i++){
-		printk("part[%d],disk.major: %d, partno: %d,  start_sect: %lu, nr_sector: %d\n", i+1, gbb_dev->bd_disk->major, hds_tbl[i]->partno, hds_tbl[i]->start_sect,  hds_tbl[i]->nr_sects);
+	for(i=0; /* hds_tbl[i] ||*/  i<gbb_dev->bd_disk->part_tbl->len  ;i++){
+		if(!hds_tbl[i]){
+//			printk("hds_tbl[%d] == NULL\n", i); 
+			continue;
+		}
+		printk("part[%d],disk.major: %d, first_minor: %d,  partno: %d,  start_sect: %lu, nr_sector: %lu\n", i, gbb_dev->bd_disk->major, gbb_dev->bd_disk->first_minor, hds_tbl[i]->partno, hds_tbl[i]->start_sect,  hds_tbl[i]->nr_sects);
 	}
 
-	
 	return 0;
 }
 
