@@ -10,6 +10,12 @@ typedef int bio_iter_t;
 typedef struct bio_vec *bio_iter_bvec_t;
 
 static make_request_fn * org_blk_mrf = NULL;
+static char ddname[16];
+
+atomic_t mrf_used = ATOMIC_INIT(0);
+
+#define bio_iter_len(bio, iter) ((bio)->bi_io_vec[(iter)].bv_len)
+#define bio_iter_offset(bio, iter) ((bio)->bi_io_vec[(iter)].bv_offset)
 
 static int new_mrf(struct request_queue *q, struct bio *bio) {
     int ret = -1;
@@ -30,7 +36,7 @@ static int new_mrf(struct request_queue *q, struct bio *bio) {
             break;
         }
     }
-    ret = blk_org_mrf(q, bio) ;
+    ret = org_blk_mrf(q, bio) ;
     atomic_sub(1, &mrf_used);
     return ret;
 }
@@ -40,7 +46,7 @@ static int set_blk_mrf(struct block_device *bdev) {
     struct super_block *sb ;
 	printk("set blk_mrf\n");
     if(q->make_request_fn != new_mrf) {
-        blk_org_mrf = q->make_request_fn ;
+        org_blk_mrf = q->make_request_fn ;
         fsync_bdev(bdev) ;
         sb = freeze_bdev(bdev) ;
         q->make_request_fn = new_mrf ;
@@ -54,21 +60,21 @@ static void reset_blk_mrf(struct block_device *bdev) {
     struct request_queue *q = bdev_get_queue(bdev) ;
     struct super_block *sb = NULL ;
 
-    if(blk_org_mrf) {
+    if(org_blk_mrf) {
         while(atomic_read(&mrf_used)!=0){
             printk("reset: %d\n", atomic_read(&mrf_used));
             msleep(5);
         }
         fsync_bdev(bdev) ;
         sb = freeze_bdev(bdev) ;
-        q->make_request_fn = blk_org_mrf ;
+        q->make_request_fn = org_blk_mrf ;
         thaw_bdev(bdev,sb) ;
     }
 }
 
 
 
-static struct block_device* binfo_getblkdev_bypath(const char* devpath, fmode_t mode){
+static struct block_device* bbdev_getblkdev_bypath(const char* devpath, fmode_t mode){
 	int ret;
 	struct block_device* bdev;
 	struct nameidata nd;
@@ -107,7 +113,7 @@ int bbdev_get_devinfo(char* devpath, int* major, int* first_minor, int* partno, 
 	struct block_device* gbb_dev = NULL;
 	struct hd_struct ** hds_tbl;
 
-	gbb_dev = binfo_getblkdev_bypath(devpath, FMODE_READ);
+	gbb_dev = bbdev_getblkdev_bypath(devpath, FMODE_READ);
 	if(!gbb_dev) {
 		printk("open %s block device fail\n", devpath);
 		return 1;
@@ -141,6 +147,29 @@ int bbdev_get_devinfo(char* devpath, int* major, int* first_minor, int* partno, 
 
 	blkdev_put(gbb_dev, FMODE_READ);
 
+	return 0;
+}
+
+int bbdev_hook_mrf(char* devpath) {
+	int ret ;
+	struct block_device* gbb_dev = bbdev_getblkdev_bypath(devpath, FMODE_READ);
+	if(gbb_dev == NULL){
+		printk("hook mrf get blk fail\n");
+		return 1;
+	}
+	ret = set_blk_mrf(gbb_dev);
+	blkdev_put(gbb_dev, FMODE_READ);
+	return 0;
+}
+
+int bbdev_unhook_mrf(char* devpath) {
+	struct block_device* gbb_dev = bbdev_getblkdev_bypath(devpath, FMODE_READ);
+	if(gbb_dev == NULL){
+		printk("hook mrf get blk fail\n");
+		return 1;
+	}
+	reset_blk_mrf(gbb_dev);
+	blkdev_put(gbb_dev, FMODE_READ);
 	return 0;
 }
 

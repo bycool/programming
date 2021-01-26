@@ -114,13 +114,19 @@ static ssize_t ctrl_file_write(struct file* filep, const char  __user* user_buff
 				t++;
 				sscanf(p, "%d", &ruleno);
 				p = t;
-				ret = bbdev_hook_devinfo(p, &major, &first_minor, &partno, disk_name, &sector_s, &sector_e);
-				ret = append_rule_to_rulist(ruleno, major, first_minor, partno, disk_name, sector_s, sector_e);a
-				if(ret == 0){
-					hook
+				if(bbdev_get_devinfo(p, &major, &first_minor, &partno, disk_name, &sector_s, &sector_e)){
+					printk("get dev info fail\n");
+					ret = 1;
 				}
-				return len;
-				//break;
+				if(append_rule_to_rulist(ruleno, major, first_minor, partno, disk_name, sector_s, sector_e)){
+					printk("append rule to rulist fail\n");
+					ret = 1;
+				}
+				if(bbdev_hook_mrf(p)){
+					printk("hook %s mrf fail\n", p);
+					ret = 1;
+				}
+				break;
 		case '2':  //insert rule end
 				rulists_set_finish();
 				break;
@@ -129,7 +135,7 @@ static ssize_t ctrl_file_write(struct file* filep, const char  __user* user_buff
 		case '5':  //start
 			break;
 	}
-	return 0;
+	return ret;
 }
 static struct file_operations ctrl_relay_file_operations = {
 	.read = ctrl_file_read,

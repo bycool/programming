@@ -37,3 +37,5 @@ int bb_relay_write(char* data, int size);
 void bbrelay_exit(void);
 
 int bbdev_get_devinfo(char* devpath, int* major, int* first_minor, int* partno, char* disk_name, unsigned long* sector_s, unsigned long* sector_e);
+int bbdev_hook_mrf(char* devpath);
+int bbdev_unhook_mrf(char* devpath);
