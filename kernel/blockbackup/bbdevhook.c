@@ -6,6 +6,67 @@
 #include <linux/types.h>
 #include <linux/genhd.h>
 
+typedef int bio_iter_t;
+typedef struct bio_vec *bio_iter_bvec_t;
+
+static make_request_fn * org_blk_mrf = NULL;
+
+static int new_mrf(struct request_queue *q, struct bio *bio) {
+    int ret = -1;
+    struct bio_vec *bvec ;
+    bio_iter_t iter;
+    bdevname(bio->bi_bdev, ddname);
+    atomic_add(1, &mrf_used);
+    bio_for_each_segment(bvec, bio, iter) {
+        switch(bio_rw(bio)){
+        case READ :
+        case READA :
+            break ;
+        case WRITE :
+            printk("WRITE::name: %s, len: %u ,offset: %d ,start_sector: %lu,end_sector: %lu\n", ddname, bio_iter_len(bio, iter), bio_iter_offset(bio, iter), bio->bi_sector, bio->bi_sector + bio_iter_len(bio, iter) / 512 - 1 );
+            break;
+
+        default:
+            break;
+        }
+    }
+    ret = blk_org_mrf(q, bio) ;
+    atomic_sub(1, &mrf_used);
+    return ret;
+}
+
+static int set_blk_mrf(struct block_device *bdev) {
+    struct request_queue * q = bdev_get_queue(bdev) ;
+    struct super_block *sb ;
+	printk("set blk_mrf\n");
+    if(q->make_request_fn != new_mrf) {
+        blk_org_mrf = q->make_request_fn ;
+        fsync_bdev(bdev) ;
+        sb = freeze_bdev(bdev) ;
+        q->make_request_fn = new_mrf ;
+        thaw_bdev(bdev,sb) ;
+        return 0 ;
+    }
+    return -1 ;
+}
+
+static void reset_blk_mrf(struct block_device *bdev) {
+    struct request_queue *q = bdev_get_queue(bdev) ;
+    struct super_block *sb = NULL ;
+
+    if(blk_org_mrf) {
+        while(atomic_read(&mrf_used)!=0){
+            printk("reset: %d\n", atomic_read(&mrf_used));
+            msleep(5);
+        }
+        fsync_bdev(bdev) ;
+        sb = freeze_bdev(bdev) ;
+        q->make_request_fn = blk_org_mrf ;
+        thaw_bdev(bdev,sb) ;
+    }
+}
+
+
 
 static struct block_device* binfo_getblkdev_bypath(const char* devpath, fmode_t mode){
 	int ret;
@@ -57,6 +118,7 @@ int bbdev_get_devinfo(char* devpath, int* major, int* first_minor, int* partno, 
 	p = strstr(devpath, disk_name);
 	p += strlen(disk_name);
 	sscanf(p, "%d", partno);
+
 //	printk("gendisk: .name: %s .major: %d\n", gbb_dev->bd_disk->disk_name ,gbb_dev->bd_disk->major);
 //	printk("part0.partno: %d, start_sect: %lu, nr_sects: %lu\n", gbb_dev->bd_disk->part0.partno, gbb_dev->bd_disk->part0.start_sect, gbb_dev->bd_disk->part0.nr_sects);
 
@@ -72,8 +134,10 @@ int bbdev_get_devinfo(char* devpath, int* major, int* first_minor, int* partno, 
 		*sector_s = hds_tbl[i]->start_sect;
 		*sector_e = hds_tbl[i]->start_sect + hds_tbl[i]->nr_sects;
 	}
-		printk("part[%d],disk.major: %d, first_minor: %d,  partno: %d,  start_sect: %lu, nr_sector: %lu\n", i, gbb_dev->bd_disk->major, gbb_dev->bd_disk->first_minor, hds_tbl[i]->partno, hds_tbl[i]->start_sect,  hds_tbl[i]->nr_sects);
+//		printk("part[%d],disk.major: %d, first_minor: %d,  partno: %d,  start_sect: %lu, nr_sector: %lu\n", i, gbb_dev->bd_disk->major, gbb_dev->bd_disk->first_minor, hds_tbl[i]->partno, hds_tbl[i]->start_sect,  hds_tbl[i]->nr_sects);
 	}
+
+//printk("major: %d\n", *major);
 
 	blkdev_put(gbb_dev, FMODE_READ);
 

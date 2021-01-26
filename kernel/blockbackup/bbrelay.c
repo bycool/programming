@@ -7,13 +7,7 @@
 #include <linux/relay.h>
 #include <linux/debugfs.h>
 
-#define BB_DATA_RELAY_FILENAME "bbdata"
-#define BB_DATA_SUBBUF_LEN	64
-#define BB_DATA_SUBBUF_CNT  1024*1024
-#define BB_DATA_RELAY_BUFSIZE 1024*1024*64  //64M
-
-#define BB_CTRL_RELAY_FILENAME "bbctrl"
-#define BB_CTRL_RELAY_BUFSIZE 1024*4
+#include "bb.h"
 
 struct rchan* relay_data = NULL;
 bool data_mapped = false;
@@ -103,20 +97,38 @@ static ssize_t ctrl_file_read(struct file* filep, char __user* user_buffer, size
 }
 static ssize_t ctrl_file_write(struct file* filep, const char  __user* user_buffer, size_t count, loff_t* ppos){
 	char buffer[128];
+	int ret;
+	char* p = NULL;
+	char* t = NULL;
 	int len;
-//	int ruleno;
+	int major; int first_minor; int partno; char disk_name[32]; unsigned long sector_s; unsigned long sector_e;
+	int ruleno;
 	len = copy_from_user(buffer, user_buffer, count);
 
 	switch(buffer[0])
 	{
 		case '1':  //insert rule
+				p = &buffer[1];
+				t = strchr(p, ',');
+				*t = 0;
+				t++;
+				sscanf(p, "%d", &ruleno);
+				p = t;
+				ret = bbdev_hook_devinfo(p, &major, &first_minor, &partno, disk_name, &sector_s, &sector_e);
+				ret = append_rule_to_rulist(ruleno, major, first_minor, partno, disk_name, sector_s, sector_e);a
+				if(ret == 0){
+					hook
+				}
+				return len;
+				//break;
 		case '2':  //insert rule end
+				rulists_set_finish();
+				break;
 		case '3':  //quit
 		case '4':  //stop
 		case '5':  //start
 			break;
 	}
-	printk("ctrl_file_write\n");
 	return 0;
 }
 static struct file_operations ctrl_relay_file_operations = {
@@ -142,7 +154,7 @@ static struct rchan_callbacks ctrl_callback = {
 };
 
 
-int __init bbrelay_init(void) {
+int bbrelay_init(void) {
 //int bbrelay_init(void) {
 	relay_data = relay_open(BB_DATA_RELAY_FILENAME, NULL, BB_DATA_SUBBUF_LEN * BB_DATA_SUBBUF_CNT, 1, &data_callback, NULL);
 	relay_ctrl = relay_open(BB_CTRL_RELAY_FILENAME, NULL, BB_CTRL_RELAY_BUFSIZE, 1, &ctrl_callback, NULL);
@@ -171,7 +183,7 @@ fail:
 	return -1;
 }
 
-void __exit bbrelay_exit(void) {
+void bbrelay_exit(void) {
 //void bbrelay_exit(void) {
 	if(relay_data){
 		relay_close(relay_data);
@@ -183,8 +195,9 @@ void __exit bbrelay_exit(void) {
 	}
 	printk("[block backup relay module exit]\n");
 }
-
+#if 0
 module_init(bbrelay_init);
 module_exit(bbrelay_exit);
 
 MODULE_LICENSE("GPL");
+#endif
