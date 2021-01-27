@@ -25,17 +25,21 @@
 
 struct bbnode;
 
-
+//bbfilter.c
 int rulists_set_finish(void);
 void cleanup_rulist(void);
 int append_rule_to_rulist(int ruleno, int major, int first_minor, int partno, char* disk_name, unsigned long sector_s, unsigned long sector_e);
 int rulists_set_finish(void);
+int bbdev_unhook_devs(void);
 void display_rulist(struct bbnode* rule);
+int bbfilter(char* devname, unsigned long sector_s, char* rulenos);
 
+//bbrelay.c
 int bbrelay_init(void);
 int bb_relay_write(char* data, int size);
 void bbrelay_exit(void);
 
+//bbdevhook.c
 int bbdev_get_devinfo(char* devpath, int* major, int* first_minor, int* partno, char* disk_name, unsigned long* sector_s, unsigned long* sector_e);
 int bbdev_hook_mrf(char* devpath);
 int bbdev_unhook_mrf(char* devpath);

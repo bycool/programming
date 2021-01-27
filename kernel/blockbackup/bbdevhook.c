@@ -6,11 +6,14 @@
 #include <linux/types.h>
 #include <linux/genhd.h>
 
+#include "bb.h"
+
 typedef int bio_iter_t;
 typedef struct bio_vec *bio_iter_bvec_t;
 
 static make_request_fn * org_blk_mrf = NULL;
 static char ddname[16];
+char rbio[64];
 
 atomic_t mrf_used = ATOMIC_INIT(0);
 
@@ -20,6 +23,7 @@ atomic_t mrf_used = ATOMIC_INIT(0);
 static int new_mrf(struct request_queue *q, struct bio *bio) {
     int ret = -1;
     struct bio_vec *bvec ;
+	char rules[32];
     bio_iter_t iter;
     bdevname(bio->bi_bdev, ddname);
     atomic_add(1, &mrf_used);
@@ -29,7 +33,11 @@ static int new_mrf(struct request_queue *q, struct bio *bio) {
         case READA :
             break ;
         case WRITE :
-            printk("WRITE::name: %s, len: %u ,offset: %d ,start_sector: %lu,end_sector: %lu\n", ddname, bio_iter_len(bio, iter), bio_iter_offset(bio, iter), bio->bi_sector, bio->bi_sector + bio_iter_len(bio, iter) / 512 - 1 );
+//            printk("WRITE::name: %s, len: %u ,offset: %d ,start_sector: %lu,end_sector: %lu\n", ddname, bio_iter_len(bio, iter), bio_iter_offset(bio, iter), bio->bi_sector, bio->bi_sector + bio_iter_len(bio, iter) / 512 - 1 );
+			ret = bbfilter(ddname, bio->bi_sector, rules);
+			sprintf(rbio, "%lu,%u%s", bio->bi_sector, bio_iter_len(bio, iter), rules);
+//			printk("rbio: %s", rbio);
+			bb_relay_write(rbio, strlen(rbio));
             break;
 
         default:
@@ -44,9 +52,11 @@ static int new_mrf(struct request_queue *q, struct bio *bio) {
 static int set_blk_mrf(struct block_device *bdev) {
     struct request_queue * q = bdev_get_queue(bdev) ;
     struct super_block *sb ;
-	printk("set blk_mrf\n");
     if(q->make_request_fn != new_mrf) {
         org_blk_mrf = q->make_request_fn ;
+//		printk("q %p\n", (void*)q);
+//		printk("q->make_request_fn: %p\n", q->make_request_fn);
+//		printk("set blk_mrf.org_blk_mrf: %p\n", org_blk_mrf);
         fsync_bdev(bdev) ;
         sb = freeze_bdev(bdev) ;
         q->make_request_fn = new_mrf ;
@@ -68,6 +78,9 @@ static void reset_blk_mrf(struct block_device *bdev) {
         fsync_bdev(bdev) ;
         sb = freeze_bdev(bdev) ;
         q->make_request_fn = org_blk_mrf ;
+//		printk("q %p\n", (void*)q);
+//		printk("q->make_request_fn: %p\n", q->make_request_fn);
+//		printk("reset blk_mrf.org_blk_mrf: %p\n", org_blk_mrf);
         thaw_bdev(bdev,sb) ;
     }
 }
@@ -123,7 +136,10 @@ int bbdev_get_devinfo(char* devpath, int* major, int* first_minor, int* partno, 
 	strcpy(disk_name, gbb_dev->bd_disk->disk_name);
 	p = strstr(devpath, disk_name);
 	p += strlen(disk_name);
-	sscanf(p, "%d", partno);
+	if(p)
+		sscanf(p, "%d", partno);
+	else
+		partno = 0;
 
 //	printk("gendisk: .name: %s .major: %d\n", gbb_dev->bd_disk->disk_name ,gbb_dev->bd_disk->major);
 //	printk("part0.partno: %d, start_sect: %lu, nr_sects: %lu\n", gbb_dev->bd_disk->part0.partno, gbb_dev->bd_disk->part0.start_sect, gbb_dev->bd_disk->part0.nr_sects);
@@ -165,7 +181,7 @@ int bbdev_hook_mrf(char* devpath) {
 int bbdev_unhook_mrf(char* devpath) {
 	struct block_device* gbb_dev = bbdev_getblkdev_bypath(devpath, FMODE_READ);
 	if(gbb_dev == NULL){
-		printk("hook mrf get blk fail\n");
+		printk("unhook mrf get blk fail\n");
 		return 1;
 	}
 	reset_blk_mrf(gbb_dev);

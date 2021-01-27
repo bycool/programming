@@ -37,8 +37,8 @@ struct bbnode {
 atomic_t rule_state = ATOMIC_INIT(0);  //0:NULL rules, 1: rule6 online, 2: rule9 online
 atomic_t rule6_used_cnt = ATOMIC_INIT(0);
 atomic_t rule9_used_cnt = ATOMIC_INIT(0);
-static struct bbnode rulist6 = {0,0,0,0,"0",0,0,0};
-static struct bbnode rulist9 = {0,0,0,0,"0",0,0,0};;
+static struct bbnode rulist6 = {0,0,0,0,"0",0,0,NULL};
+static struct bbnode rulist9 = {0,0,0,0,"0",0,0,NULL};;
 
 //find: 1, find null: 0
 static int find_rule_from_rulist(struct bbnode* head, int ruleno, int major, int first_minor, int partno, char* disk_name){
@@ -149,6 +149,33 @@ int rulists_set_finish(){
 	return 0;
 }
 
+int bbdev_unhook_devs(){
+	struct bbnode* head = NULL;
+	struct bbnode* tmp = NULL;
+	char devpath[32];
+	int ret ;
+
+    if( atomic_read(&rule_state)==2 || atomic_read(&rule_state)==0 ) {  //get online rule
+        head = &rulist9;
+    } else if( atomic_read(&rule_state)== 1 ) {
+        head = &rulist6;
+    }
+
+	tmp = head->next;
+	while(tmp){
+		sprintf(devpath, "/dev/%s%d", tmp->disk_name, tmp->partno);
+		printk("rmmod devpath: %s\n", devpath);
+		ret = bbdev_unhook_mrf(devpath);
+		if(ret!=0){
+			printk("rmmod devs fail\n");
+			return 1;
+		}
+		tmp = tmp->next;
+	}
+	return 0;
+}
+
+
 void display_rulist(struct bbnode* rule){
 	struct bbnode* tmp = rule;
 
@@ -168,22 +195,29 @@ void display_rulist(struct bbnode* rule){
 
 int bbfilter(char* devname, unsigned long sector_s, char* rulenos){
 	int cnt = 0;
+	char * p = NULL;
 	struct bbnode* tmp = NULL;
 //	struct bbnode* ptmp = NULL;
 	if( atomic_read(&rule_state)==2 || atomic_read(&rule_state)==0 ){
-		tmp = &rulist6;
-		atomic_add(1, &rule6_used_cnt);
+		tmp = rulist9.next;
+//		atomic_add(1, &rule6_used_cnt);
 	}else if( atomic_read(&rule_state)==1 ){
-		tmp = &rulist9;
-		atomic_add(1, &rule9_used_cnt);
+		tmp = rulist6.next;
+//		atomic_add(1, &rule9_used_cnt);
 	}
+//	printk("devname: %s, sector: %lu\n", devname, sector_s);
 
+	p = rulenos;
 	for(; tmp!=NULL; tmp=tmp->next){
-		if(strstr(tmp->disk_name,devname)){
-			cnt++;
-			sprintf(rulenos, "%d", tmp->ruleno);
+//		printk("%s::%s\n", tmp->disk_name, devname);
+		if(!strcmp(tmp->disk_name,devname)){
+			if(tmp->sector_s <= sector_s && sector_s <= tmp->sector_e){
+				cnt++;
+				p += sprintf(p, ".%d", tmp->ruleno);
+			}
 		}
 	}
+	p += sprintf(p, "\n");
 	return cnt;
 }
 

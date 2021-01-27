@@ -27,6 +27,7 @@ static int bb_relay_output(struct rchan* channel, char* data, int size){
 		rbuf->data = rbuf->start;
 
 	atomic_add_return(1, &data_ready_sub_cnt);
+//	printk("&data_ready_sub_cnt: %d\n", atomic_read(&data_ready_sub_cnt));
 
 	memcpy(rbuf->data, data, size);
 	rbuf->data += BB_DATA_SUBBUF_LEN;
@@ -64,7 +65,7 @@ static void data_buf_mapped(struct rchan_buf* rbuf, struct file* pfile) {
 	atomic_set(&data_ready_sub_cnt, 0);
 
 	data_mapped = true;
-	printk("data_relay mapped\n");
+//	printk("data_relay mapped\n");
 }
 static void data_buf_unmapped(struct rchan_buf* rbuf, struct file* pfile) {
 //	if(pfile->f_count.counter > 2)
@@ -88,11 +89,10 @@ static ssize_t ctrl_file_read(struct file* filep, char __user* user_buffer, size
 	int len;
 	len = copy_from_user(buffer, user_buffer, count);
 
-	if((buffer[0] == '1')){
+	if((buffer[0] == '3')){
 		return atomic_read(&data_ready_sub_cnt);
 	}
 
-	printk("ctrl_file_read\n");
 	return 0;
 }
 static ssize_t ctrl_file_write(struct file* filep, const char  __user* user_buffer, size_t count, loff_t* ppos){
@@ -130,7 +130,9 @@ static ssize_t ctrl_file_write(struct file* filep, const char  __user* user_buff
 		case '2':  //insert rule end
 				rulists_set_finish();
 				break;
-		case '3':  //quit
+		case '3':  // sub data_ready_sub_cnt
+				atomic_sub(1, &data_ready_sub_cnt);
+				break;
 		case '4':  //stop
 		case '5':  //start
 			break;
