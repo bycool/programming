@@ -17,10 +17,11 @@ void kill_process(int signo){
 void main(){
 	char* ctrlfile = "/mnt/debugfs/bbctrl0";
 	char* datafile = "/mnt/debugfs/bbdata0";
-	char* rule1 = "11,/dev/sdb1";
-	char* rule2 = "12,/dev/sdc1";
-	char* rule3 = "13,/dev/sdc1";
-	char* rule4 = "2,";
+	char* rule1 = "11,/dev/sdb";
+	char* rule2 = "12,/dev/sdc";
+	char* rule3 = "13,/dev/sdc";
+	char* rule4 = "13,/dev/sda3";
+	char* rule0 = "2,";
 	int ret = 0;
 	char* cread = "3";
 	unsigned char* data = 0;
@@ -32,10 +33,11 @@ void main(){
 
 	int fc = open(ctrlfile, O_RDWR, 0600);
 	if(fc < 0) return ;
-	write(fc, rule1, strlen(rule1));
-	write(fc, rule2, strlen(rule2));
+//	write(fc, rule1, strlen(rule1));
+//	write(fc, rule2, strlen(rule2));
 	write(fc, rule3, strlen(rule3));
-	write(fc, rule4, strlen(rule3));
+	write(fc, rule4, strlen(rule4));
+	write(fc, rule0, strlen(rule0));
 
 //	write(fc, "3", 1);
 //	ret = read(fc, "3", 1);

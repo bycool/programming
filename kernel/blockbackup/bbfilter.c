@@ -163,7 +163,10 @@ int bbdev_unhook_devs(){
 
 	tmp = head->next;
 	while(tmp){
-		sprintf(devpath, "/dev/%s%d", tmp->disk_name, tmp->partno);
+	    if(tmp->partno)
+			sprintf(devpath, "/dev/%s%d", tmp->disk_name, tmp->partno);
+		else
+			sprintf(devpath, "/dev/%s", tmp->disk_name);
 		printk("rmmod devpath: %s\n", devpath);
 		ret = bbdev_unhook_mrf(devpath);
 		if(ret!=0){

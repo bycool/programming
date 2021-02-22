@@ -51,38 +51,42 @@ static int new_mrf(struct request_queue *q, struct bio *bio) {
 
 static int set_blk_mrf(struct block_device *bdev) {
     struct request_queue * q = bdev_get_queue(bdev) ;
-    struct super_block *sb ;
+    struct super_block *sb = NULL;
+
+#if 1
+        fsync_bdev(bdev) ;
+        sb = freeze_bdev(bdev) ;
     if(q->make_request_fn != new_mrf) {
         org_blk_mrf = q->make_request_fn ;
 //		printk("q %p\n", (void*)q);
 //		printk("q->make_request_fn: %p\n", q->make_request_fn);
 //		printk("set blk_mrf.org_blk_mrf: %p\n", org_blk_mrf);
-        fsync_bdev(bdev) ;
-        sb = freeze_bdev(bdev) ;
         q->make_request_fn = new_mrf ;
-        thaw_bdev(bdev,sb) ;
-        return 0 ;
     }
-    return -1 ;
+        thaw_bdev(bdev,sb) ;
+#endif
+    return 0 ;
 }
 
 static void reset_blk_mrf(struct block_device *bdev) {
     struct request_queue *q = bdev_get_queue(bdev) ;
     struct super_block *sb = NULL ;
-
-    if(org_blk_mrf) {
+#if 1
+        fsync_bdev(bdev) ;
+        sb = freeze_bdev(bdev) ;
+    if(org_blk_mrf!=NULL) {
         while(atomic_read(&mrf_used)!=0){
             printk("reset: %d\n", atomic_read(&mrf_used));
             msleep(5);
         }
-        fsync_bdev(bdev) ;
-        sb = freeze_bdev(bdev) ;
+		printk("reset blk mrf: %s\n", bdev->bd_disk->disk_name);
         q->make_request_fn = org_blk_mrf ;
 //		printk("q %p\n", (void*)q);
 //		printk("q->make_request_fn: %p\n", q->make_request_fn);
 //		printk("reset blk_mrf.org_blk_mrf: %p\n", org_blk_mrf);
-        thaw_bdev(bdev,sb) ;
     }
+        thaw_bdev(bdev,sb) ;
+#endif
 }
 
 
@@ -136,10 +140,12 @@ int bbdev_get_devinfo(char* devpath, int* major, int* first_minor, int* partno, 
 	strcpy(disk_name, gbb_dev->bd_disk->disk_name);
 	p = strstr(devpath, disk_name);
 	p += strlen(disk_name);
-	if(p)
-		sscanf(p, "%d", partno);
+
+	i = p - devpath;
+	if(i == strlen(devpath))
+		*partno = 0;
 	else
-		partno = 0;
+		sscanf(p, "%d", partno);
 
 //	printk("gendisk: .name: %s .major: %d\n", gbb_dev->bd_disk->disk_name ,gbb_dev->bd_disk->major);
 //	printk("part0.partno: %d, start_sect: %lu, nr_sects: %lu\n", gbb_dev->bd_disk->part0.partno, gbb_dev->bd_disk->part0.start_sect, gbb_dev->bd_disk->part0.nr_sects);

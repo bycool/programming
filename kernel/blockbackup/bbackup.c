@@ -13,9 +13,9 @@ int __init bbackup_init(void){
 }
 
 void __exit bbackup_exit(void){
-	bbrelay_exit();
 	bbdev_unhook_devs();
 	cleanup_rulist();
+	bbrelay_exit();
 	printk("[bbackup exit]\n");
 }
 
