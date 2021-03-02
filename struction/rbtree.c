@@ -256,7 +256,7 @@ void rbtree_delete_fixup(rbtree* tree, rbnode* child, rbnode* parent){
 
 
 
-
+#if 0
 void rbtree_delete_fixup(rbtree* tree, rbnode* child, rbnode* parent){
 	rbnode *other;
 
@@ -298,7 +298,7 @@ void rbtree_delete_fixup(rbtree* tree, rbnode* child, rbnode* parent){
 		child->color = BLACK;
 
 }
-
+#endif 
 void rbtree_delete_rbnode(rbtree* tree, rbnode* dnode){
 	rbnode *child, *parnet;
 	int color;

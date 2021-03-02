@@ -191,7 +191,7 @@ void rbtree_delete_rbnode(rbtree *tree, rbnode *dnode){
 				dnode->parent->left = replace;
 			else
 				dnode->parent->right = replace;
-		}eles{
+		}else{
 			tree->root = replace;
 		}
 

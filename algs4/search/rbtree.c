@@ -163,19 +163,19 @@ void rbtree_delete_fixup(rbtree* tree, rbnode* child, rbnode* parent){
 	rbnode *other;
 
 	while((!child || child->color == BLACK) && tree->root != child){
-		if(parnet->left == child){
+		if(parent->left == child){
 			other = parent->right;
 			if(other->color == RED){
 				other->color = BLACK;
 				parent->color = RED;
 				rbtree_left_rotate(tree, parent);
-				other = parnet->right;
+				other = parent->right;
 			}
 
 			if((!other->left || other->left->color == BLACK) &&
 				(!other->right || other->right->color == BLACK)){
 				other->color = RED;
-				child = parnet;
+				child = parent;
 				parent = child->parent;
 			}else{
 				//        other
@@ -188,7 +188,7 @@ void rbtree_delete_fixup(rbtree* tree, rbnode* child, rbnode* parent){
 				}
 				other->color = parent->color;
 				parent->color = BLACK;
-				other->rigt->color = BLACK;
+				other->right->color = BLACK;
 				rbtree_left_rotate(tree, parent);
 				child = tree->root;
 				break;
@@ -231,7 +231,7 @@ void rbtree_delete_rbnode(rbtree* tree, rbnode* dnode){
 			parent->left = child;
 
 			replace->right = dnode->right;
-			dnode->right->parnet = replace;
+			dnode->right->parent = replace;
 		}
 
 		replace->left = dnode->left;
@@ -240,7 +240,7 @@ void rbtree_delete_rbnode(rbtree* tree, rbnode* dnode){
 		replace->color = dnode->color;
 
 		if(color == BLACK)
-			rbtree_delete_fixup(tree, child, paren);
+			rbtree_delete_fixup(tree, child, parent);
 
 		free(dnode);
 		return ;
