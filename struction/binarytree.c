@@ -75,6 +75,26 @@ binode* bitree_delete_binode(binode* root, int val){
 }
 
 
+int findval(binode* root, int val) {
+	int ret = -1;
+	if(root == NULL) return -1;
+
+	binode *tmp = root;
+	while(tmp){
+		if(tmp->val < val)
+			tmp = tmp->right;
+		else if(tmp->val > val)
+			tmp = tmp->left;
+		else if(tmp->val == val){
+			ret = val;
+			tmp = NULL;
+		}
+		sleep(1);
+	}
+	return ret;
+	
+}
+
 void bitree_delete(bitree* tree, int val){
 	if(tree == NULL) return ;
 
@@ -118,7 +138,11 @@ void main(){
 		bitree_insert_binode(tree, tmp);
 	}
 
+
+
 	displaybitree(tree);
+
+	printf("val: %d\n", findval(tree->root, 10));
 
 	destroybitree(tree);
 	
