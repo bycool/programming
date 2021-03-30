@@ -21,7 +21,7 @@
 
 
 
-const char* dname = "/dev/sdb1" ;
+const char* dname = "/dev/sda3" ;
 
 struct block_device * bdev = NULL ;
 struct super_block *  bsuperblk = NULL;;

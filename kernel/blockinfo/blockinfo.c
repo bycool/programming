@@ -6,7 +6,7 @@
 #include <linux/types.h>
 #include <linux/genhd.h>
 
-const char* gbdev = "/dev/sdd1";
+const char* gbdev = "/dev/sda3";
 struct block_device* gbb_dev = NULL;
 
 
